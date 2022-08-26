@@ -7,6 +7,7 @@ use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
 use crate::providers::Auth;
+use crate::providers::AuthAction;
 use crate::providers::AuthContext;
 
 #[derive(Properties, PartialEq, Eq, Default)]
@@ -15,6 +16,7 @@ pub struct IndexProps {}
 #[derive(Deserialize, Debug)]
 struct ApiItem<T: Serialize> {
     #[serde(deserialize_with = "status_code_from_u16")]
+    #[allow(dead_code)]
     status_code: StatusCode,
     item: T,
 }
@@ -65,12 +67,21 @@ where
 #[function_component(Index)]
 pub fn index(_: &IndexProps) -> Html {
     let auth_context = use_context::<AuthContext>().unwrap();
+    let auth_reducer = use_reducer(|| auth_context);
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
 
-    if let AuthContext::Authed(auth) = auth_context {
+    if let AuthContext::Authed(auth) = (*auth_reducer).clone() {
         return html! {
-            <div>{ format!("Welcome, {}...!", auth.username) }</div>
+            <div>
+                <h4>{ format!("Welcome, {}...!", auth.username) }</h4>
+                <button
+                    type="button"
+                    onclick={move |_| {
+                        auth_reducer.clone().dispatch(AuthAction::SignOut);
+                    }}
+                >{ "Sign out" }</button>
+            </div>
         };
     }
 
@@ -85,9 +96,10 @@ pub fn index(_: &IndexProps) -> Html {
 
                 Callback::from(move |e: FocusEvent| {
                     e.prevent_default();
+                    let auth_reducer = (auth_reducer).clone();
 
-                    handle_submit(username.clone(), password.clone(), |auth| {
-                        log::info!("{auth:?}");
+                    handle_submit(username.clone(), password.clone(), move |auth| {
+                        auth_reducer.dispatch(AuthAction::SignIn(auth));
                     });
                 })
             }}
