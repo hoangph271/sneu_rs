@@ -5,6 +5,7 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
+use yew_hooks::use_bool_toggle;
 
 use crate::providers::Auth;
 use crate::providers::AuthAction;
@@ -70,6 +71,7 @@ pub fn index(_: &IndexProps) -> Html {
     let auth_reducer = use_reducer(|| auth_context);
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
+    let is_loading = use_bool_toggle(false);
 
     if let AuthContext::Authed(auth) = (*auth_reducer).clone() {
         return html! {
@@ -93,12 +95,18 @@ pub fn index(_: &IndexProps) -> Html {
             onsubmit={{
                 let username = (*username).clone();
                 let password = (*password).clone();
+                let is_loading = is_loading.clone();
 
                 Callback::from(move |e: FocusEvent| {
                     e.prevent_default();
+
                     let auth_reducer = (auth_reducer).clone();
+                    let is_loading = is_loading.clone();
+
+                    is_loading.toggle();
 
                     handle_submit(username.clone(), password.clone(), move |auth| {
+                        is_loading.toggle();
                         auth_reducer.dispatch(AuthAction::SignIn(auth));
                     });
                 })
@@ -128,7 +136,7 @@ pub fn index(_: &IndexProps) -> Html {
                     }}
                 />
             </label>
-            <button type="submit">{ "Sign in" }</button>
+            <button type="submit" disabled={*is_loading}>{ "Sign in" }</button>
         </form>
     }
 }
