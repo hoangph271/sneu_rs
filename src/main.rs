@@ -1,6 +1,5 @@
-mod components;
-use components::MarkdownViewer;
+mod views;
 
 fn main() {
-    yew::start_app::<MarkdownViewer>();
+    yew::start_app::<views::Index>();
 }
