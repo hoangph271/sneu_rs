@@ -78,6 +78,7 @@ pub fn index(_: &IndexProps) -> Html {
             <div>
                 <h4>{ format!("Welcome, {}...!", auth.username) }</h4>
                 <button
+                    class="button is-warning"
                     type="button"
                     onclick={move |_| {
                         auth_reducer.clone().dispatch(AuthAction::SignOut);
@@ -112,31 +113,49 @@ pub fn index(_: &IndexProps) -> Html {
                 })
             }}
         >
-            <label>
-                <span>{ "Username:" }</span>
-                <input
-                    type="text"
-                    value={(*username).clone()}
-                    oninput={move |e: InputEvent| {
-                        let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
+            <div class="field">
+                <label class="label">{ "Username:" }</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input
+                        type="text"
+                        class="input is-success"
+                        placeholder="Your username"
+                        value={(*username).clone()}
+                        oninput={move |e: InputEvent| {
+                            let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
 
-                        username.set(value);
-                    }}
-                />
-            </label>
-            <label>
-                <span>{ "Password:" }</span>
-                <input
-                    type="password"
-                    value={(*password).clone()}
-                    oninput={move |e: InputEvent| {
-                        let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
+                            username.set(value);
+                        }}
+                    />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{ "Password:" }</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input
+                        type="password"
+                        class="input is-success"
+                        placeholder="Your password"
+                        value={(*password).clone()}
+                        oninput={move |e: InputEvent| {
+                            let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
 
-                        password.set(value);
-                    }}
-                />
-            </label>
-            <button type="submit" disabled={*is_loading}>{ "Sign in" }</button>
+                            password.set(value);
+                        }}
+                    />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                    </span>
+                </div>
+            </div>
+            <button
+                type="submit"
+                disabled={*is_loading}
+                class="button is-primary"
+            >{ "Sign in" }</button>
         </form>
     }
 }
