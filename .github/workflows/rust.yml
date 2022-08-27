@@ -1,7 +1,7 @@
 name: Rust
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
