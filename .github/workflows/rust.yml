@@ -22,5 +22,7 @@ jobs:
       run: cargo install --locked trunk && cargo install wasm-bindgen-cli
     - name: Build
       run: trunk build --release
-    - name: Run tests
-      run: cargo test --verbose
+    - name: Upload dist
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        path: dist
