@@ -10,6 +10,8 @@ pub enum SneuRoute {
     SignIn,
     #[at("/markdown/:filename")]
     Markdown { filename: String },
+    #[at("/gallery")]
+    Gallery,
 }
 
 pub fn switch(route: &SneuRoute) -> Html {
@@ -19,5 +21,6 @@ pub fn switch(route: &SneuRoute) -> Html {
         SneuRoute::Markdown { filename } => html! {
             <Markdown filename={filename.clone()} />
         },
+        SneuRoute::Gallery => html! { <Gallery /> },
     }
 }
