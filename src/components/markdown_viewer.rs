@@ -1,7 +1,7 @@
 use pulldown_cmark::{html, Options, Parser};
 use yew::prelude::*;
 
-use super::safe_html::SafeHtml;
+use super::unsafe_html::UnsafeHtml;
 
 pub enum MarkdownViewerMessage {
     ToggleMonospace,
@@ -48,7 +48,7 @@ impl Component for MarkdownViewer {
                 <button onclick={link.callback(|_| MarkdownViewerMessage::ToggleMonospace)}>
                     { font_style }
                 </button>
-                <SafeHtml
+                <UnsafeHtml
                     html={ parse_markdown(&self.markdown) }
                     tag={ markdown_root_tag }
                 />
