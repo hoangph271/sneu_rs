@@ -1,10 +1,10 @@
-use super::providers::AuthContext;
+use super::providers::AuthMessage;
 use super::router;
-use yew::{function_component, html, use_reducer, ContextProvider};
+use yew::prelude::*;
 use yew_router::prelude::*;
 
-#[function_component(Router)]
-pub fn app() -> Html {
+#[function_component(AppWithRouter)]
+pub fn app_with_router() -> Html {
     html! {
         <BrowserRouter>
             <Switch<router::SneuRoute>
@@ -14,13 +14,13 @@ pub fn app() -> Html {
     }
 }
 
-#[function_component(App)]
+#[function_component(AppWithContext)]
 pub fn app_with_context() -> Html {
-    let auth_reducer = use_reducer(AuthContext::default);
+    let auth = use_state_eq(AuthMessage::default);
 
     html! {
-        <ContextProvider<AuthContext> context={(*auth_reducer).clone()}>
-            <Router />
-        </ContextProvider<AuthContext>>
+        <ContextProvider<AuthMessage> context={(*auth).clone()}>
+            <AppWithRouter />
+        </ContextProvider<AuthMessage>>
     }
 }
