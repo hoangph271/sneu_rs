@@ -1,5 +1,6 @@
 mod app;
 mod providers;
+mod router;
 mod views;
 
 fn main() {

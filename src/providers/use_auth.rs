@@ -2,6 +2,7 @@ use std::rc::Rc;
 
 use yew::Reducible;
 
+#[derive(Debug)]
 pub enum AuthAction {
     SignIn(Auth),
     SignOut,
@@ -30,8 +31,9 @@ impl Reducible for AuthContext {
 
     fn reduce(self: Rc<Self>, action: Self::Action) -> Rc<Self> {
         match action {
-            AuthAction::SignIn(auth) => Self::Authed(auth).into(),
-            AuthAction::SignOut => Self::NotAuthed.into(),
+            AuthAction::SignIn(auth) => Self::Authed(auth),
+            AuthAction::SignOut => Self::NotAuthed,
         }
+        .into()
     }
 }

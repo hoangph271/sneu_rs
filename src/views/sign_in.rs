@@ -1,91 +1,28 @@
 use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
-use wasm_bindgen::JsCast;
-use wasm_bindgen::JsValue;
+use wasm_bindgen::{JsCast, JsValue};
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_hooks::use_bool_toggle;
+use yew_router::prelude::Redirect;
 
-use crate::providers::Auth;
-use crate::providers::AuthAction;
-use crate::providers::AuthContext;
+use crate::{
+    providers::{Auth, AuthAction, AuthContext},
+    router::SneuRoute,
+};
 
-#[derive(Properties, PartialEq, Eq, Default)]
-pub struct IndexProps {}
-
-#[derive(Deserialize, Debug)]
-struct ApiItem<T: Serialize> {
-    #[serde(deserialize_with = "status_code_from_u16")]
-    #[allow(dead_code)]
-    status_code: StatusCode,
-    item: T,
-}
-
-fn status_code_from_u16<'de, D: Deserializer<'de>>(
-    deserializer: D,
-) -> Result<StatusCode, D::Error> {
-    let code: u16 = Deserialize::deserialize(deserializer)?;
-
-    Ok(StatusCode::from(code))
-}
-
-fn handle_submit<OnAuth>(username: String, password: String, on_authed: OnAuth)
-where
-    OnAuth: Fn(Auth) + 'static,
-{
-    wasm_bindgen_futures::spawn_local(async move {
-        #[derive(Serialize)]
-        struct LoginPayload {
-            username: String,
-            password: String,
-        }
-
-        let json_payload = serde_json::to_string(&LoginPayload {
-            username: username.clone(),
-            password,
-        })
-        .unwrap();
-        let login_payload = JsValue::from_str(&json_payload);
-
-        let api_item: ApiItem<String> = Request::post("https://alpha-sneu.xyz/api/v1/users/signin")
-            .method(Method::POST)
-            .body(login_payload)
-            .send()
-            .await
-            .unwrap()
-            .json()
-            .await
-            .unwrap();
-
-        on_authed(Auth {
-            username: username.clone(),
-            jwt: api_item.item,
-        });
-    });
-}
-
-#[function_component(Index)]
-pub fn index(_: &IndexProps) -> Html {
+#[function_component(SignIn)]
+pub fn sign_in() -> Html {
     let auth_context = use_context::<AuthContext>().unwrap();
-    let auth_reducer = use_reducer(|| auth_context);
+    let auth_reducer = use_reducer_eq(|| auth_context);
+
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
     let is_loading = use_bool_toggle(false);
 
-    if let AuthContext::Authed(auth) = (*auth_reducer).clone() {
-        return html! {
-            <div>
-                <h4>{ format!("Welcome, {}...!", auth.username) }</h4>
-                <button
-                    class="button is-warning"
-                    type="button"
-                    onclick={move |_| {
-                        auth_reducer.clone().dispatch(AuthAction::SignOut);
-                    }}
-                >{ "Sign out" }</button>
-            </div>
-        };
+    if let AuthContext::Authed(_) = *auth_reducer {
+        return html! { <Redirect<SneuRoute> to={SneuRoute::Home} />};
     }
 
     html! {
@@ -101,7 +38,7 @@ pub fn index(_: &IndexProps) -> Html {
                 Callback::from(move |e: FocusEvent| {
                     e.prevent_default();
 
-                    let auth_reducer = (auth_reducer).clone();
+                    let auth_reducer = auth_reducer.clone();
                     let is_loading = is_loading.clone();
 
                     is_loading.toggle();
@@ -158,4 +95,55 @@ pub fn index(_: &IndexProps) -> Html {
             >{ "Sign in" }</button>
         </form>
     }
+}
+
+#[derive(Deserialize, Debug)]
+struct ApiItem<T: Serialize> {
+    #[serde(deserialize_with = "status_code_from_u16")]
+    #[allow(dead_code)]
+    status_code: StatusCode,
+    item: T,
+}
+
+fn status_code_from_u16<'de, D: Deserializer<'de>>(
+    deserializer: D,
+) -> Result<StatusCode, D::Error> {
+    let code: u16 = Deserialize::deserialize(deserializer)?;
+
+    Ok(StatusCode::from(code))
+}
+
+fn handle_submit<OnAuth>(username: String, password: String, on_authed: OnAuth)
+where
+    OnAuth: Fn(Auth) + 'static,
+{
+    wasm_bindgen_futures::spawn_local(async move {
+        #[derive(Serialize)]
+        struct LoginPayload {
+            username: String,
+            password: String,
+        }
+
+        let json_payload = serde_json::to_string(&LoginPayload {
+            username: username.clone(),
+            password,
+        })
+        .unwrap();
+        let login_payload = JsValue::from_str(&json_payload);
+
+        let api_item: ApiItem<String> = Request::post("https://alpha-sneu.xyz/api/v1/users/signin")
+            .method(Method::POST)
+            .body(login_payload)
+            .send()
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+
+        on_authed(Auth {
+            username: username.clone(),
+            jwt: api_item.item,
+        });
+    });
 }
