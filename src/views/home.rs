@@ -2,14 +2,12 @@ use yew::prelude::*;
 use yew_router::prelude::Redirect;
 
 use crate::components::MarkdownViewer;
-use crate::providers::AuthAction;
-use crate::providers::AuthContext;
+use crate::providers::{use_auth_reducer, AuthAction, AuthContext};
 use crate::router::SneuRoute;
 
 #[function_component(Home)]
 pub fn index() -> Html {
-    let auth_context = use_context::<AuthContext>().unwrap();
-    let auth_reducer = use_reducer_eq(|| auth_context);
+    let auth_reducer = use_auth_reducer();
 
     match (*auth_reducer).clone() {
         AuthContext::NotAuthed => html! {

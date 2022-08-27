@@ -8,14 +8,14 @@ use yew_hooks::use_bool_toggle;
 use yew_router::prelude::Redirect;
 
 use crate::{
-    providers::{Auth, AuthAction, AuthContext},
+    providers::{use_auth_reducer, Auth, AuthAction, AuthContext},
     router::SneuRoute,
 };
 
 #[function_component(SignIn)]
 pub fn sign_in() -> Html {
-    let auth_context = use_context::<AuthContext>().unwrap();
-    let auth_reducer = use_reducer_eq(|| auth_context);
+    let auth_reducer = use_auth_reducer();
+    log::info!("{:?}", *auth_reducer);
 
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());

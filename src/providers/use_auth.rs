@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use yew::Reducible;
+use yew::{use_context, use_reducer_eq, Reducible, UseReducerHandle};
 
 #[derive(Debug)]
 pub enum AuthAction {
@@ -36,4 +36,10 @@ impl Reducible for AuthContext {
         }
         .into()
     }
+}
+
+pub fn use_auth_reducer() -> UseReducerHandle<AuthContext> {
+    let auth_context = use_context::<AuthContext>().unwrap();
+
+    use_reducer_eq(|| auth_context)
 }
