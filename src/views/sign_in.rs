@@ -13,7 +13,7 @@ use yew_router::prelude::{use_history, History};
 
 use crate::{
     components::{BulmaButton, FormInput, InputType},
-    providers::{Auth, AuthMessage},
+    providers::{AuthMessage, AuthPayload},
     router::SneuRoute,
 };
 
@@ -65,6 +65,9 @@ pub fn sign_in() -> Html {
 
                         handle_submit(username.clone(), password.clone(), move |auth| {
                             is_loading.toggle();
+
+                            AuthMessage::Authed(auth.clone()).persist_locally().expect("persist_locally() failed");
+
                             auth_context.dispatch(AuthAction::SignIn(auth))
                         });
                     }
@@ -121,7 +124,7 @@ fn status_code_from_u16<'de, D: Deserializer<'de>>(
 
 fn handle_submit<OnAuth>(username: String, password: String, on_authed: OnAuth)
 where
-    OnAuth: Fn(Auth) + 'static,
+    OnAuth: Fn(AuthPayload) + 'static,
 {
     wasm_bindgen_futures::spawn_local(async move {
         #[derive(Serialize)]
@@ -147,7 +150,7 @@ where
             .await
             .unwrap();
 
-        on_authed(Auth {
+        on_authed(AuthPayload {
             username: username.clone(),
             jwt: api_item.item,
         });
