@@ -27,9 +27,10 @@ pub fn sign_in() -> Html {
 
     html! {
         <form
-            action="http://localhost:8000/api/v1/users/signin"
             method="post"
-            style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center;"
+            action="http://localhost:8000/api/v1/users/signin"
+            style="height: 100vh;"
+            class="container is-fluid is-flex is-flex-direction-column is-justify-content-center"
             onsubmit={{
                 let username = (*username).clone();
                 let password = (*password).clone();
@@ -55,7 +56,7 @@ pub fn sign_in() -> Html {
                 <div class="control has-icons-left has-icons-right">
                     <input
                         type="text"
-                        class="input is-success"
+                        class="input"
                         placeholder="Your username"
                         value={(*username).clone()}
                         oninput={move |e: InputEvent| {
@@ -74,7 +75,7 @@ pub fn sign_in() -> Html {
                 <div class="control has-icons-left has-icons-right">
                     <input
                         type="password"
-                        class="input is-success"
+                        class="input"
                         placeholder="Your password"
                         value={(*password).clone()}
                         oninput={move |e: InputEvent| {
