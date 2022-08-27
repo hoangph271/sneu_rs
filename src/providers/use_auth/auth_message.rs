@@ -31,7 +31,10 @@ impl AuthMessage {
     pub fn persist_locally(&self) -> Result<(), StorageError> {
         match self {
             AuthMessage::Authed(auth) => SessionStorage::set(AUTH_STORAGE_KEY, auth),
-            AuthMessage::NotAuthed => Ok(SessionStorage::delete(AUTH_STORAGE_KEY)),
+            AuthMessage::NotAuthed => {
+                SessionStorage::delete(AUTH_STORAGE_KEY);
+                Ok(())
+            },
         }
     }
 }

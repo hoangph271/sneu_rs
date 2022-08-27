@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-#[derive(PartialEq, Default)]
+#[derive(PartialEq, Eq, Default)]
 pub enum ButtonType {
     #[default]
     Button,
@@ -16,7 +16,7 @@ impl ButtonType {
     }
 }
 
-#[derive(PartialEq, Default)]
+#[derive(PartialEq, Eq, Default)]
 pub enum ButtonVariant {
     #[default]
     Primary,
