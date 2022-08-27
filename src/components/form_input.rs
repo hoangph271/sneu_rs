@@ -2,11 +2,13 @@ use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Default)]
 pub enum InputType {
+    #[default]
     Text,
     Password,
 }
+
 impl InputType {
     fn to_type_attr(&self) -> String {
         match self {
@@ -16,12 +18,17 @@ impl InputType {
     }
 }
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Default)]
 pub struct FormInputProps {
+    #[prop_or(InputType::Text)]
     pub input_type: InputType,
     pub label: String,
     pub value: String,
+    #[prop_or_default]
+    pub fa_icon: String,
     pub on_value_changed: Callback<String>,
+    #[prop_or_default]
+    pub placeholder: String,
 }
 
 #[function_component(FormInput)]
@@ -30,12 +37,14 @@ pub fn form_input(props: &FormInputProps) -> Html {
 
     html! {
         <div class="field">
-            <label class="label">{ "Username:" }</label>
+            if !props.label.is_empty() {
+                <label class="label">{ props.label.clone() }</label>
+            }
             <div class="control has-icons-left has-icons-right">
                 <input
                     type={props.input_type.to_type_attr()}
                     class="input"
-                    placeholder="Your username"
+                    placeholder={props.placeholder.to_owned()}
                     value={props.value.clone()}
                     oninput={move |e: InputEvent| {
                         let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
@@ -43,9 +52,12 @@ pub fn form_input(props: &FormInputProps) -> Html {
                         on_value_changed.emit(value);
                     }}
                 />
-                <span class="icon is-small is-left">
-                    <i class="fas fa-user"></i>
-                </span>
+
+                if !props.fa_icon.is_empty() {
+                    <span class="icon is-small is-left">
+                        <i class={format!("fas {}", props.fa_icon)}></i>
+                    </span>
+                }
             </div>
         </div>
     }

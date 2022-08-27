@@ -8,6 +8,7 @@ use crate::router::SneuRoute;
 #[function_component(Home)]
 pub fn index() -> Html {
     let auth_reducer = use_auth_reducer();
+    log::info!("{:?}", *auth_reducer);
 
     match (*auth_reducer).clone() {
         AuthContext::NotAuthed => html! {

@@ -1,10 +1,11 @@
+use crate::utils::no_op;
 use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
 use wasm_bindgen::JsValue;
 use yew::prelude::*;
 use yew_hooks::use_bool_toggle;
-use yew_router::prelude::Redirect;
+use yew_router::prelude::{use_history, History};
 
 use crate::{
     components::{FormInput, InputType},
@@ -14,16 +15,27 @@ use crate::{
 
 #[function_component(SignIn)]
 pub fn sign_in() -> Html {
+    let history = use_history().unwrap();
     let auth_reducer = use_auth_reducer();
-    log::info!("{:?}", *auth_reducer);
 
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
     let is_loading = use_bool_toggle(false);
 
-    if let AuthContext::Authed(_) = *auth_reducer {
-        return html! { <Redirect<SneuRoute> to={SneuRoute::Home} />};
-    }
+    use_effect_with_deps(
+        {
+            let auth_reducer = auth_reducer.clone();
+
+            move |_| {
+                if let AuthContext::Authed(_) = *auth_reducer {
+                    history.push(SneuRoute::Home)
+                }
+
+                no_op
+            }
+        },
+        auth_reducer.clone(),
+    );
 
     html! {
         <form
@@ -52,22 +64,25 @@ pub fn sign_in() -> Html {
             }}
         >
             <FormInput
-                label={"Username:"}
+                fa_icon="fa-user"
+                label="Username:"
+                placeholder="Your username...?"
                 value={(*username).clone()}
                 on_value_changed={{
                     let username = username.clone();
                     Callback::from(move |value| username.set(value))
                 }}
-                input_type={InputType::Text}
             />
             <FormInput
-                label={"Password:"}
+                fa_icon="fa-key"
+                label="Password:"
+                placeholder="Your password...?"
+                input_type={InputType::Password}
                 value={(*password).clone()}
                 on_value_changed={{
                     let password = password.clone();
                     Callback::from(move |value| password.set(value))
                 }}
-                input_type={InputType::Password}
             />
             <button
                 type="submit"

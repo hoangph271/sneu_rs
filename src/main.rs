@@ -2,6 +2,7 @@ mod app;
 mod components;
 mod providers;
 mod router;
+mod utils;
 mod views;
 
 fn main() {
