@@ -33,7 +33,19 @@ pub struct FormInputProps {
 
 #[function_component(FormInput)]
 pub fn form_input(props: &FormInputProps) -> Html {
-    let on_value_changed = props.on_value_changed.clone();
+    let oninput = {
+        let on_value_changed = props.on_value_changed.clone();
+
+        move |e: InputEvent| {
+            let value = e
+                .target()
+                .and_then(|t| t.dyn_into::<HtmlInputElement>().ok())
+                .unwrap()
+                .value();
+
+            on_value_changed.emit(value);
+        }
+    };
 
     html! {
         <div class="field">
@@ -46,11 +58,7 @@ pub fn form_input(props: &FormInputProps) -> Html {
                     class="input"
                     placeholder={props.placeholder.to_owned()}
                     value={props.value.clone()}
-                    oninput={move |e: InputEvent| {
-                        let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
-
-                        on_value_changed.emit(value);
-                    }}
+                    {oninput}
                 />
 
                 if !props.fa_icon.is_empty() {
