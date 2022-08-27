@@ -7,6 +7,7 @@ use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
 use wasm_bindgen::JsValue;
+use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_hooks::use_bool_toggle;
 use yew_router::prelude::{use_history, History};
@@ -126,7 +127,7 @@ fn handle_submit<OnAuth>(username: String, password: String, on_authed: OnAuth)
 where
     OnAuth: Fn(AuthPayload) + 'static,
 {
-    wasm_bindgen_futures::spawn_local(async move {
+    spawn_local(async move {
         #[derive(Serialize)]
         struct LoginPayload {
             username: String,
