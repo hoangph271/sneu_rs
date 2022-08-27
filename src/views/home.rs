@@ -1,6 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::Redirect;
 
+use crate::components::MarkdownViewer;
 use crate::providers::AuthAction;
 use crate::providers::AuthContext;
 use crate::router::SneuRoute;
@@ -22,6 +23,7 @@ pub fn index() -> Html {
                     type="button"
                     onclick={move |_| auth_reducer.dispatch(AuthAction::SignOut)}
                 >{ "Sign out" }</button>
+                <MarkdownViewer />
             </div>
         },
     }

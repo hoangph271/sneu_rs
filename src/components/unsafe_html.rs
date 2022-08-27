@@ -1,13 +1,13 @@
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq)]
-pub struct SafeHtmlProps {
+#[derive(Properties, PartialEq, Eq)]
+pub struct UnsafeHtmlProps {
     pub html: String,
     pub tag: String,
 }
 
-#[function_component(SafeHtml)]
-pub fn safe_html(props: &SafeHtmlProps) -> Html {
+#[function_component(UnsafeHtml)]
+pub fn unsafe_html(props: &UnsafeHtmlProps) -> Html {
     let code = gloo_utils::document()
         .create_element(&props.tag)
         .unwrap_or_else(|e| panic!("create_element() [{:?}] failed: {e:?}", &props.tag));

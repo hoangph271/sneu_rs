@@ -1,4 +1,5 @@
 mod app;
+mod components;
 mod providers;
 mod router;
 mod views;
