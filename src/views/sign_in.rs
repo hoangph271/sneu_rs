@@ -1,13 +1,13 @@
 use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
-use wasm_bindgen::{JsCast, JsValue};
-use web_sys::HtmlInputElement;
+use wasm_bindgen::JsValue;
 use yew::prelude::*;
 use yew_hooks::use_bool_toggle;
 use yew_router::prelude::Redirect;
 
 use crate::{
+    components::{FormInput, InputType},
     providers::{use_auth_reducer, Auth, AuthAction, AuthContext},
     router::SneuRoute,
 };
@@ -51,44 +51,24 @@ pub fn sign_in() -> Html {
                 })
             }}
         >
-            <div class="field">
-                <label class="label">{ "Username:" }</label>
-                <div class="control has-icons-left has-icons-right">
-                    <input
-                        type="text"
-                        class="input"
-                        placeholder="Your username"
-                        value={(*username).clone()}
-                        oninput={move |e: InputEvent| {
-                            let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
-
-                            username.set(value);
-                        }}
-                    />
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-user"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">{ "Password:" }</label>
-                <div class="control has-icons-left has-icons-right">
-                    <input
-                        type="password"
-                        class="input"
-                        placeholder="Your password"
-                        value={(*password).clone()}
-                        oninput={move |e: InputEvent| {
-                            let value = e.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()).unwrap().value();
-
-                            password.set(value);
-                        }}
-                    />
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-key"></i>
-                    </span>
-                </div>
-            </div>
+            <FormInput
+                label={"Username:"}
+                value={(*username).clone()}
+                on_value_changed={{
+                    let username = username.clone();
+                    Callback::from(move |value| username.set(value))
+                }}
+                input_type={InputType::Text}
+            />
+            <FormInput
+                label={"Password:"}
+                value={(*password).clone()}
+                on_value_changed={{
+                    let password = password.clone();
+                    Callback::from(move |value| password.set(value))
+                }}
+                input_type={InputType::Password}
+            />
             <button
                 type="submit"
                 disabled={*is_loading}
