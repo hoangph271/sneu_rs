@@ -1,4 +1,5 @@
 use crate::{
+    components::ButtonType,
     providers::{use_auth_context, AuthAction},
     utils::no_op,
 };
@@ -11,7 +12,7 @@ use yew_hooks::use_bool_toggle;
 use yew_router::prelude::{use_history, History};
 
 use crate::{
-    components::{FormInput, InputType},
+    components::{BulmaButton, FormInput, InputType},
     providers::{Auth, AuthMessage},
     router::SneuRoute,
 };
@@ -92,11 +93,12 @@ pub fn sign_in() -> Html {
                     Callback::from(move |value| password.set(value))
                 }}
             />
-            <button
-                type="submit"
+            <BulmaButton
+                button_type={ButtonType::Submit}
                 disabled={*is_loading}
-                class="button is-primary"
-            >{ "Sign in" }</button>
+            >
+                { "Sign in" }
+            </BulmaButton>
         </form>
     }
 }

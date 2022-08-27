@@ -4,11 +4,13 @@ use yew::prelude::*;
 pub enum ButtonType {
     #[default]
     Button,
+    Submit,
 }
 impl ButtonType {
     fn to_type_attr(&self) -> String {
         match self {
             ButtonType::Button => "button",
+            ButtonType::Submit => "submit",
         }
         .to_owned()
     }
@@ -18,11 +20,13 @@ impl ButtonType {
 pub enum ButtonVariant {
     #[default]
     Primary,
+    Warning,
 }
 impl ButtonVariant {
     fn to_bulma_classname(&self) -> String {
         let suffix = match self {
             ButtonVariant::Primary => "primary",
+            ButtonVariant::Warning => "warning",
         };
 
         format!("button is-{suffix}")
