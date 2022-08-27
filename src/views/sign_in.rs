@@ -1,4 +1,7 @@
-use crate::utils::no_op;
+use crate::{
+    providers::{use_auth_context, AuthAction},
+    utils::no_op,
+};
 use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
@@ -9,14 +12,14 @@ use yew_router::prelude::{use_history, History};
 
 use crate::{
     components::{FormInput, InputType},
-    providers::{use_auth_reducer, Auth, AuthAction, AuthContext},
+    providers::{Auth, AuthMessage},
     router::SneuRoute,
 };
 
 #[function_component(SignIn)]
 pub fn sign_in() -> Html {
     let history = use_history().unwrap();
-    let auth_reducer = use_auth_reducer();
+    let auth_context = use_auth_context();
 
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
@@ -24,17 +27,17 @@ pub fn sign_in() -> Html {
 
     use_effect_with_deps(
         {
-            let auth_reducer = auth_reducer.clone();
+            let auth = (*auth_context).clone();
 
             move |_| {
-                if let AuthContext::Authed(_) = *auth_reducer {
+                if let AuthMessage::Authed(_) = auth {
                     history.push(SneuRoute::Home)
                 }
 
                 no_op
             }
         },
-        auth_reducer.clone(),
+        auth_context.clone(),
     );
 
     html! {
@@ -48,18 +51,23 @@ pub fn sign_in() -> Html {
                 let password = (*password).clone();
                 let is_loading = is_loading.clone();
 
-                Callback::from(move |e: FocusEvent| {
-                    e.prevent_default();
+                Callback::from({
+                    let auth_context = auth_context.clone();
 
-                    let auth_reducer = auth_reducer.clone();
-                    let is_loading = is_loading.clone();
+                    move |e: FocusEvent| {
+                        e.prevent_default();
 
-                    is_loading.toggle();
+                        let is_loading = is_loading.clone();
+                        let auth_context = auth_context.clone();
 
-                    handle_submit(username.clone(), password.clone(), move |auth| {
                         is_loading.toggle();
-                        auth_reducer.dispatch(AuthAction::SignIn(auth));
-                    });
+
+                        handle_submit(username.clone(), password.clone(), move |auth| {
+                            is_loading.toggle();
+                            auth_context.dispatch(AuthAction::SignIn(auth))
+                        });
+                    }
+
                 })
             }}
         >

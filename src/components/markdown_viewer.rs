@@ -1,3 +1,4 @@
+use crate::components::*;
 use pulldown_cmark::{html, Options, Parser};
 use yew::prelude::*;
 
@@ -12,6 +13,21 @@ pub struct MarkdownViewer {
     markdown: String,
 }
 
+impl MarkdownViewer {
+    fn font_style(&self) -> String {
+        if self.is_in_monospace {
+            "Serif"
+        } else {
+            "Monospace"
+        }
+        .to_owned()
+    }
+
+    fn markdown_root_tag(&self) -> String {
+        if self.is_in_monospace { "code" } else { "div" }.to_owned()
+    }
+}
+
 impl Component for MarkdownViewer {
     type Message = MarkdownViewerMessage;
     type Properties = ();
@@ -19,6 +35,7 @@ impl Component for MarkdownViewer {
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
             is_in_monospace: true,
+            // TODO: Read from URL
             markdown: String::from_utf8(include_bytes!("../../LICENSE.md").to_vec())
                 .unwrap_or_else(|e| panic!("{e}")),
         }
@@ -36,26 +53,25 @@ impl Component for MarkdownViewer {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let link = ctx.link();
-        let font_style = if self.is_in_monospace {
-            "Serif"
-        } else {
-            "Monospace"
-        };
-        let markdown_root_tag = if self.is_in_monospace { "code" } else { "div" };
 
         html! {
             <div>
-                <button onclick={link.callback(|_| MarkdownViewerMessage::ToggleMonospace)}>
-                    { font_style }
-                </button>
-                <UnsafeHtml
-                    html={ parse_markdown(&self.markdown) }
-                    tag={ markdown_root_tag }
-                />
+                <BulmaButton
+                    onclick={link.callback(|_| MarkdownViewerMessage::ToggleMonospace)}
+                >
+                    { self.font_style() }
+                </BulmaButton>
+                <div>
+                    <UnsafeHtml
+                        html={ parse_markdown(&self.markdown) }
+                        tag={ self.markdown_root_tag() }
+                    />
+                </div>
             </div>
         }
     }
 }
+
 fn parse_markdown(markdown_input: &str) -> String {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);

@@ -1,6 +1,5 @@
 use std::rc::Rc;
-
-use yew::{use_context, use_reducer_eq, Reducible, UseReducerHandle};
+use yew::prelude::*;
 
 #[derive(Debug)]
 pub enum AuthAction {
@@ -14,19 +13,14 @@ pub struct Auth {
     pub jwt: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum AuthContext {
+#[derive(Clone, Debug, PartialEq, Eq, Default)]
+pub enum AuthMessage {
     Authed(Auth),
+    #[default]
     NotAuthed,
 }
 
-impl Default for AuthContext {
-    fn default() -> Self {
-        Self::NotAuthed
-    }
-}
-
-impl Reducible for AuthContext {
+impl Reducible for AuthMessage {
     type Action = AuthAction;
 
     fn reduce(self: Rc<Self>, action: Self::Action) -> Rc<Self> {
@@ -38,8 +32,25 @@ impl Reducible for AuthContext {
     }
 }
 
-pub fn use_auth_reducer() -> UseReducerHandle<AuthContext> {
-    let auth_context = use_context::<AuthContext>().unwrap();
+pub type AuthContext = UseReducerHandle<AuthMessage>;
 
-    use_reducer_eq(|| auth_context)
+pub fn use_auth_context() -> UseReducerHandle<AuthMessage> {
+    use_context::<AuthContext>().expect("use_auth_context() got None")
+}
+
+#[derive(PartialEq, Properties)]
+pub struct AuthProviderProps {
+    #[prop_or_default]
+    pub children: Children,
+}
+
+#[function_component(AuthProvider)]
+pub fn auth_provider(props: &AuthProviderProps) -> Html {
+    let auth = use_reducer(AuthMessage::default);
+
+    html! {
+        <ContextProvider<AuthContext> context={auth}>
+            {props.children.clone()}
+        </ContextProvider<AuthContext>>
+    }
 }
