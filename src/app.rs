@@ -1,4 +1,4 @@
-use super::providers::AuthMessage;
+use super::providers::AuthProvider;
 use super::router;
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -16,11 +16,9 @@ pub fn app_with_router() -> Html {
 
 #[function_component(AppWithContext)]
 pub fn app_with_context() -> Html {
-    let auth = use_state_eq(AuthMessage::default);
-
     html! {
-        <ContextProvider<AuthMessage> context={(*auth).clone()}>
+        <AuthProvider>
             <AppWithRouter />
-        </ContextProvider<AuthMessage>>
+        </AuthProvider>
     }
 }

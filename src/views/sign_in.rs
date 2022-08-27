@@ -18,8 +18,6 @@ use crate::{
 
 #[function_component(SignIn)]
 pub fn sign_in() -> Html {
-    log::info!("SignIn:");
-
     let history = use_history().unwrap();
     let auth_context = use_auth_context();
 

@@ -1,6 +1,5 @@
 use std::rc::Rc;
-
-use yew::{use_context, Reducible, UseReducerHandle};
+use yew::prelude::*;
 
 #[derive(Debug)]
 pub enum AuthAction {
@@ -36,7 +35,22 @@ impl Reducible for AuthMessage {
 pub type AuthContext = UseReducerHandle<AuthMessage>;
 
 pub fn use_auth_context() -> UseReducerHandle<AuthMessage> {
-    let auth_context = use_context::<AuthContext>().expect("use_auth_context() got None");
+    use_context::<AuthContext>().expect("use_auth_context() got None")
+}
 
-    auth_context
+#[derive(PartialEq, Properties)]
+pub struct AuthProviderProps {
+    #[prop_or_default]
+    pub children: Children,
+}
+
+#[function_component(AuthProvider)]
+pub fn auth_provider(props: &AuthProviderProps) -> Html {
+    let auth = use_reducer(AuthMessage::default);
+
+    html! {
+        <ContextProvider<AuthContext> context={auth}>
+            {props.children.clone()}
+        </ContextProvider<AuthContext>>
+    }
 }

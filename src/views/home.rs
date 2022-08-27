@@ -1,13 +1,11 @@
 use yew::prelude::*;
 use yew_router::prelude::Redirect;
 
-use crate::components::MarkdownViewer;
 use crate::providers::{use_auth_context, AuthAction, AuthMessage};
 use crate::router::SneuRoute;
 
 #[function_component(Home)]
 pub fn index() -> Html {
-    log::info!("Home:");
     let auth_context = use_auth_context();
 
     match &*auth_context {
@@ -24,7 +22,6 @@ pub fn index() -> Html {
                         auth_context.dispatch(AuthAction::SignOut);
                     }}
                 >{ "Sign out" }</button>
-                <MarkdownViewer />
             </div>
         },
     }
