@@ -1,4 +1,4 @@
-name: Rust
+name: trunkrs
 
 on:
   workflow_dispatch:
