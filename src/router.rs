@@ -14,6 +14,8 @@ pub enum SneuRoute {
     Gallery,
     #[at("/music")]
     Music,
+    #[at("/quickjs")]
+    QuickJs,
 }
 
 pub fn switch(route: &SneuRoute) -> Html {
@@ -25,5 +27,6 @@ pub fn switch(route: &SneuRoute) -> Html {
         },
         SneuRoute::Gallery => html! { <Gallery /> },
         SneuRoute::Music => html! { <Music /> },
+        SneuRoute::QuickJs => html! { <QuickJs /> },
     }
 }
