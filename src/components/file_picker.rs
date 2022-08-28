@@ -1,7 +1,8 @@
 use gloo_file::FileList;
-use wasm_bindgen::JsCast;
-use web_sys::{EventTarget, HtmlInputElement};
+use web_sys::HtmlInputElement;
 use yew::prelude::*;
+
+use crate::utils::expect_target;
 
 #[derive(PartialEq, Properties, Default)]
 pub struct FilePickerProps {
@@ -16,12 +17,11 @@ pub fn file_picker(props: &FilePickerProps) -> Html {
         let on_files_picked = on_files_picked.clone();
 
         move |e: InputEvent| {
-            expect_target(e.target())
-                .map(|el: HtmlInputElement| el.files())
-                .flatten()
-                .map(|files| {
-                    on_files_picked.emit(files.into());
-                });
+            let file_list = expect_target(e.target()).and_then(|el: HtmlInputElement| el.files());
+
+            if let Some(files) = file_list {
+                on_files_picked.emit(files.into());
+            }
         }
     });
 
@@ -49,15 +49,4 @@ pub fn file_picker(props: &FilePickerProps) -> Html {
             </label>
         </div>
     }
-}
-
-fn expect_target<T: JsCast>(target: Option<EventTarget>) -> Option<T> {
-    target.and_then(|t| match t.dyn_into::<T>() {
-        Ok(value) => Some(value),
-        Err(e) => {
-            log::error!("expect_target() failed: {e:?}");
-
-            None
-        }
-    })
 }

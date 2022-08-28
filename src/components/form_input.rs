@@ -1,6 +1,7 @@
-use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
+
+use crate::utils::expect_target;
 
 #[derive(PartialEq, Eq, Default)]
 pub enum InputType {
@@ -37,10 +38,8 @@ pub fn form_input(props: &FormInputProps) -> Html {
         let on_value_changed = props.on_value_changed.clone();
 
         move |e: InputEvent| {
-            let value = e
-                .target()
-                .and_then(|t| t.dyn_into::<HtmlInputElement>().ok())
-                .unwrap()
+            let value = expect_target::<HtmlInputElement>(e.target())
+                .expect("form_input event target casting failed")
                 .value();
 
             on_value_changed.emit(value);
