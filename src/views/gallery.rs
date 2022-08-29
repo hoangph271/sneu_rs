@@ -25,6 +25,20 @@ fn use_image_url() -> Option<String> {
                             .unwrap()
                             .url();
 
+                    let reader = Request::get(&redirect_url)
+                        .send()
+                        .await
+                        .unwrap()
+                        .binary()
+                        .await
+                        .unwrap();
+
+                    let reader = std::io::Cursor::new(reader);
+                    let mut image = image::io::Reader::new(reader);
+                    image.set_format(image::ImageFormat::Gif);
+
+                    log::info!("WTF: {:?}", image.with_guessed_format().unwrap().format());
+
                     image_url.set(Some(redirect_url));
                 });
 
