@@ -13,11 +13,12 @@ pub fn use_random_image_url() -> Option<String> {
 
             |_| {
                 spawn_local(async move {
-                    let redirect_url = sneu_api::get("/files/random/raw?mime=image/&preview=true")
-                        .await
-                        .unwrap();
+                    let redirect_url =
+                        sneu_api::raw_get("/files/random/raw?mime=image/&preview=true")
+                            .await
+                            .unwrap();
 
-                    image_url.set(Some(redirect_url));
+                    image_url.set(Some(redirect_url.url()));
                 });
 
                 no_op

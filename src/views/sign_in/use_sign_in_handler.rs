@@ -81,12 +81,15 @@ where
         });
 
         on_authed(
-            sneu_api::post::<ApiItem<String>>("/users/signin", JsValue::from_str(&sign_in_payload))
-                .await
-                .map(|api_item| AuthPayload {
-                    username,
-                    jwt: api_item.item,
-                }),
+            sneu_api::json_post::<ApiItem<String>>(
+                "/users/signin",
+                JsValue::from_str(&sign_in_payload),
+            )
+            .await
+            .map(|api_item| AuthPayload {
+                username,
+                jwt: api_item.item,
+            }),
         );
     });
 }
