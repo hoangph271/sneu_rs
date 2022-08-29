@@ -1,5 +1,4 @@
-use crate::components::ButtonType;
-use crate::components::{BulmaButton, FormInput, InputType};
+use crate::components::*;
 
 mod use_redirect_on_auth;
 mod use_sign_in_handler;
@@ -14,7 +13,8 @@ pub fn sign_in() -> Html {
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
 
-    let (is_loading, onsubmit) = use_sign_in_handler((*username).clone(), (*password).clone());
+    let (is_loading, onsubmit, sign_in_error, clear_error) =
+        use_sign_in_handler((*username).clone(), (*password).clone());
 
     use_redirect_on_auth();
 
@@ -26,6 +26,15 @@ pub fn sign_in() -> Html {
             class="container is-fluid is-flex is-flex-direction-column is-justify-content-center"
             {onsubmit}
         >
+            if !sign_in_error.is_empty() {
+                <Toast
+                    variant={BulmaVariant::Danger}
+                    header="Sign in error...!"
+                    ondismiss={Callback::from(move |_| clear_error.emit(()))}
+                >
+                    { sign_in_error }
+                </Toast>
+            }
             <FormInput
                 fa_icon="fa-user"
                 label="Username:"

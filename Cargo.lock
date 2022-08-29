@@ -469,6 +469,7 @@ dependencies = [
  "gloo-file",
  "gloo-net",
  "gloo-storage",
+ "gloo-timers",
  "gloo-utils",
  "httpstatus",
  "log",

@@ -25,6 +25,14 @@ impl From<Error> for ApiError {
     }
 }
 
+impl ApiError {
+    pub fn to_string(&self) -> String {
+        match self {
+            ApiError::JsonError(e) => e.to_owned(),
+        }
+    }
+}
+
 pub async fn post<T: DeserializeOwned>(url: &str, payload: JsValue) -> ApiResult<T> {
     let res: T = Request::post(&with_api_root(url))
         .method(Method::POST)
