@@ -17,16 +17,19 @@ impl ButtonType {
 }
 
 #[derive(PartialEq, Eq, Default)]
-pub enum ButtonVariant {
+pub enum BulmaVariant {
     #[default]
     Primary,
     Warning,
+    Danger,
 }
-impl ButtonVariant {
-    fn to_bulma_classname(&self) -> String {
+
+impl BulmaVariant {
+    pub fn to_classname(&self) -> String {
         let suffix = match self {
-            ButtonVariant::Primary => "primary",
-            ButtonVariant::Warning => "warning",
+            BulmaVariant::Primary => "primary",
+            BulmaVariant::Warning => "warning",
+            BulmaVariant::Danger => "danger",
         };
 
         format!("button is-{suffix}")
@@ -42,7 +45,7 @@ pub struct BulmaButtonProps {
     #[prop_or_default]
     pub button_type: ButtonType,
     #[prop_or_default]
-    pub variant: ButtonVariant,
+    pub variant: BulmaVariant,
     #[prop_or_default]
     pub children: Children,
 }
@@ -66,7 +69,7 @@ pub fn bulma_button(props: &BulmaButtonProps) -> Html {
             }}
             type={ button_type.to_type_attr() }
             disabled={ *disabled }
-            class={ variant.to_bulma_classname() }
+            class={ variant.to_classname() }
         >
             { children.clone() }
         </button>

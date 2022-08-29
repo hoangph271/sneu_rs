@@ -17,6 +17,8 @@ pub enum SneuRoute {
     #[not_found]
     #[at("/404")]
     NotFound,
+    #[at("/trial")]
+    Trial,
 }
 
 pub fn switch(route: &SneuRoute) -> Html {
@@ -27,6 +29,9 @@ pub fn switch(route: &SneuRoute) -> Html {
         SneuRoute::Gallery => html! { <Gallery /> },
         SneuRoute::Music => html! { <Music /> },
         SneuRoute::NotFound => html! { <NotFound /> },
+        SneuRoute::Trial => {
+            html! { <code> { "TODO: // Add something to use SneuRoute::Trial" } </code> }
+        }
     }
 }
 

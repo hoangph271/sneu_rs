@@ -14,6 +14,7 @@ gloo-utils = "0.1.5"
 gloo-net = "0.2.4"
 gloo-storage = "0.2.2"
 gloo-file = "0.2.3"
+gloo-timers = "0.2.4"
 
 wasm-bindgen-futures = "0.4.32"
 wasm-bindgen = "0.2.82"

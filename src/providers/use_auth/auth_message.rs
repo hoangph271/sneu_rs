@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use gloo_storage::{errors::StorageError, SessionStorage, Storage};
+use gloo_storage::{SessionStorage, Storage};
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
@@ -28,14 +28,19 @@ impl AuthMessage {
     // FIXME: Now using SessionStorage to store JWT
     // NOT safe, consider HttpOnly Cookies...?
     // Or only in-memory...?
-    pub fn persist_locally(&self) -> Result<(), StorageError> {
+    pub fn persist_locally(&self) {
         match self {
             AuthMessage::Authed(auth) => SessionStorage::set(AUTH_STORAGE_KEY, auth),
             AuthMessage::NotAuthed => {
                 SessionStorage::delete(AUTH_STORAGE_KEY);
                 Ok(())
-            },
+            }
         }
+        .unwrap_or_else(|e| panic!("persist_locally() failed: {e}"));
+    }
+
+    pub fn remove_locally() {
+        SessionStorage::delete(AUTH_STORAGE_KEY);
     }
 }
 
