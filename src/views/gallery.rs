@@ -1,12 +1,10 @@
-use crate::utils::api_url::with_api_root;
+use crate::utils::no_op;
+use crate::utils::sneu_api;
 
-use gloo_net::http::Request;
 use gloo_utils::document;
 use std::path::PathBuf;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
-
-use crate::utils::no_op;
 
 fn use_image_url() -> Option<String> {
     let image_url = use_state_eq(|| None);
@@ -17,12 +15,9 @@ fn use_image_url() -> Option<String> {
 
             |_| {
                 spawn_local(async move {
-                    let redirect_url =
-                        Request::get(&with_api_root("/files/random/raw?mime=image/&preview=true"))
-                            .send()
-                            .await
-                            .unwrap()
-                            .url();
+                    let redirect_url = sneu_api::get("/files/random/raw?mime=image/&preview=true")
+                        .await
+                        .unwrap();
 
                     image_url.set(Some(redirect_url));
                 });
