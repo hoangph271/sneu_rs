@@ -1,7 +1,7 @@
 use crate::{
     components::ButtonType,
     providers::{use_auth_context, AuthAction},
-    utils::no_op,
+    utils::{api_url::with_api_root, no_op},
 };
 use gloo_net::http::{Method, Request};
 use httpstatus::StatusCode;
@@ -141,7 +141,7 @@ where
         .unwrap();
         let login_payload = JsValue::from_str(&json_payload);
 
-        let api_item: ApiItem<String> = Request::post("https://alpha-sneu.xyz/api/v1/users/signin")
+        let api_item: ApiItem<String> = Request::post(&with_api_root("/users/signin"))
             .method(Method::POST)
             .body(login_payload)
             .send()

@@ -1,3 +1,4 @@
+use crate::utils::api_url::with_api_root;
 use std::path::PathBuf;
 
 use gloo_net::http::Request;
@@ -16,9 +17,9 @@ fn use_image_url() -> Option<String> {
 
             |_| {
                 spawn_local(async move {
-                    let redirect_url = Request::get(
-                        "https://alpha-sneu.xyz/api/v1/files/random/raw?mime=image/&preview=true",
-                    )
+                    let redirect_url = Request::get(&with_api_root(
+                        "{API_ROOT}/files/random/raw?mime=image/&preview=true",
+                    ))
                     .send()
                     .await
                     .unwrap()
