@@ -19,15 +19,13 @@ pub fn use_sign_in_handler(
 ) -> (bool, Callback<FocusEvent>, String, Callback<()>) {
     let auth_context = use_auth_context();
     let is_loading = use_bool_toggle(false);
-    let sign_in_error = use_state_eq(|| String::new());
+    let sign_in_error = use_state_eq(String::new);
 
     let onsubmit = {
         let is_loading = is_loading.clone();
         let sign_in_error = sign_in_error.clone();
 
         Callback::from({
-            let auth_context = auth_context.clone();
-
             move |e: FocusEvent| {
                 e.prevent_default();
 

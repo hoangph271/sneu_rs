@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use super::api_url::with_api_root;
 mod api_item;
 
@@ -24,13 +26,16 @@ impl From<Error> for ApiError {
         }
     }
 }
-
-impl ApiError {
-    pub fn to_string(&self) -> String {
-        match self {
-            ApiError::JsonError(e) => e.to_owned(),
-            ApiError::JsError(e) => e.to_owned(),
-        }
+impl Display for ApiError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                ApiError::JsonError(e) => e.to_owned(),
+                ApiError::JsError(e) => e.to_owned(),
+            }
+        )
     }
 }
 
