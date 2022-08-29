@@ -38,6 +38,10 @@ impl AuthMessage {
         }
         .unwrap_or_else(|e| panic!("persist_locally() failed: {e}"));
     }
+
+    pub fn remove_locally() {
+        SessionStorage::delete(AUTH_STORAGE_KEY);
+    }
 }
 
 impl Default for AuthMessage {

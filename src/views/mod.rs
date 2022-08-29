@@ -6,6 +6,7 @@ mod not_found;
 mod sign_in;
 
 pub use gallery::*;
+pub use gallery::*;
 pub use home::*;
 pub use markdown::*;
 pub use music::*;

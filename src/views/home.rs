@@ -18,7 +18,10 @@ pub fn index() -> Html {
                 <h4>{ format!("Welcome, {}...!", auth.username) }</h4>
                 <BulmaButton
                     variant={ButtonVariant::Warning}
-                    onclick={Callback::from(move |_| auth_context.dispatch(AuthAction::SignOut))}
+                    onclick={Callback::from(move |_| {
+                        AuthMessage::remove_locally();
+                        auth_context.dispatch(AuthAction::SignOut);
+                    })}
                 >
                     { "Sign out" }
                 </BulmaButton>
