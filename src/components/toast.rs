@@ -29,7 +29,7 @@ pub fn toast(props: &ToastProps) -> Html {
         duration,
     } = props;
 
-    use_cleanup_toast(duration.clone(), ondismiss.clone());
+    use_cleanup_toast(*duration, ondismiss.clone());
 
     create_portal(
         html! {
@@ -84,26 +84,24 @@ fn get_toast_host() -> Element {
 fn use_cleanup_toast(duration: Option<Duration>, ondismiss: Callback<()>) {
     use_effect_with_deps(
         {
-            let duration = duration.clone();
-
             move |_| {
                 let mut timeout = None;
 
                 if let Some(duration) = duration {
                     let duration = duration.as_millis() as u32;
 
-                    timeout = Some(Timeout::new(duration.clone(), move || {
+                    timeout = Some(Timeout::new(duration, move || {
                         ondismiss.emit(());
                     }));
                 };
 
                 || {
-                    timeout.map(|timeout| {
+                    if let Some(timeout) = timeout {
                         timeout.cancel();
-                    });
+                    }
                 }
             }
         },
-        duration.clone(),
+        duration,
     );
 }
