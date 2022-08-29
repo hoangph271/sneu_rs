@@ -20,3 +20,14 @@ pub fn app_with_context() -> Html {
         </AuthProvider>
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::AppWithContext;
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen_test]
+    fn app_runs() {
+        yew::start_app::<AppWithContext>();
+    }
+}
