@@ -17,22 +17,21 @@ impl ButtonType {
 }
 
 #[derive(PartialEq, Eq, Default)]
-pub enum BulmaVariant {
+pub enum ColorVariant {
     #[default]
     Primary,
     Warning,
     Danger,
 }
 
-impl BulmaVariant {
-    pub fn to_classname(&self) -> String {
-        let suffix = match self {
-            BulmaVariant::Primary => "primary",
-            BulmaVariant::Warning => "warning",
-            BulmaVariant::Danger => "danger",
-        };
-
-        format!("button is-{suffix}")
+impl ColorVariant {
+    pub fn bg(&self) -> String {
+        match self {
+            ColorVariant::Primary => "bg-sky-500 hover:bg-sky-700",
+            ColorVariant::Warning => "bg-amber-500 hover:bg-amber-700",
+            ColorVariant::Danger => "bg-rose-500 hover:bg-rose-700",
+        }
+        .to_owned()
     }
 }
 
@@ -45,13 +44,13 @@ pub struct BulmaButtonProps {
     #[prop_or_default]
     pub button_type: ButtonType,
     #[prop_or_default]
-    pub variant: BulmaVariant,
+    pub variant: ColorVariant,
     #[prop_or_default]
     pub children: Children,
 }
 
-#[function_component(BulmaButton)]
-pub fn bulma_button(props: &BulmaButtonProps) -> Html {
+#[function_component(PillButton)]
+pub fn pill_button(props: &BulmaButtonProps) -> Html {
     let BulmaButtonProps {
         onclick,
         button_type,
@@ -69,7 +68,7 @@ pub fn bulma_button(props: &BulmaButtonProps) -> Html {
             }}
             type={ button_type.to_type_attr() }
             disabled={ *disabled }
-            class={ variant.to_classname() }
+            class={ format!("rounded-full px-6 py-1 text-white {}", variant.bg()) }
         >
             { children.clone() }
         </button>

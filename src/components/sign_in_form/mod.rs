@@ -1,34 +1,28 @@
-use crate::components::*;
-
-mod use_redirect_on_auth;
 mod use_sign_in_handler;
 
-use use_redirect_on_auth::use_redirect_on_auth;
+use crate::components::*;
 use use_sign_in_handler::use_sign_in_handler;
 
 use yew::prelude::*;
 
-#[function_component(SignIn)]
-pub fn sign_in() -> Html {
+#[function_component(SignInForm)]
+pub fn sign_in_form() -> Html {
     let username = use_state_eq(|| "".to_owned());
     let password = use_state_eq(|| "".to_owned());
 
     let (is_loading, onsubmit, sign_in_error, clear_error) =
         use_sign_in_handler((*username).clone(), (*password).clone());
 
-    use_redirect_on_auth();
-
     html! {
         <form
             method="post"
             action="http://localhost:8000/api/v1/users/signin"
-            style="height: 100vh;"
-            class="container is-fluid is-flex is-flex-direction-column is-justify-content-center"
+            class="inline-flex flex-col items-center p-6 gap-4 drop-shadow-md border rounded border-gray-400 drop-shadow-md"
             {onsubmit}
         >
             if !sign_in_error.is_empty() {
                 <Toast
-                    variant={BulmaVariant::Danger}
+                    variant={ColorVariant::Danger}
                     header="Sign in error...!"
                     ondismiss={Callback::from(move |_| clear_error.emit(()))}
                 >
@@ -56,12 +50,12 @@ pub fn sign_in() -> Html {
                     Callback::from(move |value| password.set(value))
                 }}
             />
-            <BulmaButton
+            <PillButton
                 button_type={ButtonType::Submit}
                 disabled={is_loading}
             >
                 { "Sign in" }
-            </BulmaButton>
+            </PillButton>
         </form>
     }
 }

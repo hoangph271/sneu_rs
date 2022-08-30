@@ -1,4 +1,4 @@
-use super::BulmaVariant;
+use super::ColorVariant;
 
 use gloo_timers::callback::Timeout;
 use gloo_utils::document;
@@ -9,7 +9,7 @@ use yew::prelude::*;
 #[derive(PartialEq, Properties, Default)]
 pub struct ToastProps {
     #[prop_or_default]
-    pub variant: BulmaVariant,
+    pub variant: ColorVariant,
     pub header: String,
     #[prop_or_default]
     pub children: Children,
@@ -37,7 +37,7 @@ pub fn toast(props: &ToastProps) -> Html {
                 open={true}
                 style="position: absolute; border: none; bottom: 0; right: 0; left: unset; z-index: 5; margin: 1rem; padding: 0;"
             >
-                <article class={ format!("message is-{}", variant.to_classname()) }>
+                <article class={ format!("message is-{}", variant.bg()) }>
                     <div class="message-header">
                         <p>{ header }</p>
                         <button

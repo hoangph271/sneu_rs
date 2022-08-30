@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::Redirect;
 
-use crate::components::{BulmaButton, BulmaVariant};
+use crate::components::{ColorVariant, PillButton};
 use crate::providers::{use_auth_context, AuthAction, AuthMessage};
 use crate::router::SneuRoute;
 
@@ -16,15 +16,15 @@ pub fn index() -> Html {
         AuthMessage::Authed(auth) => html! {
             <div>
                 <h4>{ format!("Welcome, {}...!", auth.username) }</h4>
-                <BulmaButton
-                    variant={BulmaVariant::Warning}
+                <PillButton
+                    variant={ColorVariant::Warning}
                     onclick={Callback::from(move |_| {
                         AuthMessage::remove_locally();
                         auth_context.dispatch(AuthAction::SignOut);
                     })}
                 >
                     { "Sign out" }
-                </BulmaButton>
+                </PillButton>
             </div>
         },
     }
