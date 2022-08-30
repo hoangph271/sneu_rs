@@ -25,11 +25,11 @@ pub enum ColorVariant {
 }
 
 impl ColorVariant {
-    pub fn to_color(&self) -> String {
+    pub fn bg(&self) -> String {
         match self {
-            ColorVariant::Primary => "primary",
-            ColorVariant::Warning => "warning",
-            ColorVariant::Danger => "danger",
+            ColorVariant::Primary => "bg-sky-500 hover:bg-sky-700",
+            ColorVariant::Warning => "bg-amber-500 hover:bg-amber-700",
+            ColorVariant::Danger => "bg-rose-500 hover:bg-rose-700",
         }
         .to_owned()
     }
@@ -59,8 +59,6 @@ pub fn pill_button(props: &BulmaButtonProps) -> Html {
         children,
     } = props;
 
-    let color = variant.to_color();
-
     html! {
         <button
             onclick={{
@@ -70,7 +68,7 @@ pub fn pill_button(props: &BulmaButtonProps) -> Html {
             }}
             type={ button_type.to_type_attr() }
             disabled={ *disabled }
-            class={ "rounded-full bg-cyan-500 px-6 py-1 hover:bg-cyan-700" }
+            class={ format!("rounded-full px-6 py-1 text-white {}", variant.bg()) }
         >
             { children.clone() }
         </button>
