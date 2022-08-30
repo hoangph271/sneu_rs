@@ -34,7 +34,6 @@ pub fn sign_in_form() -> Html {
                     </Toast>
                 }
                 <FormInput
-                    id="username"
                     fa_icon="fa-user"
                     label="Username:"
                     placeholder="Your username...?"
@@ -45,7 +44,6 @@ pub fn sign_in_form() -> Html {
                     }}
                 />
                 <FormInput
-                    id="password"
                     fa_icon="fa-key"
                     label="Password:"
                     placeholder="Your password...?"
