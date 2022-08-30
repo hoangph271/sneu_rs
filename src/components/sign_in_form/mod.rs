@@ -15,14 +15,14 @@ pub fn sign_in_form() -> Html {
 
     html! {
         <div
-            class="inline-flex flex-col items-center gap-4 border rounded border-zinc-200 shadow-lg shadow-zinc-200"
+            class="inline-flex flex-col items-center p-6 gap-4 border rounded border-zinc-200 shadow-lg shadow-zinc-200"
         >
             <Logo />
             <form
                 method="post"
                 action="http://localhost:8000/api/v1/users/signin"
                 {onsubmit}
-                class="inline-flex flex-col items-center p-6 gap-4"
+                class="inline-flex flex-col items-center gap-4"
             >
                 if !sign_in_error.is_empty() {
                     <Toast
