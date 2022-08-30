@@ -6,7 +6,7 @@ const LOGO_URL: &str = "https://alpha-sneu.xyz/static/svg/sneu.svg";
 pub fn logo() -> Html {
     html! {
         <div
-            class="w-16 h-16"
+            class="w-32 h-32 rounded-full bg-[length:80%] bg-center bg-no-repeat shadow-xl shadow-slate-300"
             style={format!("background-image: url({LOGO_URL})")}
         />
     }
