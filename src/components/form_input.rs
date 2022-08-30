@@ -1,5 +1,6 @@
 use crate::utils::expect_target;
 
+use nanoid::nanoid;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
@@ -21,8 +22,7 @@ impl InputType {
 
 #[derive(Properties, PartialEq, Default)]
 pub struct FormInputProps {
-    // ! FIXME: use random ID
-    #[prop_or_default]
+    #[prop_or_else(|| nanoid!())]
     pub id: String,
     #[prop_or(InputType::Text)]
     pub input_type: InputType,
@@ -67,17 +67,16 @@ pub fn form_input(props: &FormInputProps) -> Html {
                 <label class="label" for={id.clone()}>{ label.clone() }</label>
             }
             <div
-                class="border rounded border-gray-200 bg-slate-300 shadow-sm shadow-gray-200"
+                class="border rounded border-gray-200 bg-slate-300 shadow-sm shadow-gray-200 focus-within:shadow-sky-500 focus-within:border-sky-200"
             >
                 <input
                     id={id.clone()}
                     type={input_type.to_type_attr()}
-                    class="px-1.5 py-1 rounded-l"
+                    class="px-1.5 py-1 rounded-l outline-0"
                     placeholder={placeholder.to_owned()}
                     value={value.clone()}
                     {oninput}
                 />
-
                 if !fa_icon.is_empty() {
                     <span class="px-2 rounded-r">
                         <i class={format!("fas {}", fa_icon)}></i>
