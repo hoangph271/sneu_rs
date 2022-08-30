@@ -1,7 +1,4 @@
-use crate::{
-    components::{CenteredViewport, SignInForm},
-    hooks::use_redirect_on_auth,
-};
+use crate::{components::*, hooks::use_redirect_on_auth};
 use yew::prelude::*;
 
 #[function_component(SignIn)]
