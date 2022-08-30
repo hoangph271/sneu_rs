@@ -56,11 +56,11 @@ impl Component for MarkdownViewer {
 
         html! {
             <div>
-                <BulmaButton
+                <PillButton
                     onclick={link.callback(|_| MarkdownViewerMessage::ToggleMonospace)}
                 >
                     { self.font_style() }
-                </BulmaButton>
+                </PillButton>
                 <div>
                     <UnsafeHtml
                         html={ parse_markdown(&self.markdown) }

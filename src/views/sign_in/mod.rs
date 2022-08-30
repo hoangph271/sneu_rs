@@ -22,13 +22,14 @@ pub fn sign_in() -> Html {
         <form
             method="post"
             action="http://localhost:8000/api/v1/users/signin"
-            style="height: 100vh;"
-            class="container is-fluid is-flex is-flex-direction-column is-justify-content-center"
+            // style="height: 100vh;"
+            // class="container is-fluid is-flex is-flex-direction-column is-justify-content-center"
+            class="items-center text-white flex flex-col drop-shadow-md border rounded border-gray-400 drop-shadow-md"
             {onsubmit}
         >
             if !sign_in_error.is_empty() {
                 <Toast
-                    variant={BulmaVariant::Danger}
+                    variant={ColorVariant::Danger}
                     header="Sign in error...!"
                     ondismiss={Callback::from(move |_| clear_error.emit(()))}
                 >
@@ -56,12 +57,12 @@ pub fn sign_in() -> Html {
                     Callback::from(move |value| password.set(value))
                 }}
             />
-            <BulmaButton
+            <PillButton
                 button_type={ButtonType::Submit}
                 disabled={is_loading}
             >
                 { "Sign in" }
-            </BulmaButton>
+            </PillButton>
         </form>
     }
 }
