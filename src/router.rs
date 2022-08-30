@@ -29,9 +29,7 @@ pub fn switch(route: &SneuRoute) -> Html {
         SneuRoute::Gallery => html! { <Gallery /> },
         SneuRoute::Music => html! { <Music /> },
         SneuRoute::NotFound => html! { <NotFound /> },
-        SneuRoute::Trial => {
-            html! { <code> { "TODO: // Add something to use SneuRoute::Trial" } </code> }
-        }
+        SneuRoute::Trial => html! { <Trial /> },
     }
 }
 

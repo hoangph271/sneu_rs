@@ -4,6 +4,7 @@ mod markdown;
 mod music;
 mod not_found;
 mod sign_in;
+mod trial;
 
 pub use gallery::*;
 pub use gallery::*;
@@ -12,3 +13,4 @@ pub use markdown::*;
 pub use music::*;
 pub use not_found::*;
 pub use sign_in::*;
+pub use trial::*;
