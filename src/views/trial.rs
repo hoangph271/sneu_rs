@@ -1,15 +1,11 @@
+use crate::components::*;
 use yew::prelude::*;
 
 #[function_component(Trial)]
 pub fn trial() -> Html {
-    // use crate::components::*;
-    // html! {
-
-    // }
-
     html! {
-        <code>
+        <CenteredViewport>
             { "TODO: // Add something to use SneuRoute::Trial" }
-        </code>
+        </CenteredViewport>
     }
 }
