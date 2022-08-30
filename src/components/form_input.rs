@@ -1,7 +1,7 @@
+use crate::utils::expect_target;
+
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
-
-use crate::utils::expect_target;
 
 #[derive(PartialEq, Eq, Default)]
 pub enum InputType {
@@ -21,8 +21,12 @@ impl InputType {
 
 #[derive(Properties, PartialEq, Default)]
 pub struct FormInputProps {
+    // ! FIXME: use random ID
+    #[prop_or_default]
+    pub id: String,
     #[prop_or(InputType::Text)]
     pub input_type: InputType,
+    #[prop_or_default]
     pub label: String,
     pub value: String,
     #[prop_or_default]
@@ -34,8 +38,19 @@ pub struct FormInputProps {
 
 #[function_component(FormInput)]
 pub fn form_input(props: &FormInputProps) -> Html {
+    let FormInputProps {
+        id,
+        label,
+        on_value_changed,
+        input_type,
+        placeholder,
+        value,
+        fa_icon,
+        ..
+    } = props;
+
     let oninput = {
-        let on_value_changed = props.on_value_changed.clone();
+        let on_value_changed = on_value_changed.clone();
 
         move |e: InputEvent| {
             let value = expect_target::<HtmlInputElement>(e.target())
@@ -47,22 +62,25 @@ pub fn form_input(props: &FormInputProps) -> Html {
     };
 
     html! {
-        <div class="field">
-            if !props.label.is_empty() {
-                <label class="label">{ props.label.clone() }</label>
+        <div>
+            if !label.is_empty() {
+                <label class="label" for={id.clone()}>{ label.clone() }</label>
             }
-            <div class="control has-icons-left has-icons-right">
+            <div
+                class="border rounded border-gray-200 bg-slate-300 shadow-sm shadow-gray-200"
+            >
                 <input
-                    type={props.input_type.to_type_attr()}
-                    class="input"
-                    placeholder={props.placeholder.to_owned()}
-                    value={props.value.clone()}
+                    id={id.clone()}
+                    type={input_type.to_type_attr()}
+                    class="px-1.5 py-1 rounded-l"
+                    placeholder={placeholder.to_owned()}
+                    value={value.clone()}
                     {oninput}
                 />
 
-                if !props.fa_icon.is_empty() {
-                    <span class="icon is-small is-left">
-                        <i class={format!("fas {}", props.fa_icon)}></i>
+                if !fa_icon.is_empty() {
+                    <span class="px-2 rounded-r">
+                        <i class={format!("fas {}", fa_icon)}></i>
                     </span>
                 }
             </div>
