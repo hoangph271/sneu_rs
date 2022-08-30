@@ -12,6 +12,11 @@
       "label": "build",
       "type": "shell",
       "command": "trunk build --release"
+    },
+    {
+      "label": "tailwindcss",
+      "type": "shell",
+      "command": "npx tailwindcss -i ./styles/index.css -o ./dist/index.css --watch"
     }
   ]
 }
