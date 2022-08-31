@@ -2,7 +2,7 @@ use crate::{
     providers::{use_auth_context, AuthAction, AuthMessage, AuthPayload},
     utils::{
         json,
-        sneu_api::{self, ApiItem, ApiResult},
+        sneu_api::{ApiHandler, ApiItem, ApiResult},
     },
 };
 
@@ -79,15 +79,13 @@ where
         });
 
         on_authed(
-            sneu_api::json_post::<ApiItem<String>>(
-                "/users/signin",
-                JsValue::from_str(&sign_in_payload),
-            )
-            .await
-            .map(|api_item| AuthPayload {
-                username,
-                jwt: api_item.item,
-            }),
+            ApiHandler::default()
+                .json_post::<ApiItem<String>>("/users/signin", JsValue::from_str(&sign_in_payload))
+                .await
+                .map(|api_item| AuthPayload {
+                    username,
+                    jwt: api_item.item,
+                }),
         );
     });
 }

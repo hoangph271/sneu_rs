@@ -1,15 +1,13 @@
-use std::fmt::Display;
-
 use super::api_url::with_api_root;
-mod api_item;
-
 pub use api_item::*;
 use gloo_net::{
     http::{Method, Request, Response},
     Error,
 };
 use serde::de::DeserializeOwned;
+use std::fmt::Display;
 use wasm_bindgen::JsValue;
+mod api_item;
 
 #[derive(Debug)]
 pub enum ApiError {
@@ -39,30 +37,6 @@ impl Display for ApiError {
     }
 }
 
-pub async fn json_post<T: DeserializeOwned>(url: &str, payload: JsValue) -> ApiResult<T> {
-    let res: T = Request::post(&with_api_root(url))
-        .method(Method::POST)
-        .body(payload)
-        .send()
-        .await?
-        .json()
-        .await?;
-
-    Ok(res)
-}
-
-#[allow(dead_code)]
-pub async fn json_get<T: DeserializeOwned>(url: &str) -> ApiResult<T> {
-    let res: T = Request::post(&with_api_root(url))
-        .method(Method::GET)
-        .send()
-        .await?
-        .json()
-        .await?;
-
-    Ok(res)
-}
-
 pub async fn raw_get(url: &str) -> ApiResult<Response> {
     let res = Request::post(&with_api_root(url))
         .method(Method::GET)
@@ -70,4 +44,59 @@ pub async fn raw_get(url: &str) -> ApiResult<Response> {
         .await?;
 
     Ok(res)
+}
+
+#[derive(Default, PartialEq, Eq, Clone)]
+pub struct ApiHandler {
+    pub jwt: Option<String>,
+}
+
+impl ApiHandler {
+    pub fn with_jwt(jwt: Option<String>) -> Self {
+        Self { jwt }
+    }
+
+    fn append_jwt_query_param(&self, url: &str) -> String {
+        if let Some(jwt) = &self.jwt {
+            if url.contains('?') {
+                format!("{url}&jwt={jwt}")
+            } else {
+                format!("{url}?jwt={jwt}")
+            }
+        } else {
+            url.to_owned()
+        }
+    }
+
+    #[allow(dead_code)]
+    pub async fn json_get<T: DeserializeOwned>(&self, url: &str) -> ApiResult<T> {
+        let url = with_api_root(&self.append_jwt_query_param(url));
+
+        let res: T = Request::post(&url)
+            .method(Method::GET)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
+
+    pub async fn json_post<T: DeserializeOwned>(
+        &self,
+        url: &str,
+        payload: JsValue,
+    ) -> ApiResult<T> {
+        let url = with_api_root(&self.append_jwt_query_param(url));
+
+        let res: T = Request::post(&url)
+            .method(Method::POST)
+            .body(payload)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
 }
