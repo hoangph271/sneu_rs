@@ -53,15 +53,12 @@ pub struct ApiHandler {
 
 impl ApiHandler {
     pub fn with_jwt(jwt: Option<String>) -> Self {
-        Self {
-            jwt,
-            ..Default::default()
-        }
+        Self { jwt }
     }
 
     fn append_jwt_query_param(&self, url: &str) -> String {
         if let Some(jwt) = &self.jwt {
-            if url.contains("?") {
+            if url.contains('?') {
                 format!("{url}&jwt={jwt}")
             } else {
                 format!("{url}?jwt={jwt}")
