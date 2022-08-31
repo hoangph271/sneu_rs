@@ -1,3 +1,3 @@
-export function initWasm() {
-  return `${typeof navigator.serviceWorker}`
+export function isWindowControlsOverlayVisible() {
+  return !!navigator.windowControlsOverlay?.visible
 }

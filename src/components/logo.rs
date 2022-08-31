@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-const LOGO_URL: &str = "https://alpha-sneu.xyz/static/svg/sneu.svg";
+pub const LOGO_URL: &str = "https://alpha-sneu.xyz/static/svg/sneu.svg";
 
 #[derive(Default, Properties, PartialEq, Eq)]
 pub struct LogoProps {
