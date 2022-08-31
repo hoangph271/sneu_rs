@@ -5,7 +5,10 @@ use yew::prelude::*;
 pub fn trial() -> Html {
     html! {
         <CenteredViewport>
-            { "TODO: // Add something to use SneuRoute::Trial" }
+            <Toast
+                header="Dude"
+            />
+            // { "TODO: // Add something to use SneuRoute::Trial" }
         </CenteredViewport>
     }
 }

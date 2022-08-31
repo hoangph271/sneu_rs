@@ -1,5 +1,6 @@
 use super::use_profile::UserProfile;
 use crate::components::*;
+use crate::theme::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]

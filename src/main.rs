@@ -3,6 +3,7 @@ mod components;
 mod hooks;
 mod providers;
 mod router;
+mod theme;
 mod utils;
 mod views;
 
