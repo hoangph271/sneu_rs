@@ -18,6 +18,14 @@ impl InputType {
             InputType::Password => "password".to_owned(),
         }
     }
+
+    fn autocomplete(&self) -> String {
+        match self {
+            InputType::Text => "off",
+            InputType::Password => "current-password",
+        }
+        .to_owned()
+    }
 }
 
 #[derive(Properties, PartialEq, Default)]
@@ -60,6 +68,7 @@ pub fn form_input(props: &FormInputProps) -> Html {
             on_value_changed.emit(value);
         }
     };
+    let autocomplete = input_type.autocomplete();
 
     html! {
         <div>
@@ -75,6 +84,7 @@ pub fn form_input(props: &FormInputProps) -> Html {
                     class="px-1.5 py-1 rounded-l outline-0"
                     placeholder={placeholder.to_owned()}
                     value={value.clone()}
+                    {autocomplete}
                     {oninput}
                 />
                 if !fa_icon.is_empty() {
