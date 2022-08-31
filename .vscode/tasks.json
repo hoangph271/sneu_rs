@@ -19,7 +19,7 @@
     {
       "label": "tailwindcss",
       "type": "shell",
-      "command": "npx tailwindcss -i ./styles/index.css -o ./dist/index.css --watch",
+      "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch",
       "runOptions": {
         "runOn": "folderOpen"
       }
