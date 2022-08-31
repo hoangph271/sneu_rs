@@ -42,6 +42,20 @@ impl AuthMessage {
     pub fn remove_locally() {
         SessionStorage::delete(AUTH_STORAGE_KEY);
     }
+
+    pub fn is_authed(&self) -> bool {
+        match self {
+            AuthMessage::Authed(_) => true,
+            AuthMessage::NotAuthed => false,
+        }
+    }
+
+    pub fn jwt(&self) -> Option<String> {
+        match self {
+            AuthMessage::Authed(auth) => Some(auth.jwt.to_owned()),
+            AuthMessage::NotAuthed => None,
+        }
+    }
 }
 
 impl Default for AuthMessage {
