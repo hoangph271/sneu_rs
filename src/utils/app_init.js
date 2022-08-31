@@ -16,7 +16,7 @@ export class MyClass {
   }
 
   render() {
-    console.info(WindowControlsOverlay)
-    return `My number is: ${this.number}, ${WindowControlsOverlay}`;
+    console.info(window.WindowControlsOverlay)
+    return `My number is: ${this.number}, ${1}`;
   }
 }

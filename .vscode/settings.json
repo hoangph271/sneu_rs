@@ -9,5 +9,6 @@
   },
   "files.associations": {
     "*.rs": "rust"
-  }
+  },
+  "task.allowAutomaticTasks": true
 }
