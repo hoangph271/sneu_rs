@@ -1,3 +1,3 @@
-export function name() {
-  return `${navigator?.windowControlsOverlay}`
+export function initWasm() {
+  return `${typeof navigator.serviceWorker}`
 }
