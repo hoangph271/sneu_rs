@@ -1,8 +1,8 @@
 mod use_sign_in_handler;
 
 use crate::components::*;
+use crate::theme::*;
 use use_sign_in_handler::use_sign_in_handler;
-
 use yew::prelude::*;
 
 #[function_component(SignInForm)]

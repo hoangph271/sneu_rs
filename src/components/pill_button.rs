@@ -1,3 +1,4 @@
+use crate::theme::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Default)]
@@ -11,25 +12,6 @@ impl ButtonType {
         match self {
             ButtonType::Button => "button",
             ButtonType::Submit => "submit",
-        }
-        .to_owned()
-    }
-}
-
-#[derive(PartialEq, Eq, Default)]
-pub enum ColorVariant {
-    #[default]
-    Primary,
-    Warning,
-    Danger,
-}
-
-impl ColorVariant {
-    pub fn bg(&self) -> String {
-        match self {
-            ColorVariant::Primary => "bg-sky-500 hover:bg-sky-700",
-            ColorVariant::Warning => "bg-amber-500 hover:bg-amber-700",
-            ColorVariant::Danger => "bg-rose-500 hover:bg-rose-700",
         }
         .to_owned()
     }
@@ -49,6 +31,19 @@ pub struct BulmaButtonProps {
     pub children: Children,
 }
 
+pub struct PillButtonTheme {
+    variant: ColorVariant,
+}
+impl Themable for PillButtonTheme {
+    fn sub_theme(&self) -> Option<Box<dyn Themable>> {
+        None
+    }
+
+    fn classnames(&self) -> String {
+        format!("rounded-full px-6 py-1 text-white {}", self.variant.bg())
+    }
+}
+
 #[function_component(PillButton)]
 pub fn pill_button(props: &BulmaButtonProps) -> Html {
     let BulmaButtonProps {
@@ -59,6 +54,10 @@ pub fn pill_button(props: &BulmaButtonProps) -> Html {
         children,
     } = props;
 
+    let theme = PillButtonTheme {
+        variant: (*variant).clone(),
+    };
+
     html! {
         <button
             onclick={{
@@ -68,7 +67,7 @@ pub fn pill_button(props: &BulmaButtonProps) -> Html {
             }}
             type={ button_type.to_type_attr() }
             disabled={ *disabled }
-            class={ format!("rounded-full px-6 py-1 text-white {}", variant.bg()) }
+            class={theme.classnames()}
         >
             { children.clone() }
         </button>

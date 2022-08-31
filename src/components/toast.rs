@@ -1,9 +1,7 @@
-use super::ColorVariant;
+use crate::theme::ColorVariant;
 
-use gloo_timers::callback::Timeout;
-use gloo_utils::document;
 use std::time::Duration;
-use web_sys::Element;
+use toast_utils::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties, Default)]
@@ -59,49 +57,58 @@ pub fn toast(props: &ToastProps) -> Html {
     )
 }
 
-const TOAST_HOST: &str = "toast-host";
-fn get_toast_host() -> Element {
-    document()
-        .get_element_by_id(TOAST_HOST)
-        .or_else(|| {
-            let element = document()
-                .create_element("div")
-                .unwrap_or_else(|e| panic!("create_element(\"div\") failed: {e:?}"));
+mod toast_utils {
+    use gloo_timers::callback::Timeout;
+    use gloo_utils::document;
+    use std::time::Duration;
+    use web_sys::Element;
+    use yew::prelude::*;
 
-            element.set_id(TOAST_HOST);
+    const TOAST_HOST: &str = "toast-host";
 
-            document()
-                .body()
-                .expect("Expectec to find the body element")
-                .append_child(&*element)
-                .unwrap_or_else(|e| panic!("append_child() failed: {e:?}"));
+    pub fn get_toast_host() -> Element {
+        document()
+            .get_element_by_id(TOAST_HOST)
+            .or_else(|| {
+                let element = document()
+                    .create_element("div")
+                    .unwrap_or_else(|e| panic!("create_element(\"div\") failed: {e:?}"));
 
-            Some(element)
-        })
-        .unwrap_or_else(|| panic!("Expected to find the #{TOAST_HOST} element"))
-}
+                element.set_id(TOAST_HOST);
 
-fn use_cleanup_toast(duration: Option<Duration>, ondismiss: Callback<()>) {
-    use_effect_with_deps(
-        {
-            move |_| {
-                let mut timeout = None;
+                document()
+                    .body()
+                    .expect("Expectec to find the body element")
+                    .append_child(&*element)
+                    .unwrap_or_else(|e| panic!("append_child() failed: {e:?}"));
 
-                if let Some(duration) = duration {
-                    let duration = duration.as_millis() as u32;
+                Some(element)
+            })
+            .unwrap_or_else(|| panic!("Expected to find the #{TOAST_HOST} element"))
+    }
 
-                    timeout = Some(Timeout::new(duration, move || {
-                        ondismiss.emit(());
-                    }));
-                };
+    pub fn use_cleanup_toast(duration: Option<Duration>, ondismiss: Callback<()>) {
+        use_effect_with_deps(
+            {
+                move |_| {
+                    let mut timeout = None;
 
-                || {
-                    if let Some(timeout) = timeout {
-                        timeout.cancel();
+                    if let Some(duration) = duration {
+                        let duration = duration.as_millis() as u32;
+
+                        timeout = Some(Timeout::new(duration, move || {
+                            ondismiss.emit(());
+                        }));
+                    };
+
+                    || {
+                        if let Some(timeout) = timeout {
+                            timeout.cancel();
+                        }
                     }
                 }
-            }
-        },
-        duration,
-    );
+            },
+            duration,
+        );
+    }
 }
