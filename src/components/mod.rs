@@ -1,3 +1,4 @@
+mod app_title;
 mod centered_viewport;
 mod file_picker;
 mod form_input;
@@ -8,6 +9,7 @@ mod sign_in_form;
 mod toast;
 mod unsafe_html;
 
+pub use app_title::*;
 pub use centered_viewport::*;
 pub use file_picker::*;
 pub use form_input::*;
