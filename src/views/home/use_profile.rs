@@ -1,8 +1,5 @@
-use crate::components::*;
-use crate::hooks::use_redirect_unauthed;
-use crate::providers::{use_auth_context, AuthAction, AuthMessage};
-use crate::utils::no_op;
 use crate::utils::sneu_api::ApiHandler;
+use crate::{providers::use_auth_context, utils::no_op};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
@@ -22,7 +19,7 @@ pub struct ApiItem<T: Serialize> {
     item: T,
 }
 
-fn use_profile() -> Option<UserProfile> {
+pub fn use_profile() -> Option<UserProfile> {
     let profile = use_state_eq(|| Option::<UserProfile>::None);
     let auth_context = use_auth_context();
     let api_hander = use_state_eq(|| ApiHandler::with_jwt((*auth_context).jwt()));
@@ -50,33 +47,4 @@ fn use_profile() -> Option<UserProfile> {
     );
 
     (*profile).clone()
-}
-
-#[function_component(Home)]
-pub fn index() -> Html {
-    let auth_context = use_auth_context();
-    let profile = use_profile();
-
-    use_redirect_unauthed();
-
-    match profile {
-        Some(profile) => html! {
-            <div>
-                if let Some(avatar_url) = profile.avatar_url {
-                    <Logo src={avatar_url} />
-                }
-                <h4>{ format!("Welcome, {}...!", profile.username) }</h4>
-                <PillButton
-                    variant={ColorVariant::Warning}
-                    onclick={Callback::from(move |_| {
-                        AuthMessage::remove_locally();
-                        auth_context.dispatch(AuthAction::SignOut);
-                    })}
-                >
-                    { "Sign out" }
-                </PillButton>
-            </div>
-        },
-        _ => html! {},
-    }
 }
