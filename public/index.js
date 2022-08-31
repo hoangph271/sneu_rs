@@ -18,3 +18,7 @@ const registerServiceWorker = async () => {
 }
 
 registerServiceWorker()
+
+if (navigator.windowControlsOverlay.visible) {
+
+}
