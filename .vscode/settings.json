@@ -2,5 +2,12 @@
   "editor.formatOnSave": true,
   "emmet.includeLanguages": {
     "rust": "html",
+  },
+  "tailwindCSS.includeLanguages": {
+    "rust": "html",
+    "*.rs": "html"
+  },
+  "files.associations": {
+    "*.rs": "rust"
   }
 }
