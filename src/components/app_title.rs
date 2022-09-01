@@ -19,7 +19,7 @@ pub fn app_title() -> Html {
             >
                 <img
                     class="p-1"
-                    src={ LOGO_URL.clone() }
+                    src={ LOGO_URL }
                     style="height: env(titlebar-area-height, 33px); width: env(titlebar-area-height, 33px);"
                 />
                 <h4
