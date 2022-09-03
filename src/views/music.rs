@@ -1,8 +1,11 @@
-use gloo_file::{futures::read_as_bytes, Blob, File, FileList};
+use gloo_file::{File, FileList};
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
-use crate::{components::FilePicker, utils::no_op};
+use crate::{
+    components::FilePicker,
+    utils::{init_wasm, no_op},
+};
 
 #[derive(PartialEq, Properties, Eq)]
 pub struct MusicProps {}
@@ -40,19 +43,10 @@ async fn play_audio(file: File) {
     use web_sys::HtmlAudioElement;
 
     spawn_local(async move {
-        let blob = Blob::from(file);
+        let audio_el = HtmlAudioElement::new().unwrap();
 
-        let mime_type = blob.raw_mime_type();
-        let bytes = read_as_bytes(&blob).await.unwrap();
+        init_wasm::setSrcObject(&audio_el, file.as_ref());
 
-        // ! FIXME: This will crash when exceed wasm32 limit
-        let baes64 = base64::encode(bytes);
-        let base64_url = format!("data:{mime_type};base64, {baes64}");
-
-        HtmlAudioElement::new_with_src(&base64_url)
-            .unwrap()
-            .play()
-            .unwrap()
-            .as_bool();
+        audio_el.play().unwrap().as_bool();
     });
 }
