@@ -51,7 +51,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
             <input
                 type="file"
                 multiple={true}
-                accept="video/*"
+                accept=".mkv,video/*"
                 oninput={handle_file_change}
             />
             if let Some(opening_file) = (*opening_file).clone() {
@@ -127,7 +127,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
         <div>
             <h5>{ file.name() }</h5>
             <video
-                style="max-width: 80vw"
+                style="max-width: 80vw; max-height: 400px;"
                 controls={true}
                 autoplay={true}
                 ref={video_ref.clone()}
