@@ -23,6 +23,18 @@
       "runOptions": {
         "runOn": "folderOpen"
       }
+    },
+    {
+      "label": "tauri dev",
+      "type": "shell",
+      "command": "cargo tauri dev",
+      "runOptions": {}
+    },
+    {
+      "label": "tauri build",
+      "type": "shell",
+      "command": "cargo tauri build",
+      "runOptions": {}
     }
   ]
 }
