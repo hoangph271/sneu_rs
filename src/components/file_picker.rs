@@ -1,8 +1,7 @@
+use crate::utils::expect_input_target;
 use gloo_file::FileList;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
-
-use crate::utils::expect_target;
 
 #[derive(PartialEq, Properties, Default)]
 pub struct FilePickerProps {
@@ -17,7 +16,8 @@ pub fn file_picker(props: &FilePickerProps) -> Html {
         let on_files_picked = on_files_picked.clone();
 
         move |e: InputEvent| {
-            let file_list = expect_target(e.target()).and_then(|el: HtmlInputElement| el.files());
+            let file_list =
+                expect_input_target(e.target()).and_then(|el: HtmlInputElement| el.files());
 
             if let Some(files) = file_list {
                 on_files_picked.emit(files.into());
@@ -35,17 +35,6 @@ pub fn file_picker(props: &FilePickerProps) -> Html {
                     class="file-input"
                     accept="audio/*"
                 />
-                <span class="file-cta">
-                    <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">
-                        { "Choose a file…!" }
-                    </span>
-                </span>
-                <span class="file-name">
-                    { "Screen Shot 2017-07-29 at 15.54.25.png" }
-                </span>
             </label>
         </div>
     }

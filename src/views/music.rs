@@ -45,6 +45,7 @@ async fn play_audio(file: File) {
         let mime_type = blob.raw_mime_type();
         let bytes = read_as_bytes(&blob).await.unwrap();
 
+        // ! FIXME: This will crash when exceed wasm32 limit
         let baes64 = base64::encode(bytes);
         let base64_url = format!("data:{mime_type};base64, {baes64}");
 

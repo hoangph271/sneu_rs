@@ -14,6 +14,8 @@ pub enum SneuRoute {
     Gallery,
     #[at("/music")]
     Music,
+    #[at("/sneu-player")]
+    SneuPlayer,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -28,6 +30,7 @@ pub fn switch(route: &SneuRoute) -> Html {
         SneuRoute::Markdown { filename } => html! { <Markdown filename={filename.clone()} /> },
         SneuRoute::Gallery => html! { <Gallery /> },
         SneuRoute::Music => html! { <Music /> },
+        SneuRoute::SneuPlayer => html! { <SneuPlayer /> },
         SneuRoute::NotFound => html! { <NotFound /> },
         SneuRoute::Trial => html! { <Trial /> },
     }
