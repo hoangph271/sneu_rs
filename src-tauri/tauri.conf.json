@@ -2,7 +2,7 @@
   "build": {
     "beforeBuildCommand": "npx tailwindcss -i ./public/index.css -o ./dist/index.css && trunk build",
     "beforeDevCommand": "",
-    "devPath": "http://localhost:8080",
+    "devPath": "http://localhost:8080/sneu-player",
     "distDir": "../dist"
   },
   "package": {
