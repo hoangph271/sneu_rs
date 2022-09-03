@@ -6,7 +6,7 @@ use web_sys::HtmlVideoElement;
 use yew::prelude::*;
 use yew_hooks::use_state_ptr_eq;
 
-use crate::utils::{expect_input_target, no_op};
+use crate::utils::{expect_input_target, no_op, setSrcObject};
 
 #[derive(Properties, PartialEq, Eq)]
 pub struct SneuPlayerProps {}
@@ -111,23 +111,9 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
             let file = file.clone();
 
             move |_| {
-                if let Some(_video_el) = video_ref.cast::<HtmlVideoElement>() {
+                if let Some(video_el) = video_ref.cast::<HtmlVideoElement>() {
                     spawn_local(async move {
-                        log::info!(
-                            "{} last modified: {:?}",
-                            file.name(),
-                            file.last_modified_time()
-                        );
-
-                        // let blob: &Blob = file.as_ref();
-                        // let readable_stream = blob.stream();
-
-                        // let media_stream = MediaStream::new().unwrap();
-                        // let media_track = MediaStreamTrack;
-
-                        // media_stream.add_track(&media_track);
-
-                        // video_el.set_src_object(Some(&media_stream));
+                        setSrcObject(&video_el, file.as_ref());
                     });
                 }
 
@@ -140,7 +126,12 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
     html! {
         <div>
             <h5>{ file.name() }</h5>
-            <video controls={true} ref={video_ref.clone()} />
+            <video
+                style="max-width: 80vw"
+                controls={true}
+                autoplay={true}
+                ref={video_ref.clone()}
+            />
         </div>
     }
 }

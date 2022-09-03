@@ -4,7 +4,7 @@ use yew::prelude::*;
 
 use crate::{
     components::FilePicker,
-    utils::{init_wasm, no_op},
+    utils::{init_wasm::setSrcObject, no_op},
 };
 
 #[derive(PartialEq, Properties, Eq)]
@@ -45,7 +45,7 @@ async fn play_audio(file: File) {
     spawn_local(async move {
         let audio_el = HtmlAudioElement::new().unwrap();
 
-        init_wasm::setSrcObject(&audio_el, file.as_ref());
+        setSrcObject(&audio_el, file.as_ref());
 
         audio_el.play().unwrap().as_bool();
     });
