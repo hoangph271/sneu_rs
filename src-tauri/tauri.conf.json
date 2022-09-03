@@ -1,6 +1,6 @@
 {
   "build": {
-    "beforeBuildCommand": "",
+    "beforeBuildCommand": "npx tailwindcss -i ./public/index.css -o ./dist/index.css && trunk build",
     "beforeDevCommand": "",
     "devPath": "http://localhost:8080",
     "distDir": "../dist"
