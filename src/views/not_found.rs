@@ -1,4 +1,4 @@
-use crate::router::{SneuLink, SneuRoute};
+use crate::router::{sneu_routes::SneuRoutes, SneuLink};
 
 use yew::prelude::*;
 
@@ -13,7 +13,7 @@ pub fn not_found() -> Html {
             </header>
             <div class="card-content">
                 <div class="content has-text-centered">
-                    <SneuLink to={SneuRoute::Home}>
+                    <SneuLink to={SneuRoutes::Home}>
                         { "Click here to get home" }
                     </SneuLink>
                 </div>
