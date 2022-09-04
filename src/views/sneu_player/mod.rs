@@ -1,9 +1,11 @@
+mod local_library;
 mod media_list;
 mod video_player;
 
 use crate::utils::expect_input_target;
 use core::panic;
 use gloo_file::{File, FileList};
+use local_library::*;
 use media_list::*;
 use video_player::*;
 use yew::prelude::*;
@@ -35,6 +37,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
 
     html! {
         <div>
+            <LocalLibrary />
             if file_count > 0 {
                 <MediaList
                     on_clicked={Callback::from({

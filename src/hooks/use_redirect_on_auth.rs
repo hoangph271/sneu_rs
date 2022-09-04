@@ -23,7 +23,7 @@ pub fn use_redirect_on_auth() {
                     if let Some(redirect_url) = redirect_url {
                         history.push(SneuRoutes::recognize(&redirect_url).unwrap())
                     } else {
-                        history.push(SneuRoutes::Home)
+                        history.push(SneuRoutes::index())
                     }
                 }
 
