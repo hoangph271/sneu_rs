@@ -20,9 +20,5 @@ pub fn local_library(props: &LocalLibraryProps) -> Html {
 pub fn local_library(props: &LocalLibraryProps) -> Html {
     let LocalLibraryProps {} = props;
 
-    html! {
-        <code>
-            { "Local library: N/A" }
-        </code>
-    }
+    html! {}
 }
