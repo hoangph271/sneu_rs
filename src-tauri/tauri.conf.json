@@ -1,6 +1,6 @@
 {
   "build": {
-    "beforeBuildCommand": "npx tailwindcss -i ./public/index.css -o ./dist/index.css && trunk build",
+    "beforeBuildCommand": "npx tailwindcss -i ./public/index.css -o ./dist/index.css && trunk build --features sneu_tauri",
     "beforeDevCommand": "",
     "devPath": "http://localhost:8080/sneu-player",
     "distDir": "../dist"

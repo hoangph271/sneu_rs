@@ -28,6 +28,16 @@ pub mod sneu_routes {
         Trial,
     }
 
+    impl SneuRoutes {
+        pub fn index() -> Self {
+            if cfg!(feature = "sneu_tauri") {
+                SneuRoutes::SneuPlayer
+            } else {
+                SneuRoutes::Home
+            }
+        }
+    }
+
     #[derive(Serialize)]
     pub struct SignInQuery {
         pub redirect_url: String,

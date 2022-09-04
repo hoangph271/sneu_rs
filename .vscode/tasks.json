@@ -4,31 +4,51 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "serve",
+      "label": "trunk",
       "type": "shell",
-      "command": "trunk serve",
+      "dependsOn": [
+        "tailwindcss:watch",
+        "trunk serve"
+      ],
+      "dependsOrder": "parallel",
       "runOptions": {
         "runOn": "folderOpen"
-      }
+      },
     },
     {
-      "label": "build:release",
+      "label": "trunk serve",
+      "type": "shell",
+      "command": "trunk serve",
+    },
+    {
+      "label": "trunk serve:sneu_tauri",
+      "type": "shell",
+      "command": "trunk serve --features sneu_tauri"
+    },
+    {
+      "label": "trunk build:release",
       "type": "shell",
       "command": "trunk build --release"
     },
     {
-      "label": "tailwindcss",
+      "label": "tailwindcss:watch",
       "type": "shell",
-      "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch",
-      "runOptions": {
-        "runOn": "folderOpen"
-      }
+      "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch"
+    },
+    {
+      "label": "tauri",
+      "type": "shell",
+      "dependsOn": [
+        "tailwindcss:watch",
+        "trunk serve:sneu_tauri",
+        "tauri dev"
+      ],
+      "dependsOrder": "parallel"
     },
     {
       "label": "tauri dev",
       "type": "shell",
       "command": "cargo tauri dev",
-      "runOptions": {}
     },
     {
       "label": "tauri build",
