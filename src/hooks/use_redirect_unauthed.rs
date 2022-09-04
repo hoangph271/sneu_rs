@@ -19,8 +19,13 @@ pub fn use_redirect_unauthed() {
 
             move |_| {
                 if !auth.is_authed() {
-                    let redirect_url =
-                        format!("{}{}", location.pathname.clone(), location.search.clone());
+                    let pathname = location.pathname.clone();
+
+                    let redirect_url = if pathname.eq("/") {
+                        None
+                    } else {
+                        Some(format!("{}{}", pathname, location.search.clone()))
+                    };
 
                     history
                         .replace_with_query(SneuRoutes::SignIn, SignInQuery { redirect_url })

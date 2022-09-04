@@ -40,7 +40,7 @@ pub mod sneu_routes {
 
     #[derive(Serialize)]
     pub struct SignInQuery {
-        pub redirect_url: String,
+        pub redirect_url: Option<String>,
     }
 }
 
