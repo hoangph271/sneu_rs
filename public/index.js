@@ -1,4 +1,6 @@
 const registerServiceWorker = async () => {
+  if (location.protocol !== 'https:') return
+
   if ('serviceWorker' in navigator) {
     try {
       const options = { scope: '/' }
