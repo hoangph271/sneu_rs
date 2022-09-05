@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "trunk",
+      "label": "trunk:dev",
       "type": "shell",
       "dependsOn": [
         "tailwindcss:watch",
@@ -26,7 +26,7 @@
       "command": "trunk serve --features sneu_tauri"
     },
     {
-      "label": "trunk build:release",
+      "label": "trunk:build:release",
       "type": "shell",
       "command": "trunk build --release"
     },
@@ -36,7 +36,7 @@
       "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch"
     },
     {
-      "label": "tauri",
+      "label": "tauri:dev",
       "type": "shell",
       "dependsOn": [
         "tailwindcss:watch",
@@ -51,7 +51,7 @@
       "command": "cargo tauri dev",
     },
     {
-      "label": "tauri build",
+      "label": "tauri:build",
       "type": "shell",
       "command": "cargo tauri build",
       "runOptions": {}
