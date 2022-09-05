@@ -2,6 +2,7 @@ mod profile;
 mod use_profile;
 
 use crate::{
+    components::with_loader,
     hooks::use_with_auth_required,
     providers::{use_auth_context, AuthAction, AuthMessage},
 };
@@ -14,18 +15,21 @@ fn user_profile() -> Html {
     let auth_context = use_auth_context();
     let profile = use_profile();
 
-    match profile {
-        Some(profile) => html! {
+    with_loader(profile, |profile| {
+        html! {
             <Profile
                 profile={profile}
-                on_sign_out={Callback::from(move |_| {
-                    AuthMessage::remove_locally();
-                    auth_context.dispatch(AuthAction::SignOut);
+                on_sign_out={Callback::from({
+                    let auth_context = auth_context.clone();
+
+                    move |_| {
+                        AuthMessage::remove_locally();
+                        auth_context.dispatch(AuthAction::SignOut);
+                    }
                 })}
             />
-        },
-        _ => html! {},
-    }
+        }
+    })
 }
 
 #[function_component(Home)]
