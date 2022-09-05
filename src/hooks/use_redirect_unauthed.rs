@@ -1,14 +1,15 @@
 use crate::{
-    providers::use_auth_context,
+    providers::{use_auth_context, AuthMessage},
     router::sneu_routes::{SignInQuery, SneuRoutes},
     utils::no_op,
 };
 
+pub use components::*;
 use yew::use_effect_with_deps;
 use yew_hooks::use_location;
 use yew_router::prelude::{use_history, History};
 
-pub fn use_redirect_unauthed() {
+fn use_redirect_unauthed() -> AuthMessage {
     let history = use_history().unwrap();
     let location = use_location();
     let auth_context = use_auth_context();
@@ -35,6 +36,23 @@ pub fn use_redirect_unauthed() {
                 no_op
             }
         },
-        auth_context,
+        (*auth_context).clone(),
     );
+
+    (*auth_context).clone()
+}
+
+mod components {
+    use super::use_redirect_unauthed;
+    use yew::prelude::*;
+
+    pub fn use_with_auth_required(render: impl Fn() -> Html) -> Html {
+        let auth = use_redirect_unauthed();
+
+        html! {
+            if auth.is_authed() {
+                { render() }
+            }
+        }
+    }
 }
