@@ -8,7 +8,10 @@ use tauri::Manager;
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            app.get_window("main").unwrap().open_devtools();
+            #[cfg(debug_assertions)]
+            app.get_window("main")
+                .unwrap_or_else(|| panic!("get_window(\"main\") failed"))
+                .open_devtools();
             Ok(())
         })
         .run(tauri::generate_context!())
