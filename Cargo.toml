@@ -29,6 +29,8 @@ base64 = "0.13.0"
 nanoid = "0.4.0"
 getrandom = { version = "0.2.7", features = ["js"] }
 
+hbp_types = { git = "https://github.com/hoangph271/hbp_types", features = [] }
+
 [dependencies.web-sys]
 version="0.3.59"
 features = [

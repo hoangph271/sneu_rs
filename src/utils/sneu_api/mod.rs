@@ -1,13 +1,12 @@
 use super::api_url::with_api_root;
-pub use api_item::*;
 use gloo_net::{
     http::{Method, Request, Response},
     Error,
 };
+pub use hbp_types::*;
 use serde::de::DeserializeOwned;
 use std::fmt::Display;
 use wasm_bindgen::JsValue;
-mod api_item;
 
 #[derive(Debug)]
 pub enum ApiError {
