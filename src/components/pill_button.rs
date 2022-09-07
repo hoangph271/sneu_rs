@@ -18,9 +18,11 @@ impl ButtonType {
 }
 
 #[derive(PartialEq, Properties)]
-pub struct BulmaButtonProps {
+pub struct PillButtonProps {
     #[prop_or_default]
     pub disabled: bool,
+    #[prop_or_default]
+    pub is_loading: bool,
     #[prop_or(Callback::from(|_| {}))]
     pub onclick: Callback<MouseEvent>,
     #[prop_or_default]
@@ -45,18 +47,21 @@ impl Themable for PillButtonTheme {
 }
 
 #[function_component(PillButton)]
-pub fn pill_button(props: &BulmaButtonProps) -> Html {
-    let BulmaButtonProps {
+pub fn pill_button(props: &PillButtonProps) -> Html {
+    let PillButtonProps {
         onclick,
         button_type,
         disabled,
         variant,
         children,
+        is_loading,
     } = props;
 
     let theme = PillButtonTheme {
         variant: (*variant).clone(),
     };
+
+    let disabled = *disabled || *is_loading;
 
     html! {
         <button
@@ -66,7 +71,7 @@ pub fn pill_button(props: &BulmaButtonProps) -> Html {
                 move |e| onclick.emit(e)
             }}
             type={ button_type.to_type_attr() }
-            disabled={ *disabled }
+            {disabled}
             class={theme.classnames()}
         >
             { children.clone() }

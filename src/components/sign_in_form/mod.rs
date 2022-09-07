@@ -56,7 +56,7 @@ pub fn sign_in_form() -> Html {
                 />
                 <PillButton
                     button_type={ButtonType::Submit}
-                    disabled={is_loading}
+                    {is_loading}
                 >
                     { "Sign in" }
                 </PillButton>
