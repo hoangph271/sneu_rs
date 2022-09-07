@@ -39,6 +39,7 @@ features = [
 ]
 
 [profile.release]
+strip = true
 panic = 'abort'
 codegen-units = 1
 opt-level = 's'
