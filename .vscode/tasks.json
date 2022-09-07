@@ -34,6 +34,14 @@
       ]
     },
     {
+      "label": "trunk:build:release [sneu_tauri]",
+      "type": "shell",
+      "command": "trunk build --release --features sneu_tauri",
+      "dependsOn": [
+        "tailwindcss:release"
+      ]
+    },
+    {
       "label": "tailwindcss:watch",
       "type": "shell",
       "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch"
@@ -59,9 +67,12 @@
       "command": "cargo tauri dev",
     },
     {
-      "label": "tauri:build",
+      "label": "tauri@build",
       "type": "shell",
       "command": "cargo tauri build",
+      "dependsOn": [
+        "trunk:build:release [sneu_tauri]"
+      ],
       "runOptions": {}
     }
   ]
