@@ -28,12 +28,20 @@
     {
       "label": "trunk:build:release",
       "type": "shell",
-      "command": "trunk build --release"
+      "command": "trunk build --release",
+      "dependsOn": [
+        "tailwindcss:release"
+      ]
     },
     {
       "label": "tailwindcss:watch",
       "type": "shell",
       "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css --watch"
+    },
+    {
+      "label": "tailwindcss:release",
+      "type": "shell",
+      "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css"
     },
     {
       "label": "tauri:dev",
