@@ -9,3 +9,7 @@ pub use dom::*;
 pub use init_wasm::*;
 
 pub const fn no_op() {}
+
+pub fn is_tauri_app() -> bool {
+    cfg!(feature = "sneu_tauri")
+}

@@ -72,8 +72,7 @@
       "command": "cargo tauri build",
       "dependsOn": [
         "trunk:build:release [sneu_tauri]"
-      ],
-      "runOptions": {}
+      ]
     }
   ]
 }
