@@ -25,7 +25,7 @@ mod auth_persist {
     // NOT safe, consider HttpOnly Cookies...?
     // Or only in-memory...?
     use super::{AuthMessage, AuthPayload};
-    use crate::utils::{is_pwa, storage_key::AUTH_STORAGE_KEY};
+    use crate::utils::{is_tauri_app, storage_key::AUTH_STORAGE_KEY};
     use gloo_storage::{errors::StorageError, LocalStorage, SessionStorage, Storage};
     use serde::Serialize;
 
@@ -42,7 +42,7 @@ mod auth_persist {
     }
 
     pub fn read() -> AuthMessage {
-        if is_pwa() {
+        if is_tauri_app() {
             LocalStorage::get::<AuthPayload>(AUTH_STORAGE_KEY)
         } else {
             SessionStorage::get::<AuthPayload>(AUTH_STORAGE_KEY)
@@ -55,7 +55,7 @@ mod auth_persist {
     }
 
     pub fn remove() {
-        if is_pwa() {
+        if is_tauri_app() {
             LocalStorage::delete(AUTH_STORAGE_KEY);
         } else {
             SessionStorage::delete(AUTH_STORAGE_KEY);
@@ -63,7 +63,7 @@ mod auth_persist {
     }
 
     pub fn persist(payload: &impl Serialize) {
-        if is_pwa() {
+        if is_tauri_app() {
             LocalStorage::set(AUTH_STORAGE_KEY, payload)
         } else {
             SessionStorage::set(AUTH_STORAGE_KEY, payload)

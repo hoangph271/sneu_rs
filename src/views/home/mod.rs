@@ -6,7 +6,7 @@ use crate::{
     hooks::use_with_auth_required,
     providers::{use_auth_context, AuthAction, AuthMessage},
     router::sneu_routes::SneuRoutes,
-    utils::is_pwa,
+    utils::is_tauri_app,
 };
 use profile::*;
 use use_profile::*;
@@ -40,7 +40,7 @@ pub fn index() -> Html {
     let history = use_history().unwrap();
 
     use_with_auth_required(|| {
-        if is_pwa() {
+        if is_tauri_app() {
             history.push(SneuRoutes::SneuPlayer);
             return html! {};
         }
