@@ -1,10 +1,6 @@
-use std::rc::Rc;
-
-use gloo_storage::{SessionStorage, Storage};
 use serde::{Deserialize, Serialize};
+use std::rc::Rc;
 use yew::prelude::*;
-
-use crate::utils::storage_key::AUTH_STORAGE_KEY;
 
 #[derive(Debug)]
 pub enum AuthAction {
@@ -24,23 +20,72 @@ pub enum AuthMessage {
     NotAuthed,
 }
 
-impl AuthMessage {
+mod auth_persist {
     // FIXME: Now using SessionStorage to store JWT
     // NOT safe, consider HttpOnly Cookies...?
     // Or only in-memory...?
-    pub fn persist_locally(&self) {
-        match self {
-            AuthMessage::Authed(auth) => SessionStorage::set(AUTH_STORAGE_KEY, auth),
-            AuthMessage::NotAuthed => {
-                SessionStorage::delete(AUTH_STORAGE_KEY);
-                Ok(())
+    use super::{AuthMessage, AuthPayload};
+    use crate::utils::storage_key::AUTH_STORAGE_KEY;
+    use gloo_storage::{errors::StorageError, LocalStorage, SessionStorage, Storage};
+    use serde::Serialize;
+
+    fn handle_storage_error(e: StorageError) {
+        match e {
+            StorageError::SerdeError(e) => {
+                log::error!("AuthMessage::default() failed [SerdeError]: {e}")
+            }
+            StorageError::KeyNotFound(_) => {}
+            StorageError::JsError(_) => {
+                log::error!("AuthMessage::default() failed [JsError]: {e}")
             }
         }
-        .unwrap_or_else(|e| panic!("persist_locally() failed: {e}"));
+    }
+
+    fn is_pwa() -> bool {
+        cfg!(feature = "sneu_tauri")
+    }
+
+    pub fn read() -> AuthMessage {
+        if is_pwa() {
+            LocalStorage::get::<AuthPayload>(AUTH_STORAGE_KEY)
+        } else {
+            SessionStorage::get::<AuthPayload>(AUTH_STORAGE_KEY)
+        }
+        .map(AuthMessage::Authed)
+        .unwrap_or_else(|e| {
+            handle_storage_error(e);
+            AuthMessage::NotAuthed
+        })
+    }
+
+    pub fn remove() {
+        if is_pwa() {
+            LocalStorage::delete(AUTH_STORAGE_KEY);
+        } else {
+            SessionStorage::delete(AUTH_STORAGE_KEY);
+        }
+    }
+
+    pub fn persist(payload: &impl Serialize) {
+        if is_pwa() {
+            LocalStorage::set(AUTH_STORAGE_KEY, payload)
+        } else {
+            SessionStorage::set(AUTH_STORAGE_KEY, payload)
+        }
+        .unwrap_or_else(|e| panic!("Storage::set failed: {e:?}"));
+    }
+}
+
+impl AuthMessage {
+    pub fn persist_locally(&self) {
+        match self {
+            AuthMessage::Authed(auth) => auth_persist::persist(auth),
+            AuthMessage::NotAuthed => auth_persist::remove(),
+        }
     }
 
     pub fn remove_locally() {
-        SessionStorage::delete(AUTH_STORAGE_KEY);
+        auth_persist::remove();
     }
 
     pub fn is_authed(&self) -> bool {
@@ -60,22 +105,7 @@ impl AuthMessage {
 
 impl Default for AuthMessage {
     fn default() -> Self {
-        match SessionStorage::get::<AuthPayload>(AUTH_STORAGE_KEY) {
-            Ok(auth) => Self::Authed(auth),
-            Err(e) => {
-                match e {
-                    gloo_storage::errors::StorageError::SerdeError(e) => {
-                        log::error!("AuthMessage::default() failed [SerdeError]: {e}")
-                    }
-                    gloo_storage::errors::StorageError::KeyNotFound(_) => {}
-                    gloo_storage::errors::StorageError::JsError(_) => {
-                        log::error!("AuthMessage::default() failed [JsError]: {e}")
-                    }
-                };
-
-                Self::NotAuthed
-            }
-        }
+        auth_persist::read()
     }
 }
 impl Reducible for AuthMessage {
