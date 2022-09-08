@@ -25,7 +25,7 @@ mod auth_persist {
     // NOT safe, consider HttpOnly Cookies...?
     // Or only in-memory...?
     use super::{AuthMessage, AuthPayload};
-    use crate::utils::storage_key::AUTH_STORAGE_KEY;
+    use crate::utils::{is_pwa, storage_key::AUTH_STORAGE_KEY};
     use gloo_storage::{errors::StorageError, LocalStorage, SessionStorage, Storage};
     use serde::Serialize;
 
@@ -39,10 +39,6 @@ mod auth_persist {
                 log::error!("AuthMessage::default() failed [JsError]: {e}")
             }
         }
-    }
-
-    fn is_pwa() -> bool {
-        cfg!(feature = "sneu_tauri")
     }
 
     pub fn read() -> AuthMessage {
