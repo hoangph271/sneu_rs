@@ -1,9 +1,9 @@
 mod use_random_image_url;
 mod use_synced_document_title;
+use crate::components::with_loader;
+use std::path::PathBuf;
 use use_random_image_url::use_random_image_url;
 use use_synced_document_title::use_synced_document_title;
-
-use std::path::PathBuf;
 use yew::prelude::*;
 
 fn title_from_url(url: String) -> String {
@@ -20,14 +20,12 @@ pub fn gallery() -> Html {
 
     use_synced_document_title(image_url.clone().map(title_from_url));
 
-    html! {
-        if let Some (image_url) = image_url {
+    with_loader(image_url, |image_url| {
+        html! {
             <img
                 src={ image_url.clone() }
                 style="max-width: 80%; display: block; margin: auto; }"
             />
-        } else {
-            <div>{ "...!" }</div>
         }
-    }
+    })
 }
