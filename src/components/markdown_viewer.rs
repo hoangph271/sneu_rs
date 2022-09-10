@@ -4,71 +4,37 @@ use yew::prelude::*;
 
 use super::unsafe_html::UnsafeHtml;
 
-pub enum MarkdownViewerMessage {
-    ToggleMonospace,
+#[derive(PartialEq, Properties)]
+pub struct MarkdownViewerProps {
+    pub markdown: String,
 }
 
-pub struct MarkdownViewer {
-    is_in_monospace: bool,
-    markdown: String,
-}
+#[function_component(MarkdownViewer)]
+pub fn markdown_viewer(props: &MarkdownViewerProps) -> Html {
+    let is_in_monospace = use_state_eq(|| false);
+    let MarkdownViewerProps { markdown } = props;
+    let font_style = if *is_in_monospace {
+        "Serif"
+    } else {
+        "Monospace"
+    };
 
-impl MarkdownViewer {
-    fn font_style(&self) -> String {
-        if self.is_in_monospace {
-            "Serif"
-        } else {
-            "Monospace"
-        }
-        .to_owned()
-    }
-
-    fn markdown_root_tag(&self) -> String {
-        if self.is_in_monospace { "code" } else { "div" }.to_owned()
-    }
-}
-
-impl Component for MarkdownViewer {
-    type Message = MarkdownViewerMessage;
-    type Properties = ();
-
-    fn create(_ctx: &Context<Self>) -> Self {
-        Self {
-            is_in_monospace: true,
-            // TODO: Read from URL
-            markdown: String::from_utf8(include_bytes!("../../LICENSE.md").to_vec())
-                .unwrap_or_else(|e| panic!("{e}")),
-        }
-    }
-
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            MarkdownViewerMessage::ToggleMonospace => {
-                self.is_in_monospace = !self.is_in_monospace;
-
-                true
-            }
-        }
-    }
-
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        let link = ctx.link();
-
-        html! {
+    html! {
+        <div>
+            <PillButton
+                onclick={
+                    Callback::from(move |_| is_in_monospace.set(!*is_in_monospace))
+                }
+            >
+                { font_style }
+            </PillButton>
             <div>
-                <PillButton
-                    onclick={link.callback(|_| MarkdownViewerMessage::ToggleMonospace)}
-                >
-                    { self.font_style() }
-                </PillButton>
-                <div>
-                    <UnsafeHtml
-                        html={ parse_markdown(&self.markdown) }
-                        tag={ self.markdown_root_tag() }
-                    />
-                </div>
+                <UnsafeHtml
+                    html={ parse_markdown(&markdown) }
+                    tag="div"
+                />
             </div>
-        }
+        </div>
     }
 }
 
