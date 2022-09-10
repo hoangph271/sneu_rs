@@ -13,8 +13,8 @@ pub mod sneu_routes {
         Home,
         #[at("/signin")]
         SignIn,
-        #[at("/markdown/:filename")]
-        Markdown { filename: String },
+        #[at("/markdown/:url")]
+        Markdown { url: String },
         #[at("/gallery")]
         Gallery,
         #[at("/music")]
@@ -48,7 +48,7 @@ pub fn switch(route: &SneuRoutes) -> Html {
     match route {
         SneuRoutes::Home => html! { <Home /> },
         SneuRoutes::SignIn => html! { <SignIn /> },
-        SneuRoutes::Markdown { filename } => html! { <Markdown filename={filename.clone()} /> },
+        SneuRoutes::Markdown { url } => html! { <Markdown url={url.clone()} /> },
         SneuRoutes::Gallery => html! { <Gallery /> },
         SneuRoutes::Music => html! { <Music /> },
         SneuRoutes::SneuPlayer => html! { <SneuPlayer /> },

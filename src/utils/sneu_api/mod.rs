@@ -1,6 +1,6 @@
 use super::api_url::with_api_root;
 use gloo_net::{
-    http::{Method, Request, Response},
+    http::{Request, Response},
     Error,
 };
 pub use hbp_types::*;
@@ -37,10 +37,7 @@ impl Display for ApiError {
 }
 
 pub async fn raw_get(url: &str) -> ApiResult<Response> {
-    let res = Request::post(&with_api_root(url))
-        .method(Method::GET)
-        .send()
-        .await?;
+    let res = Request::get(&with_api_root(url)).send().await?;
 
     Ok(res)
 }
@@ -71,12 +68,7 @@ impl ApiHandler {
     pub async fn json_get<T: DeserializeOwned>(&self, url: &str) -> ApiResult<T> {
         let url = with_api_root(&self.append_jwt_query_param(url));
 
-        let res: T = Request::post(&url)
-            .method(Method::GET)
-            .send()
-            .await?
-            .json()
-            .await?;
+        let res: T = Request::get(&url).send().await?.json().await?;
 
         Ok(res)
     }
@@ -89,7 +81,6 @@ impl ApiHandler {
         let url = with_api_root(&self.append_jwt_query_param(url));
 
         let res: T = Request::post(&url)
-            .method(Method::POST)
             .body(payload)
             .send()
             .await?
