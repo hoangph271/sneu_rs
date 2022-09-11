@@ -42,7 +42,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
 
     use_effect_with_deps(
         {
-            let is_playing = is_playing.clone();
+            let is_playing = *is_playing;
             let video_ref = video_ref.clone();
 
             move |_| {
@@ -59,12 +59,12 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
                 no_op
             }
         },
-        is_playing.clone(),
+        *is_playing,
     );
 
     use_effect_with_deps(
         {
-            let is_muted = is_muted.clone();
+            let is_muted = *is_muted;
             let video_ref = video_ref.clone();
 
             move |_| {
@@ -77,7 +77,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
                 no_op
             }
         },
-        is_muted.clone(),
+        *is_muted,
     );
 
     html! {

@@ -4,7 +4,7 @@ use yew::prelude::*;
 
 use super::unsafe_html::UnsafeHtml;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Eq, Properties)]
 pub struct MarkdownViewerProps {
     pub markdown: String,
 }
@@ -30,7 +30,7 @@ pub fn markdown_viewer(props: &MarkdownViewerProps) -> Html {
             </PillButton>
             <div>
                 <UnsafeHtml
-                    html={ parse_markdown(&markdown) }
+                    html={ parse_markdown(markdown) }
                     tag="div"
                 />
             </div>
