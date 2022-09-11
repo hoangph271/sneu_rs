@@ -1,7 +1,10 @@
 mod local_library;
 mod media_list;
+mod use_player_state;
 mod video_player;
 
+use self::use_player_state::*;
+use crate::components::*;
 use crate::utils::expect_input_target;
 use core::panic;
 use gloo_file::{File, FileList};
@@ -22,6 +25,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
     let file_count = (selected_files.as_ref())
         .map(|files| files.len())
         .unwrap_or_default();
+    let player_state = use_player_state();
 
     let handle_file_change = Callback::from({
         let selected_files = selected_files.clone();
@@ -58,8 +62,29 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
                 accept=".mkv,video/*"
                 oninput={handle_file_change}
             />
+            <div>
+                <PillButton
+                    onclick={Callback::from({
+                        let player_state = player_state.clone();
+                        move |_| player_state.clone().dispatch(PlayerAction::TogglePlaying)
+                    })}
+                >
+                    { if player_state.is_playing { "Pause" } else  { "Play" } }
+                </PillButton>
+                <PillButton
+                    onclick={Callback::from({
+                        let player_state = player_state.clone();
+                        move |_| player_state.clone().dispatch(PlayerAction::ToggleMuted)
+                    })}
+                >
+                    { if player_state.is_muted { "Unmute" } else  { "Mute" } }
+                </PillButton>
+            </div>
             if let Some(opening_file) = (*opening_file).clone() {
-                <VideoPlayer file={opening_file} />
+                <VideoPlayer
+                    file={opening_file}
+                    player_state={(*player_state).clone()}
+                />
             }
         </div>
     }
