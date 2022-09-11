@@ -4,14 +4,17 @@ use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlVideoElement;
 use yew::prelude::*;
 
+use super::use_player_state::PlayerState;
+
 #[derive(PartialEq, Properties)]
 pub struct VideoPlayerProps {
     pub file: File,
+    pub player_state: PlayerState,
 }
 
 #[function_component(VideoPlayer)]
 pub fn video_player(props: &VideoPlayerProps) -> Html {
-    let VideoPlayerProps { file } = props;
+    let VideoPlayerProps { file, player_state } = props;
     let video_ref = use_node_ref();
 
     use_effect_with_deps(
@@ -30,6 +33,51 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
             }
         },
         file.clone(),
+    );
+
+    let PlayerState {
+        is_playing,
+        is_muted,
+    } = player_state;
+
+    use_effect_with_deps(
+        {
+            let is_playing = is_playing.clone();
+            let video_ref = video_ref.clone();
+
+            move |_| {
+                if let Some(video_el) = video_ref.cast::<HtmlVideoElement>() {
+                    spawn_local(async move {
+                        if is_playing {
+                            video_el.play().unwrap().as_bool();
+                        } else {
+                            video_el.pause().unwrap();
+                        }
+                    });
+                }
+
+                no_op
+            }
+        },
+        is_playing.clone(),
+    );
+
+    use_effect_with_deps(
+        {
+            let is_muted = is_muted.clone();
+            let video_ref = video_ref.clone();
+
+            move |_| {
+                if let Some(video_el) = video_ref.cast::<HtmlVideoElement>() {
+                    spawn_local(async move {
+                        video_el.set_muted(is_muted);
+                    });
+                }
+
+                no_op
+            }
+        },
+        is_muted.clone(),
     );
 
     html! {
