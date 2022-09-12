@@ -12,11 +12,7 @@ pub struct VideoPlayerProps {
     pub player_state: PlayerState,
 }
 
-#[function_component(VideoPlayer)]
-pub fn video_player(props: &VideoPlayerProps) -> Html {
-    let VideoPlayerProps { file, player_state } = props;
-    let video_ref = use_node_ref();
-
+fn use_video_src(file: &File, video_ref: &NodeRef) {
     use_effect_with_deps(
         {
             let video_ref = video_ref.clone();
@@ -34,11 +30,19 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
         },
         file.clone(),
     );
+}
+
+#[function_component(VideoPlayer)]
+pub fn video_player(props: &VideoPlayerProps) -> Html {
+    let VideoPlayerProps { file, player_state } = props;
+    let video_ref = use_node_ref();
 
     let PlayerState {
         is_playing,
         is_muted,
     } = player_state;
+
+    use_video_src(file, &video_ref);
 
     use_effect_with_deps(
         {
