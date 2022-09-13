@@ -1,9 +1,23 @@
+use std::rc::Rc;
+
 use yew::prelude::*;
+
+#[derive(PartialEq, Eq, Clone)]
+pub struct MediaFile {
+    pub filename: String,
+    pub url: String,
+}
+
+#[derive(PartialEq, Eq, Clone, Default)]
+pub struct PlayList {
+    pub media_files: Vec<MediaFile>,
+}
 
 #[derive(PartialEq, Eq, Clone, Properties)]
 pub struct PlayerState {
     pub is_playing: bool,
     pub is_muted: bool,
+    pub play_list: Rc<PlayList>,
 }
 
 impl Default for PlayerState {
@@ -11,6 +25,7 @@ impl Default for PlayerState {
         Self {
             is_playing: true,
             is_muted: true,
+            play_list: Rc::new(PlayList::default()),
         }
     }
 }
@@ -27,10 +42,12 @@ impl Reducible for PlayerState {
         match action {
             PlayerAction::TogglePlaying => Self {
                 is_playing: !self.is_playing,
+                play_list: self.play_list.clone(),
                 ..*self
             },
             PlayerAction::ToggleMuted => Self {
                 is_muted: !self.is_muted,
+                play_list: self.play_list.clone(),
                 ..*self
             },
         }

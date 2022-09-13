@@ -40,6 +40,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
     let PlayerState {
         is_playing,
         is_muted,
+        ..
     } = player_state;
 
     use_video_src(file, &video_ref);
