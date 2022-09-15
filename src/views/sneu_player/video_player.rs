@@ -1,18 +1,16 @@
+use super::use_player_state::{MediaContent, MediaFile, PlayerState};
 use crate::utils::{no_op, setSrcObject};
-use gloo_file::File;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlVideoElement;
 use yew::prelude::*;
 
-use super::use_player_state::PlayerState;
-
 #[derive(PartialEq, Properties)]
 pub struct VideoPlayerProps {
-    pub file: File,
+    pub file: MediaFile,
     pub player_state: PlayerState,
 }
 
-fn use_video_src(file: &File, video_ref: &NodeRef) {
+fn use_video_src(file: &MediaFile, video_ref: &NodeRef) {
     use_effect_with_deps(
         {
             let video_ref = video_ref.clone();
@@ -21,7 +19,12 @@ fn use_video_src(file: &File, video_ref: &NodeRef) {
             move |_| {
                 if let Some(video_el) = video_ref.cast::<HtmlVideoElement>() {
                     spawn_local(async move {
-                        setSrcObject(&video_el, file.as_ref());
+                        match file.content {
+                            MediaContent::Url(url) => video_el.set_src(&url),
+                            MediaContent::Blob(blob) => {
+                                setSrcObject(&video_el, &blob);
+                            }
+                        };
                     });
                 }
 
@@ -40,6 +43,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
     let PlayerState {
         is_playing,
         is_muted,
+        ..
     } = player_state;
 
     use_video_src(file, &video_ref);
@@ -86,7 +90,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
 
     html! {
         <div>
-            <h5>{ file.name() }</h5>
+            <h5>{ file.filename.clone() }</h5>
             <video
                 style="max-width: 80vw; max-height: 400px;"
                 controls={true}

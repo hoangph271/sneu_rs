@@ -10,5 +10,5 @@
   "files.associations": {
     "*.rs": "rust"
   },
-  "task.allowAutomaticTasks": "off"
+  "task.allowAutomaticTasks": "on"
 }

@@ -1,19 +1,23 @@
-use gloo_file::{File, FileList};
+use super::use_player_state::{MediaFile, PlayList};
+use std::rc::Rc;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
 pub struct MediaListProps {
-    pub files: FileList,
-    pub on_clicked: Callback<File>,
+    pub play_list: Rc<PlayList>,
+    pub on_clicked: Callback<MediaFile>,
 }
 
 #[function_component(MediaList)]
 pub fn media_list(props: &MediaListProps) -> Html {
-    let MediaListProps { files, on_clicked } = props;
+    let MediaListProps {
+        play_list,
+        on_clicked,
+    } = props;
 
     html! {
         <ol>
-            {for files.iter().map(|file| {
+            {for play_list.media_files.iter().map(|file| {
                 html! {
                     <li
                         class="cursor-pointer"
@@ -25,9 +29,9 @@ pub fn media_list(props: &MediaListProps) -> Html {
                                 on_clicked.emit(file.clone());
                             }
                         })}
-                        key={file.name()}
+                        key={file.filename.clone()}
                     >
-                        { file.name() }
+                        { file.filename.clone() }
                     </li>
                 }
             })}
