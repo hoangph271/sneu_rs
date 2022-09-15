@@ -6,8 +6,7 @@ mod video_player;
 use self::use_player_state::*;
 use crate::components::*;
 use crate::utils::expect_input_target;
-use core::panic;
-use gloo_file::{File, FileList};
+use gloo_file::FileList;
 use local_library::*;
 use media_list::*;
 use std::rc::Rc;
@@ -21,42 +20,21 @@ pub struct SneuPlayerProps {}
 #[function_component(SneuPlayer)]
 pub fn sneu_player(props: &SneuPlayerProps) -> Html {
     let SneuPlayerProps {} = props;
-    let opening_file = use_state_ptr_eq(|| Option::<File>::None);
-    let selected_files = use_state_ptr_eq(|| Option::<FileList>::None);
-    let file_count = (selected_files.as_ref())
-        .map(|files| files.len())
-        .unwrap_or_default();
+    let opening_file = use_state_ptr_eq(|| Option::<MediaFile>::None);
     let player_state = use_player_state();
 
     let handle_file_change = Callback::from({
-        let selected_files = selected_files.clone();
         let player_state = player_state.clone();
 
         move |e: InputEvent| {
-            let files = expect_input_target(e.target())
+            let files: Option<FileList> = expect_input_target(e.target())
                 .and_then(|el| el.files())
                 .map(|files| files.into());
 
-            selected_files.set(files.clone());
-
             if let Some(files) = files {
-                let media_files = files
-                    .iter()
-                    .map(|media_file| {
-                        let mime_type = media_file.raw_mime_type();
-                        let media_file: &web_sys::File = media_file.as_ref();
+                let play_list = Rc::new(files.into());
 
-                        MediaFile {
-                            filename: media_file.name(),
-                            content: MediaContent::Blob(media_file.clone()),
-                            mime_type,
-                        }
-                    })
-                    .collect();
-
-                let play_list = PlayList { media_files };
-
-                player_state.dispatch(PlayerAction::ReplacePlaylist(Rc::new(play_list)));
+                player_state.dispatch(PlayerAction::ReplacePlaylist(play_list));
             }
         }
     });
@@ -64,7 +42,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
     html! {
         <div>
             <LocalLibrary />
-            if file_count > 0 {
+            if (*player_state).has_media() {
                 <MediaList
                     on_clicked={Callback::from({
                         let opening_file = opening_file.clone();
@@ -73,9 +51,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
                             opening_file.set(Some(file));
                         }
                     })}
-                    files={(*selected_files).clone().unwrap_or_else(|| {
-                        panic!("Expect file list to NOT be empty")
-                    })}
+                    play_list={(*player_state).play_list.clone()}
                 />
             }
             <input

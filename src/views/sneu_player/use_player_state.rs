@@ -1,5 +1,6 @@
 use std::rc::Rc;
 
+use gloo_file::FileList;
 use web_sys::File;
 use yew::prelude::*;
 
@@ -16,21 +17,43 @@ impl PartialEq for MediaContent {
             (MediaContent::Url(self_url), MediaContent::Url(other_url)) => self_url.eq(other_url),
             (MediaContent::Url(_), MediaContent::Blob(_)) => false,
             (MediaContent::Blob(_), MediaContent::Url(_)) => false,
-            (MediaContent::Blob(_), MediaContent::Blob(_)) => todo!(),
+            (MediaContent::Blob(self_blob), MediaContent::Blob(other_blob)) => {
+                self_blob.eq(other_blob)
+            }
         }
     }
 }
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Properties)]
 pub struct MediaFile {
     pub filename: String,
     pub content: MediaContent,
     pub mime_type: String,
 }
 
-#[derive(PartialEq, Clone, Default)]
+#[derive(PartialEq, Clone, Default, Properties)]
 pub struct PlayList {
     pub media_files: Vec<MediaFile>,
+}
+
+impl From<FileList> for PlayList {
+    fn from(file_list: FileList) -> Self {
+        let media_files = file_list
+            .iter()
+            .map(|media_file| {
+                let mime_type = media_file.raw_mime_type();
+                let media_file: &web_sys::File = media_file.as_ref();
+
+                MediaFile {
+                    filename: media_file.name(),
+                    content: MediaContent::Blob(media_file.clone()),
+                    mime_type,
+                }
+            })
+            .collect();
+
+        Self { media_files }
+    }
 }
 
 #[derive(PartialEq, Clone, Properties)]
@@ -47,6 +70,12 @@ impl Default for PlayerState {
             is_muted: true,
             play_list: Rc::new(PlayList::default()),
         }
+    }
+}
+
+impl PlayerState {
+    pub fn has_media(&self) -> bool {
+        !self.play_list.media_files.is_empty()
     }
 }
 
