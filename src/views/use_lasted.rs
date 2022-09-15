@@ -11,6 +11,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
     html! {
         <div class="">
             <Lasted />
+            <Whys />
         </div>
     }
 }
