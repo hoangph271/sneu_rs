@@ -9,7 +9,7 @@ const WHYS: [&str; 3] = [
 #[function_component(Whys)]
 pub fn whys() -> Html {
     html! {
-        <ul>
+        <ul class="bg-slate-700/75 p-2">
             { WHYS.iter().map(|why| {
                 html! {
                     <li key={*why}>

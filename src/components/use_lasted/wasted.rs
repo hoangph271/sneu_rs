@@ -4,9 +4,9 @@ use yew::prelude::*;
 pub fn wasted() -> Html {
     html! {
         <a
-            className="Wasted"
+            class="bg-gray-900/75 py-4 rounded-b text-center underline"
             href="https://github.com/hoangph271/useLasted"
-            style="color: white"
+            target="_blank"
         >
             { "@source_code" }
         </a>

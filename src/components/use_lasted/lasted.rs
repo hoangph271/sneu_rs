@@ -6,7 +6,7 @@ pub fn lasted() -> Html {
     let (lasted, progress) = use_lasted();
 
     html! {
-        <div>
+        <div class="bg-gray-900/75 py-4 text-center rounded-t">
             <span>{ "You lasted " }</span>
             <span style="font-style: italic">
                 { format!("{lasted} [{progress}%]...!") }
