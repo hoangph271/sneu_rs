@@ -1,7 +1,7 @@
 use crate::components::*;
 use yew::prelude::*;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Eq, Properties)]
 pub struct UseLastedProps {}
 
 #[function_component(UseLasted)]
