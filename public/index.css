@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: Monocraft;
+  src: url("https://uselasted.netlify.app/Monocraft.otf") format("opentype");
+}

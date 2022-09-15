@@ -6,6 +6,7 @@ mod not_found;
 mod sign_in;
 mod sneu_player;
 mod trial;
+mod use_lasted;
 
 pub use gallery::*;
 pub use gallery::*;
@@ -16,3 +17,4 @@ pub use not_found::*;
 pub use sign_in::*;
 pub use sneu_player::*;
 pub use trial::*;
+pub use use_lasted::*;
