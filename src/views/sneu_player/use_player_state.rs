@@ -1,19 +1,39 @@
 use std::rc::Rc;
 
+use web_sys::File;
 use yew::prelude::*;
 
-#[derive(PartialEq, Eq, Clone)]
-pub struct MediaFile {
-    pub filename: String,
-    pub url: String,
+#[allow(dead_code)]
+#[derive(Clone)]
+pub enum MediaContent {
+    Url(String),
+    Blob(File),
 }
 
-#[derive(PartialEq, Eq, Clone, Default)]
+impl PartialEq for MediaContent {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (MediaContent::Url(self_url), MediaContent::Url(other_url)) => self_url.eq(other_url),
+            (MediaContent::Url(_), MediaContent::Blob(_)) => false,
+            (MediaContent::Blob(_), MediaContent::Url(_)) => false,
+            (MediaContent::Blob(_), MediaContent::Blob(_)) => todo!(),
+        }
+    }
+}
+
+#[derive(PartialEq, Clone)]
+pub struct MediaFile {
+    pub filename: String,
+    pub content: MediaContent,
+    pub mime_type: String,
+}
+
+#[derive(PartialEq, Clone, Default)]
 pub struct PlayList {
     pub media_files: Vec<MediaFile>,
 }
 
-#[derive(PartialEq, Eq, Clone, Properties)]
+#[derive(PartialEq, Clone, Properties)]
 pub struct PlayerState {
     pub is_playing: bool,
     pub is_muted: bool,
@@ -33,6 +53,7 @@ impl Default for PlayerState {
 pub enum PlayerAction {
     TogglePlaying,
     ToggleMuted,
+    ReplacePlaylist(Rc<PlayList>),
 }
 
 impl Reducible for PlayerState {
@@ -50,6 +71,7 @@ impl Reducible for PlayerState {
                 play_list: self.play_list.clone(),
                 ..*self
             },
+            PlayerAction::ReplacePlaylist(play_list) => Self { play_list, ..*self },
         }
         .into()
     }

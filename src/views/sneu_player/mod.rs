@@ -10,6 +10,7 @@ use core::panic;
 use gloo_file::{File, FileList};
 use local_library::*;
 use media_list::*;
+use std::rc::Rc;
 use video_player::*;
 use yew::prelude::*;
 use yew_hooks::use_state_ptr_eq;
@@ -29,13 +30,34 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
 
     let handle_file_change = Callback::from({
         let selected_files = selected_files.clone();
+        let player_state = player_state.clone();
 
         move |e: InputEvent| {
             let files = expect_input_target(e.target())
                 .and_then(|el| el.files())
                 .map(|files| files.into());
 
-            selected_files.set(files);
+            selected_files.set(files.clone());
+
+            if let Some(files) = files {
+                let media_files = files
+                    .iter()
+                    .map(|media_file| {
+                        let mime_type = media_file.raw_mime_type();
+                        let media_file: &web_sys::File = media_file.as_ref();
+
+                        MediaFile {
+                            filename: media_file.name(),
+                            content: MediaContent::Blob(media_file.clone()),
+                            mime_type,
+                        }
+                    })
+                    .collect();
+
+                let play_list = PlayList { media_files };
+
+                player_state.dispatch(PlayerAction::ReplacePlaylist(Rc::new(play_list)));
+            }
         }
     });
 
@@ -59,7 +81,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
             <input
                 type="file"
                 multiple={true}
-                accept=".mkv,video/*"
+                accept=".mkv,video/*,audio/*"
                 oninput={handle_file_change}
             />
             <div>
