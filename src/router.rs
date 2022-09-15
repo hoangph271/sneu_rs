@@ -26,6 +26,8 @@ pub mod sneu_routes {
         NotFound,
         #[at("/trial")]
         Trial,
+        #[at("/uselasted")]
+        UseLasted,
     }
 
     impl SneuRoutes {
@@ -54,6 +56,7 @@ pub fn switch(route: &SneuRoutes) -> Html {
         SneuRoutes::SneuPlayer => html! { <SneuPlayer /> },
         SneuRoutes::NotFound => html! { <NotFound /> },
         SneuRoutes::Trial => html! { <Trial /> },
+        SneuRoutes::UseLasted => html! { <UseLasted /> },
     }
 }
 

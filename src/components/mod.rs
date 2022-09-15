@@ -9,6 +9,7 @@ mod pill_button;
 mod sign_in_form;
 mod toast;
 mod unsafe_html;
+mod use_lasted;
 
 pub use app_title::*;
 pub use centered_viewport::*;
@@ -20,3 +21,4 @@ pub use markdown_viewer::*;
 pub use pill_button::*;
 pub use sign_in_form::*;
 pub use toast::*;
+pub use use_lasted::*;
