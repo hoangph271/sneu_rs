@@ -16,8 +16,8 @@ gloo-storage = "0.2.2"
 gloo-file = "0.2.3"
 gloo-timers = "0.2.4"
 
-wasm-bindgen-futures = "0.4.32"
-wasm-bindgen = "0.2.82"
+wasm-bindgen-futures = "0.4.33"
+wasm-bindgen = "0.2.83"
 
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = "1.0.85"
@@ -34,11 +34,8 @@ chrono = "0.4.22"
 hbp_types = { git = "https://github.com/hoangph271/hbp_types", features = [] }
 
 [dependencies.web-sys]
-version="0.3.59"
-features = [
-  "HtmlAudioElement",
-  "HtmlVideoElement"
-]
+version = "0.3.59"
+features = ["HtmlAudioElement", "HtmlVideoElement"]
 
 [profile.release]
 panic = 'abort'
