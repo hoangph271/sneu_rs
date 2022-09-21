@@ -35,22 +35,9 @@ fn use_video_src(file: &MediaFile, video_ref: &NodeRef) {
     );
 }
 
-#[function_component(VideoPlayer)]
-pub fn video_player(props: &VideoPlayerProps) -> Html {
-    let VideoPlayerProps { file, player_state } = props;
-    let video_ref = use_node_ref();
-
-    let PlayerState {
-        is_playing,
-        is_muted,
-        ..
-    } = player_state;
-
-    use_video_src(file, &video_ref);
-
+fn use_toggle_playing(is_playing: bool, video_ref: &NodeRef) {
     use_effect_with_deps(
         {
-            let is_playing = *is_playing;
             let video_ref = video_ref.clone();
 
             move |_| {
@@ -67,12 +54,13 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
                 no_op
             }
         },
-        *is_playing,
+        is_playing,
     );
+}
 
+fn use_toggle_muted(is_muted: bool, video_ref: &NodeRef) {
     use_effect_with_deps(
         {
-            let is_muted = *is_muted;
             let video_ref = video_ref.clone();
 
             move |_| {
@@ -85,8 +73,24 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
                 no_op
             }
         },
-        *is_muted,
+        is_muted,
     );
+}
+
+#[function_component(VideoPlayer)]
+pub fn video_player(props: &VideoPlayerProps) -> Html {
+    let VideoPlayerProps { file, player_state } = props;
+    let video_ref = use_node_ref();
+
+    let PlayerState {
+        is_playing,
+        is_muted,
+        ..
+    } = player_state;
+
+    use_video_src(file, &video_ref);
+    use_toggle_playing(*is_playing, &video_ref);
+    use_toggle_muted(*is_muted, &video_ref);
 
     html! {
         <div>
