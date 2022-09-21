@@ -1,7 +1,7 @@
 use crate::views::*;
 use sneu_routes::*;
 use yew::{html, Html};
-pub use yew_router::prelude::Link;
+use yew_router::prelude::Link;
 
 pub mod sneu_routes {
     use serde::Serialize;
