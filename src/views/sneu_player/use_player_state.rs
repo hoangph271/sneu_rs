@@ -87,16 +87,24 @@ impl Clone for PlayerState {
 impl PlayerState {
     pub fn opening_file(&self) -> Option<MediaFile> {
         match self.playing_index {
-            Some(playing_index) => self
-                .play_list
-                .media_files
-                .get(playing_index).cloned(),
+            Some(playing_index) => self.play_list.media_files.get(playing_index).cloned(),
             None => None,
         }
     }
 
     pub fn has_media(&self) -> bool {
         !self.play_list.media_files.is_empty()
+    }
+
+    pub fn has_next(&self) -> bool {
+        if !self.has_media() {
+            return false;
+        }
+
+        match self.playing_index {
+            Some(playing_index) => playing_index + 1 < self.play_list.media_files.len(),
+            None => true,
+        }
     }
 }
 
@@ -136,7 +144,13 @@ impl Reducible for PlayerState {
                             None
                         }
                     }
-                    None => None,
+                    None => {
+                        if self.has_media() {
+                            Some(0)
+                        } else {
+                            None
+                        }
+                    }
                 },
                 ..(*self).clone()
             },

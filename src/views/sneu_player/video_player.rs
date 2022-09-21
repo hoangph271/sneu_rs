@@ -1,6 +1,7 @@
 use super::use_player_state::{MediaContent, MediaFile, PlayerState};
 use crate::utils::{no_op, setSrcObject};
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlMediaElement;
 use yew::prelude::*;
@@ -74,20 +75,40 @@ fn use_jump_to_next(media_el: Option<HtmlMediaElement>, on_ended: Callback<Event
             let on_ended = on_ended.clone();
 
             move |_| {
-                if let Some(media_el) = media_el {
-                    let listener: js_sys::Function = Closure::once_into_js(move |e: Event| {
+                let mut callback_wrapper = Option::<Closure<dyn Fn(Event)>>::None;
+
+                if let Some(media_el) = media_el.clone() {
+                    let callback = Closure::<dyn Fn(Event)>::new(move |e| {
                         on_ended.emit(e);
-                    })
-                    .into();
+                    });
 
                     media_el
-                        .add_event_listener_with_callback("ended", &listener)
+                        .add_event_listener_with_callback(
+                            "ended",
+                            callback.as_ref().unchecked_ref(),
+                        )
                         .unwrap_or_else(|e| {
                             panic!("media_el.add_event_listener_with_callback failed: {e:?}")
                         });
+
+                    callback_wrapper = Some(callback);
                 }
 
-                no_op
+                move || {
+                    if let Some(callback) = callback_wrapper {
+                        media_el
+                            .unwrap()
+                            .remove_event_listener_with_callback(
+                                "ended",
+                                callback.as_ref().unchecked_ref(),
+                            )
+                            .unwrap_or_else(|e| {
+                                panic!("media_el.remove_event_listener_with_callback failed: {e:?}")
+                            });
+
+                        drop(callback);
+                    }
+                }
             }
         },
         (media_el, on_ended),
