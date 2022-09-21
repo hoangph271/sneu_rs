@@ -52,7 +52,7 @@
       "command": "npx tailwindcss -i ./public/index.css -o ./dist/index.css"
     },
     {
-      "label": "tauri:dev",
+      "label": "tauri@dev",
       "type": "shell",
       "dependsOn": [
         "tailwindcss:watch",
