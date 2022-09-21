@@ -1,11 +1,11 @@
-use super::use_player_state::{MediaFile, PlayList};
+use super::use_player_state::PlayList;
 use std::rc::Rc;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
 pub struct MediaListProps {
     pub play_list: Rc<PlayList>,
-    pub on_clicked: Callback<MediaFile>,
+    pub on_clicked: Callback<usize>,
 }
 
 #[function_component(MediaList)]
@@ -17,16 +17,15 @@ pub fn media_list(props: &MediaListProps) -> Html {
 
     html! {
         <ol>
-            {for play_list.media_files.iter().map(|file| {
+            {for play_list.media_files.iter().enumerate().map(|(index, file)| {
                 html! {
                     <li
                         class="cursor-pointer"
                         onclick={Callback::from({
                             let on_clicked = on_clicked.clone();
-                            let file = (*file).clone();
 
                             move |_| {
-                                on_clicked.emit(file.clone());
+                                on_clicked.emit(index);
                             }
                         })}
                         key={file.filename.clone()}
