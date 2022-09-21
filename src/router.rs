@@ -48,7 +48,7 @@ pub mod sneu_routes {
 
 pub fn switch(route: &SneuRoutes) -> Html {
     match route {
-        SneuRoutes::Home => html! { <Home /> },
+        SneuRoutes::Home => html! { <UseLasted /> },
         SneuRoutes::SignIn => html! { <SignIn /> },
         SneuRoutes::Markdown { url } => html! { <Markdown url={url.clone()} /> },
         SneuRoutes::Gallery => html! { <Gallery /> },
