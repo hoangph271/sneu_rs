@@ -121,7 +121,7 @@ pub fn video_player(props: &VideoPlayerProps) -> Html {
     use_media_src(file, media_el.clone());
     use_toggle_playing(*is_playing, media_el.clone());
     use_toggle_muted(*is_muted, media_el.clone());
-    use_jump_to_next(media_el.clone(), (*on_ended).clone());
+    use_jump_to_next(media_el, (*on_ended).clone());
 
     html! {
         <div>

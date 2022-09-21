@@ -90,8 +90,7 @@ impl PlayerState {
             Some(playing_index) => self
                 .play_list
                 .media_files
-                .get(playing_index)
-                .map(|f| f.clone()),
+                .get(playing_index).cloned(),
             None => None,
         }
     }
