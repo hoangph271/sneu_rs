@@ -56,11 +56,12 @@ impl From<FileList> for PlayList {
     }
 }
 
-#[derive(PartialEq, Clone, Properties)]
+#[derive(PartialEq, Properties)]
 pub struct PlayerState {
     pub is_playing: bool,
     pub is_muted: bool,
     pub play_list: Rc<PlayList>,
+    pub playing_index: Option<usize>,
 }
 
 impl Default for PlayerState {
@@ -69,19 +70,49 @@ impl Default for PlayerState {
             is_playing: true,
             is_muted: true,
             play_list: Rc::new(PlayList::default()),
+            playing_index: None,
+        }
+    }
+}
+
+impl Clone for PlayerState {
+    fn clone(&self) -> Self {
+        Self {
+            play_list: self.play_list.clone(),
+            ..*self
         }
     }
 }
 
 impl PlayerState {
+    pub fn opening_file(&self) -> Option<MediaFile> {
+        match self.playing_index {
+            Some(playing_index) => self.play_list.media_files.get(playing_index).cloned(),
+            None => None,
+        }
+    }
+
     pub fn has_media(&self) -> bool {
         !self.play_list.media_files.is_empty()
+    }
+
+    pub fn has_next(&self) -> bool {
+        if !self.has_media() {
+            return false;
+        }
+
+        match self.playing_index {
+            Some(playing_index) => playing_index + 1 < self.play_list.media_files.len(),
+            None => true,
+        }
     }
 }
 
 pub enum PlayerAction {
     TogglePlaying,
     ToggleMuted,
+    JumpToNext,
+    StartAtIndex(usize),
     ReplacePlaylist(Rc<PlayList>),
 }
 
@@ -97,10 +128,32 @@ impl Reducible for PlayerState {
             },
             PlayerAction::ToggleMuted => Self {
                 is_muted: !self.is_muted,
-                play_list: self.play_list.clone(),
-                ..*self
+                ..(*self).clone()
             },
             PlayerAction::ReplacePlaylist(play_list) => Self { play_list, ..*self },
+            PlayerAction::StartAtIndex(playing_index) => Self {
+                playing_index: Some(playing_index),
+                ..(*self).clone()
+            },
+            PlayerAction::JumpToNext => Self {
+                playing_index: match self.playing_index {
+                    Some(playing_index) => {
+                        if playing_index + 1 < self.play_list.media_files.len() {
+                            Some(playing_index + 1)
+                        } else {
+                            None
+                        }
+                    }
+                    None => {
+                        if self.has_media() {
+                            Some(0)
+                        } else {
+                            None
+                        }
+                    }
+                },
+                ..(*self).clone()
+            },
         }
         .into()
     }
