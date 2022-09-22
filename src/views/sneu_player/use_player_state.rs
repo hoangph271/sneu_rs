@@ -1,6 +1,5 @@
-use std::rc::Rc;
-
 use gloo_file::FileList;
+use std::rc::Rc;
 use web_sys::File;
 use yew::prelude::*;
 
