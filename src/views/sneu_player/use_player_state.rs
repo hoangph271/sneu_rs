@@ -23,14 +23,14 @@ impl PartialEq for MediaContent {
     }
 }
 
-#[derive(PartialEq, Clone, Properties)]
+#[derive(PartialEq, Clone)]
 pub struct MediaFile {
     pub filename: String,
     pub content: MediaContent,
     pub mime_type: String,
 }
 
-#[derive(PartialEq, Clone, Default, Properties)]
+#[derive(PartialEq, Clone, Default)]
 pub struct PlayList {
     pub media_files: Vec<MediaFile>,
 }
@@ -55,7 +55,7 @@ impl From<FileList> for PlayList {
     }
 }
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq)]
 pub struct PlayerState {
     pub is_playing: bool,
     pub is_muted: bool,
