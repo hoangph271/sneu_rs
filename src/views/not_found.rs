@@ -1,5 +1,4 @@
-use crate::router::{sneu_routes::SneuRoutes, SneuLink};
-
+use crate::router::{SneuLink, SneuRoutes};
 use yew::prelude::*;
 
 #[function_component(NotFound)]

@@ -1,4 +1,4 @@
-use crate::{providers::use_auth_context, router::sneu_routes::SneuRoutes, utils::no_op};
+use crate::{providers::use_auth_context, router::SneuRoutes, utils::no_op};
 use web_sys::UrlSearchParams;
 use yew::use_effect_with_deps;
 use yew_hooks::use_location;

@@ -1,3 +1,5 @@
+mod local_library_link;
+pub use local_library_link::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Properties)]
@@ -10,7 +12,7 @@ pub fn local_library(props: &LocalLibraryProps) -> Html {
 
     html! {
         <div>
-            { "// TODO: local_library" }
+
         </div>
     }
 }

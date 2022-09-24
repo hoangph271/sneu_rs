@@ -1,13 +1,11 @@
-mod local_library;
 mod media_list;
 mod use_player_state;
 mod video_player;
-
 use self::use_player_state::*;
 use crate::components::*;
 use crate::utils::expect_input_target;
+use crate::views::LocalLibraryLink;
 use gloo_file::FileList;
-use local_library::*;
 use media_list::*;
 use std::rc::Rc;
 use video_player::*;
@@ -39,7 +37,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
 
     html! {
         <div>
-            <LocalLibrary />
+            <LocalLibraryLink />
             <input
                 type="file"
                 multiple={true}
