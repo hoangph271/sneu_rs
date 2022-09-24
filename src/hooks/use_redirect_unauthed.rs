@@ -1,6 +1,6 @@
 use crate::{
     providers::{use_auth_context, AuthMessage},
-    router::sneu_routes::{SignInQuery, SneuRoutes},
+    router::{SignInQuery, SneuRoutes},
     utils::no_op,
 };
 

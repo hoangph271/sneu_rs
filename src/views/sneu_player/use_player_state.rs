@@ -24,14 +24,14 @@ impl PartialEq for MediaContent {
     }
 }
 
-#[derive(PartialEq, Clone, Properties)]
+#[derive(PartialEq, Clone)]
 pub struct MediaFile {
     pub filename: String,
     pub content: MediaContent,
     pub mime_type: String,
 }
 
-#[derive(PartialEq, Clone, Default, Properties)]
+#[derive(PartialEq, Clone, Default)]
 pub struct PlayList {
     pub media_files: Vec<MediaFile>,
 }
@@ -56,7 +56,7 @@ impl From<FileList> for PlayList {
     }
 }
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq)]
 pub struct PlayerState {
     pub is_playing: bool,
     pub is_muted: bool,
@@ -87,10 +87,7 @@ impl Clone for PlayerState {
 impl PlayerState {
     pub fn opening_file(&self) -> Option<MediaFile> {
         match self.playing_index {
-            Some(playing_index) => self
-                .play_list
-                .media_files
-                .get(playing_index).cloned(),
+            Some(playing_index) => self.play_list.media_files.get(playing_index).cloned(),
             None => None,
         }
     }

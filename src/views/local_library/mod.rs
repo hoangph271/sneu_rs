@@ -10,7 +10,7 @@ pub fn local_library(props: &LocalLibraryProps) -> Html {
 
     html! {
         <div>
-            { "// TODO: local_library" }
+
         </div>
     }
 }
