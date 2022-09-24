@@ -3,8 +3,8 @@ mod use_player_state;
 mod video_player;
 use self::use_player_state::*;
 use crate::components::*;
-use crate::router::{SneuLink, SneuRoutes};
 use crate::utils::expect_input_target;
+use crate::views::LocalLibraryLink;
 use gloo_file::FileList;
 use media_list::*;
 use std::rc::Rc;
@@ -37,7 +37,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
 
     html! {
         <div>
-            <SneuLink to={SneuRoutes::LocalLibrary} />
+            <LocalLibraryLink />
             <input
                 type="file"
                 multiple={true}

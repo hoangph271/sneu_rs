@@ -1,3 +1,5 @@
+mod local_library_link;
+pub use local_library_link::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Properties)]
