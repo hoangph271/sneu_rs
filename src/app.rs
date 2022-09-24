@@ -1,4 +1,3 @@
-use super::components::*;
 use super::providers::AuthProvider;
 use super::router::switch as sneu_switch;
 use crate::router::SneuRoutes;
