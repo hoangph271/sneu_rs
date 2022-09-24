@@ -37,18 +37,6 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
 
     html! {
         <div>
-            if (*player_state).has_media() {
-                <MediaList
-                    on_clicked={Callback::from({
-                        let player_state = player_state.clone();
-
-                        move |index| {
-                            player_state.dispatch(PlayerAction::StartAtIndex(index));
-                        }
-                    })}
-                    play_list={(*player_state).play_list.clone()}
-                />
-            }
             <input
                 type="file"
                 multiple={true}
@@ -72,6 +60,16 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
                 >
                     { if player_state.is_muted { "Unmute" } else  { "Mute" } }
                 </PillButton>
+                if player_state.has_next() {
+                    <PillButton
+                        onclick={Callback::from({
+                            let player_state = player_state.clone();
+                            move |_| player_state.clone().dispatch(PlayerAction::JumpToNext)
+                        })}
+                    >
+                        { "Next" }
+                    </PillButton>
+                }
             </div>
             if let Some(opening_file) = player_state.opening_file() {
                 <VideoPlayer
@@ -86,6 +84,16 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
                     player_state={(*player_state).clone()}
                 />
             }
+            <MediaList
+                on_clicked={Callback::from({
+                    let player_state = player_state.clone();
+
+                    move |index| {
+                        player_state.dispatch(PlayerAction::StartAtIndex(index));
+                    }
+                })}
+                play_list={(*player_state).play_list.clone()}
+            />
         </div>
     }
 }

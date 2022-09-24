@@ -1,6 +1,5 @@
-use std::rc::Rc;
-
 use gloo_file::FileList;
+use std::rc::Rc;
 use web_sys::File;
 use yew::prelude::*;
 
@@ -95,6 +94,17 @@ impl PlayerState {
     pub fn has_media(&self) -> bool {
         !self.play_list.media_files.is_empty()
     }
+
+    pub fn has_next(&self) -> bool {
+        if !self.has_media() {
+            return false;
+        }
+
+        match self.playing_index {
+            Some(playing_index) => playing_index + 1 < self.play_list.media_files.len(),
+            None => true,
+        }
+    }
 }
 
 pub enum PlayerAction {
@@ -133,7 +143,13 @@ impl Reducible for PlayerState {
                             None
                         }
                     }
-                    None => None,
+                    None => {
+                        if self.has_media() {
+                            Some(0)
+                        } else {
+                            None
+                        }
+                    }
                 },
                 ..(*self).clone()
             },
