@@ -22,7 +22,7 @@ pub enum SneuRoutes {
     Trial,
     #[at("/uselasted")]
     UseLasted,
-    #[cfg(sneu_tauri)]
+    #[at("/local-library")]
     LocalLibrary,
 }
 

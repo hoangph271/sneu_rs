@@ -1,5 +1,6 @@
 mod gallery;
 mod home;
+mod local_library;
 mod markdown;
 mod music;
 mod not_found;
@@ -11,6 +12,7 @@ mod use_lasted;
 pub use gallery::*;
 pub use gallery::*;
 pub use home::*;
+pub use local_library::*;
 pub use markdown::*;
 pub use music::*;
 pub use not_found::*;
