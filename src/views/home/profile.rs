@@ -20,7 +20,7 @@ pub fn profile(props: &ProfileProps) -> Html {
         avatar_url,
         username,
         description,
-        title: _title, // TODO: Use this...?
+        title,
     } = profile;
     let onclick = Callback::from({
         let on_sign_out = on_sign_out.clone();
@@ -31,7 +31,7 @@ pub fn profile(props: &ProfileProps) -> Html {
     html! {
         <div>
             <div>
-                <h4>{ username }</h4>
+                <h4>{ format!("{username} ({title})") }</h4>
                 if let Some(avatar_url) = avatar_url {
                     <Logo src={avatar_url.clone()} />
                 }
