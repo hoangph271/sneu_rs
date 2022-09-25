@@ -29,9 +29,10 @@ pub fn music(_: &MusicProps) -> Html {
         file.clone(),
     );
 
-    let on_files_picked = Callback::from(move |files: FileList| match files.first() {
-        Some(first_file) => file.set(Some(first_file.clone())),
-        None => {}
+    let on_files_picked = Callback::from(move |files: FileList| {
+        if let Some(first_file) = files.first() {
+            file.set(Some(first_file.clone()))
+        }
     });
 
     html! {

@@ -5,7 +5,7 @@ use crate::{
     components::with_loader,
     hooks::use_with_auth_required,
     providers::{use_auth_context, AuthAction, AuthMessage},
-    router::sneu_routes::SneuRoutes,
+    router::SneuRoutes,
     utils::is_tauri_app,
 };
 use profile::*;

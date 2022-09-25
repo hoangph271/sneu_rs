@@ -1,7 +1,7 @@
-use super::components::*;
+use super::components::AppTitle;
 use super::providers::AuthProvider;
 use super::router::switch as sneu_switch;
-use crate::router::sneu_routes::SneuRoutes;
+use crate::router::SneuRoutes;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
