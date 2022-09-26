@@ -1,22 +1,22 @@
-use super::use_profile::UserProfile;
 use crate::components::*;
+use crate::hooks::Profile;
 use crate::theme::*;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
 pub struct ProfileProps {
-    pub profile: UserProfile,
+    pub profile: Profile,
     pub on_sign_out: Callback<()>,
 }
 
-#[function_component(Profile)]
-pub fn profile(props: &ProfileProps) -> Html {
+#[function_component(UserProfile)]
+pub fn user_profile(props: &ProfileProps) -> Html {
     let ProfileProps {
         profile,
         on_sign_out,
     } = props;
 
-    let UserProfile {
+    let Profile {
         avatar_url,
         username,
         description,

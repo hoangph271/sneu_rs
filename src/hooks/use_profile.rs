@@ -5,7 +5,7 @@ use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
 #[derive(Serialize, Clone, Deserialize, Debug, PartialEq, Eq)]
-pub struct UserProfile {
+pub struct Profile {
     pub username: String,
     pub title: String,
     #[serde(rename(deserialize = "avatarUrl"))]
@@ -19,8 +19,8 @@ pub struct ApiItem<T: Serialize> {
     item: T,
 }
 
-pub fn use_profile() -> Option<UserProfile> {
-    let profile = use_state_eq(|| Option::<UserProfile>::None);
+pub fn use_profile() -> Option<Profile> {
+    let profile = use_state_eq(|| Option::<Profile>::None);
     let auth_context = use_auth_context();
     let api_hander = use_state_eq(|| ApiHandler::with_jwt((*auth_context).jwt()));
 
@@ -33,7 +33,7 @@ pub fn use_profile() -> Option<UserProfile> {
                 spawn_local(async move {
                     profile.set(Some(
                         api_hander
-                            .json_get::<ApiItem<UserProfile>>("/profiles")
+                            .json_get::<ApiItem<Profile>>("/profiles")
                             .await
                             .unwrap()
                             .item,

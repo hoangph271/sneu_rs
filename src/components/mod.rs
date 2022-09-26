@@ -10,6 +10,7 @@ mod sign_in_form;
 mod toast;
 mod unsafe_html;
 mod use_lasted;
+mod user_profile;
 
 pub use app_title::*;
 pub use centered_viewport::*;
@@ -22,3 +23,4 @@ pub use pill_button::*;
 pub use sign_in_form::*;
 pub use toast::*;
 pub use use_lasted::*;
+pub use user_profile::*;
