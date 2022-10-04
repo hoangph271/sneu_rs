@@ -3,7 +3,7 @@ use yew::prelude::*;
 const WHYS: [&str; 3] = [
     "Stay brown for 30 days, and THEN back to green...! :\"}",
     "Really, it makes me feel so tired sometimes...!",
-    "Cuz you\'re half way there...!",
+    "Cuz you promised yourself...!",
 ];
 
 #[function_component(Whys)]
