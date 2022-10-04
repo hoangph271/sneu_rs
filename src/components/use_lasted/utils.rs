@@ -1,4 +1,4 @@
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, Duration, NaiveDate, Utc};
 use gloo_timers::callback::Interval;
 use yew::{use_effect, use_state_eq};
 
@@ -11,9 +11,17 @@ fn get_d_day() -> DateTime<Utc> {
     DateTime::<Utc>::from_utc(d_day, Utc)
 }
 
-fn get_lasted() -> String {
+fn get_diff() -> Duration {
     let today = Utc::now();
-    let diff = today.signed_duration_since(get_d_day());
+    today.signed_duration_since(get_d_day())
+}
+
+fn get_lasted() -> String {
+    let diff = get_diff();
+
+    if get_diff().num_milliseconds() < 0 {
+        return format!("{} days", 30);
+    }
 
     if diff.num_days() > 1 {
         format!("{} days", diff.num_days())
@@ -23,8 +31,11 @@ fn get_lasted() -> String {
 }
 
 fn get_progress() -> String {
-    let today = Utc::now();
-    let diff = today.signed_duration_since(get_d_day()).num_milliseconds() as f64;
+    let diff = get_diff().num_milliseconds() as f64;
+
+    if diff > 1.0 {
+        return "100".to_string();
+    }
 
     format!("{:.4}", (diff / IN_MS_30_DAYS as f64) * 100.0)
 }
