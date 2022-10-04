@@ -1,5 +1,6 @@
 use crate::utils::sneu_api::ApiHandler;
 use crate::{providers::use_auth_context, utils::no_op};
+use hbp_types::ApiItem;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
@@ -11,12 +12,6 @@ pub struct UserProfile {
     #[serde(rename(deserialize = "avatarUrl"))]
     pub avatar_url: Option<String>,
     pub description: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ApiItem<T: Serialize> {
-    status_code: u16,
-    item: T,
 }
 
 pub fn use_profile() -> Option<UserProfile> {
