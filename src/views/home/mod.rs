@@ -1,10 +1,11 @@
+use crate::components::layout::Header;
 use yew::prelude::*;
 
 #[function_component(Home)]
-pub fn index() -> Html {
+pub fn home() -> Html {
     html! {
-        <code>
-            { "sneu_rs" }
-        </code>
+        <>
+            <Header />
+        </>
     }
 }
