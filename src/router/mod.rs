@@ -7,6 +7,7 @@ pub use routes::*;
 pub fn switch(route: &SneuRoutes) -> Html {
     match route {
         SneuRoutes::Home => html! { <Home /> },
+        SneuRoutes::User => html! { <User /> },
         SneuRoutes::SignIn => html! { <SignIn /> },
         SneuRoutes::Markdown { url } => html! { <Markdown url={url.clone()} /> },
         SneuRoutes::Gallery => html! { <Gallery /> },

@@ -8,6 +8,7 @@ mod sign_in;
 mod sneu_player;
 mod trial;
 mod use_lasted;
+mod user;
 
 pub use gallery::*;
 pub use gallery::*;
@@ -20,3 +21,4 @@ pub use sign_in::*;
 pub use sneu_player::*;
 pub use trial::*;
 pub use use_lasted::*;
+pub use user::*;

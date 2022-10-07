@@ -5,6 +5,8 @@ use yew_router::Routable;
 pub enum SneuRoutes {
     #[at("/")]
     Home,
+    #[at("/user")]
+    User,
     #[at("/signin")]
     SignIn,
     #[at("/markdown/:url")]
