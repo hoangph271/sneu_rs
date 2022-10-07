@@ -2,6 +2,7 @@ mod app_title;
 mod centered_viewport;
 mod file_picker;
 mod form_input;
+pub mod layout;
 mod loader;
 mod logo;
 mod markdown_viewer;
