@@ -19,7 +19,7 @@ fn get_diff() -> Duration {
 fn get_lasted() -> String {
     let diff = get_diff();
 
-    if get_diff().num_milliseconds() < 0 {
+    if get_diff().num_milliseconds() > IN_MS_30_DAYS {
         return format!("{} days", 30);
     }
 
