@@ -5,7 +5,7 @@ use yew::{use_effect, use_state_eq};
 const UPDATE_INTERVAL: u32 = 1000;
 
 fn get_diffs(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (Duration, Duration) {
-    let so_far = started_at.signed_duration_since(Utc::now());
+    let so_far = Utc::now().signed_duration_since(*started_at);
     let total = end_at.signed_duration_since(*started_at);
 
     (so_far, total)
