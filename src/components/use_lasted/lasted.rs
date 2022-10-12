@@ -14,7 +14,7 @@ pub fn lasted(props: &LastedProps) -> Html {
     let (lasted, progress) = use_lasted(started_at, end_at);
 
     html! {
-        <div class="bg-gray-900/75 py-4 text-center rounded-t">
+        <div class="bg-gray-900/75 p-4 text-center rounded-t">
             <span>{ "You lasted " }</span>
             <span style="font-style: italic">
                 { format!("{lasted} [{progress}%]...!") }
