@@ -1,22 +1,18 @@
+use crate::components::Markdown;
 use yew::prelude::*;
 
-const WHYS: [&str; 3] = [
-    "Stay brown for 30 days, and THEN back to green...! :\"}",
-    "Really, it makes me feel so tired sometimes...!",
-    "Cuz you promised yourself...!",
-];
+#[derive(PartialEq, Properties)]
+pub struct WhysProps {
+    pub why: String,
+}
 
 #[function_component(Whys)]
-pub fn whys() -> Html {
+pub fn whys(props: &WhysProps) -> Html {
+    let WhysProps { why } = props;
+
     html! {
         <ul class="bg-slate-700/75 p-2">
-            { WHYS.iter().map(|why| {
-                html! {
-                    <li key={*why}>
-                        { format!("🍀 {why}") }
-                    </li>
-                }
-            }).collect::<Html>() }
+            <Markdown markdown={why.clone()} />
         </ul>
     }
 }

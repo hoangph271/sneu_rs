@@ -3,7 +3,7 @@ pub mod storage_key {
 }
 
 pub mod api_url {
-    pub const API_ROOT: &str = "https://alpha-sneu.xyz/api/v1";
+    pub const API_ROOT: &str = "https://sneu.date/api/v1";
     pub fn with_api_root(suffix: &str) -> String {
         format!("{API_ROOT}{suffix}")
     }
