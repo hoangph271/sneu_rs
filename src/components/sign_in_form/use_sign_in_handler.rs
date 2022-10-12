@@ -2,10 +2,11 @@ use crate::{
     providers::{use_auth_context, AuthAction, AuthMessage, AuthPayload},
     utils::{
         json,
-        sneu_api::{ApiHandler, ApiItem, ApiResult},
+        sneu_api::{ApiHandler, ApiResult},
     },
 };
 
+use hbp_types::ApiItem;
 use serde::Serialize;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::spawn_local;

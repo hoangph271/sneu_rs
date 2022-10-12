@@ -3,7 +3,6 @@ use gloo_net::{
     http::{Request, Response},
     Error,
 };
-pub use hbp_types::*;
 use serde::de::DeserializeOwned;
 use std::fmt::Display;
 use wasm_bindgen::JsValue;
@@ -64,7 +63,6 @@ impl ApiHandler {
         }
     }
 
-    #[allow(dead_code)]
     pub async fn json_get<T: DeserializeOwned>(&self, url: &str) -> ApiResult<T> {
         let url = with_api_root(&self.append_jwt_query_param(url));
 
