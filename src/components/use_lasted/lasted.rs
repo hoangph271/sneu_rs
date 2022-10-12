@@ -1,6 +1,9 @@
 use super::utils::use_lasted;
 use yew::prelude::*;
 
+#[derive(PartialEq, Properties)]
+pub struct LastedProps {}
+
 #[function_component(Lasted)]
 pub fn lasted() -> Html {
     let (lasted, progress) = use_lasted();

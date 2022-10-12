@@ -16,14 +16,15 @@ pub struct LastedItemProps {
 #[function_component(LastedItem)]
 pub fn lasted_item(props: &LastedItemProps) -> Html {
     let LastedItemProps { challenge } = props;
+    let Challenge { why, note, .. } = challenge;
 
     html! {
         <div
             class="max-w-fit m-auto flex flex-col text-white px-2"
         >
             <Lasted />
-            <Whys why={challenge.why.clone()} />
-            <Wasted />
+            <Whys why={why.clone()} />
+            <Wasted note={note.clone()} />
         </div>
     }
 }
@@ -64,7 +65,10 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
             >
                 {challenges.iter().map(|challenge| {
                     html! {
-                        <LastedItem challenge={challenge.clone()} />
+                        <LastedItem
+                            key={challenge.id.clone()}
+                            challenge={challenge.clone()}
+                        />
                     }
                 }).collect::<Html>()}
             </div>
