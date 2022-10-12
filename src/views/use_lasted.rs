@@ -16,13 +16,22 @@ pub struct LastedItemProps {
 #[function_component(LastedItem)]
 pub fn lasted_item(props: &LastedItemProps) -> Html {
     let LastedItemProps { challenge } = props;
-    let Challenge { why, note, .. } = challenge;
+    let Challenge {
+        why,
+        note,
+        started_at,
+        end_at,
+        ..
+    } = challenge;
 
     html! {
         <div
             class="max-w-fit m-auto flex flex-col text-white px-2"
         >
-            <Lasted />
+            <Lasted
+                started_at={started_at.clone()}
+                end_at={end_at.clone()}
+            />
             <Whys why={why.clone()} />
             <Wasted note={note.clone()} />
         </div>
