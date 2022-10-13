@@ -21,18 +21,22 @@ pub fn lasted_item(props: &LastedItemProps) -> Html {
         note,
         started_at,
         end_at,
+        finished,
         ..
     } = challenge;
 
+    let class = format!(
+        "max-w-fit m-auto flex flex-col text-white px-2 h-96 {}",
+        if *finished { "opacity-50" } else { "" }
+    );
+
     html! {
-        <div
-            class="max-w-fit m-auto flex flex-col text-white px-2"
-        >
+        <div {class}>
             <Lasted
                 started_at={started_at.clone()}
                 end_at={end_at.clone()}
             />
-            <Whys why={why.clone()} />
+            <Whys why={why.clone()} class="flex-grow" />
             <Wasted note={note.clone()} />
         </div>
     }
@@ -69,7 +73,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
     with_loader((*challenges).as_ref().map(|c| c.clone()), |challenges| {
         html! {
             <div
-                class="w-screen h-screen bg-cover bg-no-repeat bg-center flex flex-col justify-center"
+                class="w-screen h-screen bg-cover bg-no-repeat bg-center grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1"
                 style="font-family: Monocraft, monospace; background-image: url(https://uselasted.netlify.app/static/media/751400.530ccd0e600c0697d435.png)"
             >
                 {challenges.iter().map(|challenge| {
