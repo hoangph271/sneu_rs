@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 
 use crate::{
-    components::*,
+    components::{layout::Header, *},
     utils::{no_op, sneu_api::ApiHandler},
 };
 use hbp_types::{ApiList, Challenge};
@@ -85,17 +85,20 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
     with_loader((*challenges).as_ref().map(|c| c.clone()), |challenges| {
         html! {
             <div
-                class="w-screen h-screen bg-cover bg-no-repeat bg-center grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1"
-                style="font-family: Monocraft, monospace; background-image: url(https://uselasted.netlify.app/static/media/751400.530ccd0e600c0697d435.png)"
+                class="h-screen text-lg"
+                style="font-family: monospace;"
             >
-                {challenges.iter().map(|challenge| {
-                    html! {
-                        <LastedItem
-                            key={challenge.id.clone()}
-                            challenge={challenge.clone()}
-                        />
-                    }
-                }).collect::<Html>()}
+                <Header />
+                <div class="w-screen grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1">
+                    {challenges.iter().map(|challenge| {
+                        html! {
+                            <LastedItem
+                                key={challenge.id.clone()}
+                                challenge={challenge.clone()}
+                            />
+                        }
+                    }).collect::<Html>()}
+                </div>
             </div>
         }
     })
