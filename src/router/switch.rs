@@ -14,6 +14,7 @@ pub fn switch(route: &SneuRoutes) -> Html {
         SneuRoutes::NotFound => html! { <NotFound /> },
         SneuRoutes::Trial => html! { <Trial /> },
         SneuRoutes::UseLasted => html! { <UseLasted /> },
+        SneuRoutes::UseLastedCreate => html! { <CreateUseLasted /> },
         SneuRoutes::LocalLibrary => html! { <LocalLibrary /> },
     }
 }

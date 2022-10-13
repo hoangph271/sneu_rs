@@ -12,7 +12,7 @@ pub fn wasted(props: &WastedProps) -> Html {
 
     html! {
         <div
-            class="bg-gray-900/75 py-4 rounded-b text-center"
+            class="bg-gray-900/75 py-4 rounded-t text-center"
         >
             <Markdown markdown={note.clone()} />
         </div>

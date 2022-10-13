@@ -36,7 +36,7 @@ hbp_types = { git = "https://github.com/hoangph271/hbp_types", features = [] }
 
 [dependencies.web-sys]
 version = "0.3.60"
-features = ["HtmlMediaElement", "HtmlAudioElement"]
+features = ["HtmlMediaElement", "HtmlAudioElement", "HtmlTextAreaElement"]
 
 [profile.release]
 panic = 'abort'

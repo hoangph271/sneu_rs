@@ -11,13 +11,17 @@ pub struct LastedProps {
 #[function_component(Lasted)]
 pub fn lasted(props: &LastedProps) -> Html {
     let LastedProps { started_at, end_at } = props;
-    let (lasted, progress) = use_lasted(started_at, end_at);
+    let (lasted, progress, is_done) = use_lasted(started_at, end_at);
 
     html! {
-        <div class="bg-gray-900/75 p-4 text-center rounded-t">
-            <span>{ "You lasted " }</span>
+        <div class="bg-gray-900/75 p-4 text-center rounded-b">
+            <span>{ "Lasted " }</span>
             <span style="font-style: italic">
-                { format!("{lasted} [{progress}%]...!") }
+                {if is_done {
+                    format!("{lasted} [{progress}%]...!")
+                } else {
+                    format!("{lasted}...!")
+                }}
             </span>
         </div>
     }

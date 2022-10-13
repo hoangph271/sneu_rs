@@ -4,15 +4,18 @@ use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
 pub struct MarkdownProps {
+    #[prop_or_default]
+    pub class: Classes,
     pub markdown: String,
 }
 
 #[function_component(Markdown)]
 pub fn markdown(props: &MarkdownProps) -> Html {
-    let MarkdownProps { markdown } = props;
+    let MarkdownProps { markdown, class } = props;
 
     html! {
         <UnsafeHtml
+            class={class.clone()}
             html={ parse_markdown(markdown) }
             tag="div"
         />
