@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 use crate::{
     components::*,
     utils::{no_op, sneu_api::ApiHandler},
@@ -33,9 +31,7 @@ pub fn lasted_item(props: &LastedItemProps) -> Html {
     );
 
     html! {
-        <div
-            class="max-w-fit m-auto flex flex-col text-white px-2"
-        >
+        <div {class}>
             <Lasted
                 started_at={started_at.clone()}
                 end_at={end_at.clone()}
@@ -59,22 +55,13 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
 
             move |_| {
                 spawn_local(async move {
-                    let mut items = api_hander
-                        .json_get::<ApiList<Challenge>>("/challenges")
-                        .await
-                        .unwrap()
-                        .items;
-
-                    items.sort_by(|c1, c2| {
-                        if c1.finished {
-                            Ordering::Greater
-                        } else if c2.finished {
-                            Ordering::Less
-                        } else {
-                            Ordering::Equal
-                        }
-                    });
-                    challenges.set(Some(items))
+                    challenges.set(Some(
+                        api_hander
+                            .json_get::<ApiList<Challenge>>("/challenges")
+                            .await
+                            .unwrap()
+                            .items,
+                    ))
                 });
 
                 no_op

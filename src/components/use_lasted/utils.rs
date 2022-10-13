@@ -5,7 +5,11 @@ use yew::{use_effect, use_state_eq};
 const UPDATE_INTERVAL: u32 = 1000;
 
 fn get_diffs(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (Duration, Duration) {
-    let so_far = started_at.signed_duration_since(Utc::now());
+    let mut so_far = Utc::now().signed_duration_since(*started_at);
+    if so_far.num_milliseconds() < 0 {
+        so_far = Duration::zero();
+    }
+
     let total = end_at.signed_duration_since(*started_at);
 
     (so_far, total)
@@ -27,6 +31,10 @@ fn get_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
 
 fn get_progress(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     let (so_far, total) = get_diffs(started_at, end_at);
+
+    if so_far.is_zero() {
+        return "0".to_owned();
+    }
 
     if so_far >= total {
         return "100".to_string();
