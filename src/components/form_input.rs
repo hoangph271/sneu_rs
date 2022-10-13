@@ -9,20 +9,23 @@ pub enum InputType {
     #[default]
     Text,
     Password,
+    Datetime,
 }
 
 impl InputType {
     fn to_type_attr(&self) -> String {
         match self {
-            InputType::Text => "text".to_owned(),
-            InputType::Password => "password".to_owned(),
+            InputType::Text => "text",
+            InputType::Password => "password",
+            InputType::Datetime => "datetime-local",
         }
+        .to_owned()
     }
 
     fn autocomplete(&self) -> String {
         match self {
-            InputType::Text => "off",
             InputType::Password => "current-password",
+            _ => "off",
         }
         .to_owned()
     }
