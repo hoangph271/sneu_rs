@@ -17,8 +17,8 @@ pub struct LastedItemProps {
 pub fn lasted_item(props: &LastedItemProps) -> Html {
     let LastedItemProps { challenge } = props;
     let Challenge {
+        title,
         why,
-        note,
         started_at,
         end_at,
         finished,
@@ -32,12 +32,12 @@ pub fn lasted_item(props: &LastedItemProps) -> Html {
 
     html! {
         <div {class}>
+            <Wasted note={title.clone()} />
+            <Whys why={why.clone()} class="flex-grow" />
             <Lasted
                 started_at={started_at.clone()}
                 end_at={end_at.clone()}
             />
-            <Whys why={why.clone()} class="flex-grow" />
-            <Wasted note={note.clone()} />
         </div>
     }
 }

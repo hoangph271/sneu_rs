@@ -14,6 +14,11 @@ fn get_diffs(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (Duration, D
 
     (so_far, total)
 }
+fn is_done(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> bool {
+    let (so_far, total) = get_diffs(started_at, end_at);
+
+    so_far == total
+}
 
 fn get_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     let (so_far, total) = get_diffs(started_at, end_at);
@@ -46,19 +51,22 @@ fn get_progress(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     format!("{:.4}", (total / so_far) * 100.0)
 }
 
-pub fn use_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (String, String) {
+pub fn use_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (String, String, bool) {
     let lasted = use_state_eq(|| get_lasted(started_at, end_at));
     let progress = use_state_eq(|| get_progress(started_at, end_at));
+    let is_done_state = use_state_eq(|| false);
 
     use_effect({
         let lasted = lasted.clone();
         let progress = progress.clone();
+        let is_done_state = is_done_state.clone();
         let (started_at, end_at) = (started_at.clone(), end_at.clone());
 
         move || {
             let timer = Interval::new(UPDATE_INTERVAL, move || {
                 lasted.set(get_lasted(&started_at, &end_at));
                 progress.set(get_progress(&started_at, &end_at));
+                is_done_state.set(is_done(&started_at, &end_at));
             });
 
             || {
@@ -67,5 +75,5 @@ pub fn use_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (String
         }
     });
 
-    ((*lasted).clone(), (*progress).clone())
+    ((*lasted).clone(), (*progress).clone(), *is_done_state)
 }
