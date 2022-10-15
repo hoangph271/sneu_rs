@@ -1,6 +1,6 @@
 use crate::{
     components::*,
-    utils::{expect_target, from_date_str, to_date_str},
+    utils::{expect_target, from_datetime_str, to_datetime_str},
 };
 use chrono::Utc;
 use hbp_types::Challenge;
@@ -92,12 +92,12 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                 label="Start at:"
                 placeholder="When will the challenge begin...?"
                 input_type={InputType::Datetime}
-                value={to_date_str(&*start_at_ms)}
+                value={to_datetime_str(&*start_at_ms)}
                 on_value_changed={{
                     let start_at_ms = start_at_ms.clone();
 
                     Callback::from(move |value: String| {
-                        start_at_ms.set(from_date_str(&value));
+                        start_at_ms.set(from_datetime_str(&value));
                     })
                 }}
             />
@@ -105,12 +105,12 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                 label="End at:"
                 placeholder="When will the challenge end...?"
                 input_type={InputType::Datetime}
-                value={to_date_str(&*end_at_ms)}
+                value={to_datetime_str(&*end_at_ms)}
                 on_value_changed={{
                     let end_at_ms = end_at_ms.clone();
 
                     Callback::from(move |value: String| {
-                        end_at_ms.set(from_date_str(&value));
+                        end_at_ms.set(from_datetime_str(&value));
                     })
                 }}
             />
