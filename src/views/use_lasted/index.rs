@@ -82,24 +82,26 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
         (*api_hander).clone(),
     );
 
-    with_loader((*challenges).as_ref().map(|c| c.clone()), |challenges| {
-        html! {
-            <div
-                class="h-screen text-lg"
-                style="font-family: monospace;"
-            >
-                <Header />
-                <div class="w-screen grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1">
-                    {challenges.iter().map(|challenge| {
-                        html! {
-                            <LastedItem
-                                key={challenge.id.clone()}
-                                challenge={challenge.clone()}
-                            />
-                        }
-                    }).collect::<Html>()}
-                </div>
-            </div>
-        }
-    })
+    html! {
+        <div
+            class="h-screen text-lg"
+            style="font-family: monospace;"
+        >
+            <Header />
+            {with_loader((*challenges).as_ref().map(|c| c.clone()), |challenges| {
+                html! {
+                    <div class="w-screen grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1">
+                        {challenges.iter().map(|challenge| {
+                            html! {
+                                <LastedItem
+                                    key={challenge.id.clone()}
+                                    challenge={challenge.clone()}
+                                />
+                            }
+                        }).collect::<Html>()}
+                    </div>
+                }
+            })}
+        </div>
+    }
 }

@@ -13,9 +13,11 @@ pub fn loader(props: &LoaderProps) -> Html {
     let size = if size.is_empty() { "w-24" } else { size }.to_owned();
 
     html! {
-        <div
-            class={ format!("{size} border-8 border-zinc-300 border-t-teal-300 aspect-square rounded-full animate-spin") }
-        />
+        <div class="flex justify-center">
+            <div
+                class={ format!("{size} border-8 border-zinc-300 border-t-teal-300 aspect-square rounded-full animate-spin") }
+            />
+        </div>
     }
 }
 
