@@ -13,6 +13,7 @@ pub struct ChallengeCardProps {
 pub fn challenge_card(props: &ChallengeCardProps) -> Html {
     let ChallengeCardProps { challenge } = props;
     let Challenge {
+        id,
         title,
         why,
         start_at_ms,
@@ -28,7 +29,7 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
 
     html! {
         <div {class}>
-            <Title title={title.clone()} />
+            <Title id={id.clone()} title={title.clone()} />
             <Whys why={why.clone()} class="flex-grow" />
             <Footer
                 started_at={start_at_ms.clone()}
