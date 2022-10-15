@@ -24,6 +24,8 @@ pub enum SneuRoutes {
     Trial,
     #[at("/uselasted")]
     UseLasted,
+    #[at("/uselasted/edit/:id")]
+    UseLastedEdit { id: String },
     #[at("/uselasted/create")]
     UseLastedCreate,
     #[at("/local-library")]

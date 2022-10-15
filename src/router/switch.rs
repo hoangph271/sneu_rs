@@ -15,6 +15,7 @@ pub fn switch(route: &SneuRoutes) -> Html {
         SneuRoutes::Trial => html! { <Trial /> },
         SneuRoutes::UseLasted => html! { <UseLasted /> },
         SneuRoutes::UseLastedCreate => html! { <CreateUseLasted /> },
+        SneuRoutes::UseLastedEdit { id } => html! { <EditUseLasted id={id.clone()} /> },
         SneuRoutes::LocalLibrary => html! { <LocalLibrary /> },
     }
 }

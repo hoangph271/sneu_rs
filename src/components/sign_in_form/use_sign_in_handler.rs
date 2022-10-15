@@ -15,8 +15,8 @@ use yew::{use_state_eq, Callback};
 use yew_hooks::use_bool_toggle;
 
 pub fn use_sign_in_handler(
-    username: String,
-    password: String,
+    username: &String,
+    password: &String,
 ) -> (bool, Callback<FocusEvent>, String, Callback<()>) {
     let auth_context = use_auth_context();
     let is_loading = use_bool_toggle(false);
@@ -27,6 +27,9 @@ pub fn use_sign_in_handler(
         let sign_in_error = sign_in_error.clone();
 
         Callback::from({
+            let username = (*username).clone();
+            let password = (*password).clone();
+
             move |e: FocusEvent| {
                 e.prevent_default();
 

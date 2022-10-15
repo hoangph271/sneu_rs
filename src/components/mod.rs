@@ -1,5 +1,6 @@
 mod app_title;
 mod centered_viewport;
+mod challenge;
 mod file_picker;
 mod form_input;
 pub mod layout;
@@ -11,10 +12,10 @@ mod pill_button;
 mod sign_in_form;
 mod toast;
 mod unsafe_html;
-mod use_lasted;
 
 pub use app_title::*;
 pub use centered_viewport::*;
+pub use challenge::*;
 pub use file_picker::*;
 pub use form_input::*;
 pub use loader::*;
@@ -24,4 +25,3 @@ pub use markdown_viewer::*;
 pub use pill_button::*;
 pub use sign_in_form::*;
 pub use toast::*;
-pub use use_lasted::*;

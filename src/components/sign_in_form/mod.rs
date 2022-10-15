@@ -11,7 +11,7 @@ pub fn sign_in_form() -> Html {
     let password = use_state_eq(|| "".to_owned());
 
     let (is_loading, onsubmit, sign_in_error, clear_error) =
-        use_sign_in_handler((*username).clone(), (*password).clone());
+        use_sign_in_handler(&*username, &*username);
 
     html! {
         <div
@@ -19,9 +19,8 @@ pub fn sign_in_form() -> Html {
         >
             <Logo />
             <form
-                method="post"
-                action="http://localhost:8000/api/v1/users/signin"
                 {onsubmit}
+                method="post"
                 class="inline-flex flex-col items-center gap-4"
             >
                 if !sign_in_error.is_empty() {

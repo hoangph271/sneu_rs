@@ -1,6 +1,7 @@
-use crate::{components::*, utils::expect_target};
-use chrono::{DateTime, TimeZone, Utc};
-use web_sys::HtmlTextAreaElement;
+use crate::{components::*, utils::sneu_api::ApiHandler};
+use hbp_types::Challenge;
+use wasm_bindgen::JsValue;
+use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
@@ -10,79 +11,36 @@ pub struct CreateUseLastedProps {}
 pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
     let CreateUseLastedProps {} = props;
     let is_loading = use_state_eq(|| false);
-    // let (is_loading, onsubmit, sign_in_error, clear_error) =
-    //     use_sign_in_handler((*username).clone(), (*password).clone());
-    let title = use_state_eq(String::new);
-    let why = use_state_eq(String::new);
-    // TODO: Flip display on cards...?
-    let note = use_state_eq(String::new);
-    let started_at = use_state_eq(Utc::now);
-    let end_at = use_state_eq(Utc::now);
-    // TODO: Random ID
+
+    let onsubmit = Callback::from({
+        is_loading.set(true);
+        let is_loading = is_loading.clone();
+
+        move |challenge: Challenge| {
+            let is_loading = is_loading.clone();
+            spawn_local({
+                let json = serde_json::to_string(&challenge.clone())
+                    .expect("{challenge:?} must be a valid JSON value");
+
+                async move {
+                    let _ = ApiHandler::default()
+                        .json_post::<Challenge>("/challenges", JsValue::from_str(&json))
+                        .await
+                        .unwrap_or_else(|e| {
+                            log::error!("create_use_lasted failed: {e:?}");
+                            panic!();
+                        });
+
+                    is_loading.set(false);
+                }
+            });
+        }
+    });
 
     html! {
-        <form>
-            <FormInput
-                label="Title:"
-                placeholder="Title of your challenge...?"
-                value={(*title).clone()}
-                on_value_changed={{
-                    let title = title.clone();
-                    Callback::from(move |value| title.set(value))
-                }}
-            />
-            <textarea
-                placeholder="Explain why you want to start it...?"
-                value={(*why).clone()}
-                oninput={{
-                    let why = why.clone();
-                    Callback::from(move |e: InputEvent| why.set(expect_target::<HtmlTextAreaElement>(e.target()).unwrap().value()))
-                }}
-            />
-            <textarea
-                placeholder="Other notes...!"
-                value={(*note).clone()}
-                oninput={{
-                    let note = note.clone();
-                    Callback::from(move |e: InputEvent| note.set(expect_target::<HtmlTextAreaElement>(e.target()).unwrap().value()))
-                }}
-            />
-            <FormInput
-                label="Start at:"
-                placeholder="When will the challenge begin...?"
-                input_type={InputType::Datetime}
-                value={started_at.to_string()}
-                on_value_changed={{
-                    let started_at = started_at.clone();
-                    Callback::from(move |value: String| {
-                        let datetime = DateTime::parse_from_str(&value, "")
-                            .unwrap()
-                            .naive_utc();
-                        started_at.set(Utc.from_utc_datetime(&datetime));
-                    })
-                }}
-            />
-            <FormInput
-                label="End at:"
-                placeholder="When will the challenge end...?"
-                input_type={InputType::Datetime}
-                value={end_at.to_string()}
-                on_value_changed={{
-                    let end_at = end_at.clone();
-                    Callback::from(move |value: String| {
-                        let datetime = DateTime::parse_from_str(&value, "")
-                            .unwrap()
-                            .naive_utc();
-                        end_at.set(Utc.from_utc_datetime(&datetime));
-                    })
-                }}
-            />
-            <PillButton
-                button_type={ButtonType::Submit}
-                is_loading={*is_loading}
-            >
-                { "Create" }
-            </PillButton>
-        </form>
+        <ChallengeForm
+            {onsubmit}
+            is_loading={*is_loading}
+        />
     }
 }
