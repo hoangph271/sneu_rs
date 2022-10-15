@@ -87,4 +87,34 @@ impl ApiHandler {
 
         Ok(res)
     }
+
+    pub async fn json_put<T: DeserializeOwned>(&self, url: &str, payload: JsValue) -> ApiResult<T> {
+        let url = with_api_root(&self.append_jwt_query_param(url));
+
+        let res: T = Request::put(&url)
+            .body(payload)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
+
+    pub async fn json_delete<T: DeserializeOwned>(
+        &self,
+        url: &str,
+        payload: JsValue,
+    ) -> ApiResult<T> {
+        let url = with_api_root(&self.append_jwt_query_param(url));
+
+        let res: T = Request::delete(&url)
+            .body(payload)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
 }
