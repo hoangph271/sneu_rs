@@ -13,7 +13,7 @@ pub fn header(props: &HeaderProps) -> Html {
         .num_weeks() as f64
         / 52.0;
 
-    let sucker = format!("Sucker is {sucker:.2} years old");
+    let sucker = format!("Sucked for {sucker:.2} years...!");
 
     html! {
         <header class="p-4 shadow-md hover:shadow-xl">
