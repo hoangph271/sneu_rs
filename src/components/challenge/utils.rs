@@ -51,7 +51,10 @@ fn get_progress(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     format!("{:.4}", (total / so_far) * 100.0)
 }
 
-pub fn use_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (String, String, bool) {
+pub fn use_lasted(
+    started_at: &DateTime<Utc>,
+    end_at: &DateTime<Utc>,
+) -> (String, String, bool, bool) {
     let lasted = use_state_eq(|| get_lasted(started_at, end_at));
     let progress = use_state_eq(|| get_progress(started_at, end_at));
     let is_done_state = use_state_eq(|| false);
@@ -75,5 +78,12 @@ pub fn use_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (String
         }
     });
 
-    ((*lasted).clone(), (*progress).clone(), *is_done_state)
+    let is_started = started_at.cmp(&Utc::now()).is_lt();
+
+    (
+        (*lasted).clone(),
+        (*progress).clone(),
+        *is_done_state,
+        is_started,
+    )
 }

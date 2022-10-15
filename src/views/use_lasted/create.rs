@@ -21,7 +21,7 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
     let why = use_state_eq(String::new);
     // TODO: Flip display on cards...?
     let note = use_state_eq(String::new);
-    let started_at = use_state_eq(Utc::now);
+    let start_at = use_state_eq(Utc::now);
     let end_at = use_state_eq(Utc::now);
 
     let onsubmit = Callback::from({
@@ -30,8 +30,8 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
             title: (*title).clone(),
             why: (*why).clone(),
             note: (*note).clone(),
-            started_at: (*started_at).clone(),
-            end_at: (*end_at).clone(),
+            start_at_ms: (*start_at).clone(),
+            end_at_ms: (*end_at).clone(),
             finished: false,
         };
 
@@ -88,9 +88,9 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
                 label="Start at:"
                 placeholder="When will the challenge begin...?"
                 input_type={InputType::Datetime}
-                value={started_at.to_string()}
+                value={start_at.to_string()}
                 on_value_changed={{
-                    let started_at = started_at.clone();
+                    let started_at = start_at.clone();
                     Callback::from(move |value: String| {
                         let datetime = DateTime::parse_from_str(&value, "")
                             .unwrap()

@@ -1,8 +1,8 @@
 mod app_title;
 mod centered_viewport;
+mod challenge;
 mod file_picker;
 mod form_input;
-mod lasted;
 pub mod layout;
 mod loader;
 mod logo;
@@ -15,9 +15,9 @@ mod unsafe_html;
 
 pub use app_title::*;
 pub use centered_viewport::*;
+pub use challenge::*;
 pub use file_picker::*;
 pub use form_input::*;
-pub use lasted::*;
 pub use loader::*;
 pub use logo::*;
 pub use markdown::*;

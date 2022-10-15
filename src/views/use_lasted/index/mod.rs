@@ -1,11 +1,9 @@
-use std::cmp::Ordering;
-mod lasted_item;
 use crate::{
     components::{layout::Header, *},
     utils::{no_op, sneu_api::ApiHandler},
 };
 use hbp_types::{ApiList, Challenge};
-use lasted_item::*;
+use std::cmp::Ordering;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
@@ -61,7 +59,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
                     <div class="w-screen grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1">
                         {challenges.iter().map(|challenge| {
                             html! {
-                                <LastedItem
+                                <ChallengeCard
                                     key={challenge.id.clone()}
                                     challenge={challenge.clone()}
                                 />
