@@ -1,16 +1,24 @@
-use super::utils::use_lasted;
+mod title;
+mod utils;
+mod whys;
+
+pub use title::*;
+pub use whys::*;
+
 use chrono::{DateTime, Utc};
 use yew::prelude::*;
 
+use self::utils::use_lasted;
+
 #[derive(PartialEq, Properties)]
-pub struct LastedProps {
+pub struct FooterProps {
     pub started_at: DateTime<Utc>,
     pub end_at: DateTime<Utc>,
 }
 
-#[function_component(Lasted)]
-pub fn lasted(props: &LastedProps) -> Html {
-    let LastedProps { started_at, end_at } = props;
+#[function_component(Footer)]
+pub fn footer(props: &FooterProps) -> Html {
+    let FooterProps { started_at, end_at } = props;
     let (lasted, progress, is_done) = use_lasted(started_at, end_at);
 
     html! {

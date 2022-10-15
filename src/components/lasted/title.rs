@@ -2,19 +2,19 @@ use crate::components::Markdown;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
-pub struct WastedProps {
-    pub note: String,
+pub struct TitleProps {
+    pub title: String,
 }
 
-#[function_component(Wasted)]
-pub fn wasted(props: &WastedProps) -> Html {
-    let WastedProps { note } = props;
+#[function_component(Title)]
+pub fn title(props: &TitleProps) -> Html {
+    let TitleProps { title } = props;
 
     html! {
         <div
             class="bg-gray-900/75 py-4 rounded-t text-center"
         >
-            <Markdown markdown={note.clone()} />
+            <Markdown markdown={title.clone()} />
         </div>
     }
 }

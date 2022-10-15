@@ -28,9 +28,9 @@ pub fn lasted_item(props: &LastedItemProps) -> Html {
 
     html! {
         <div {class}>
-            <Wasted note={title.clone()} />
+            <Title title={title.clone()} />
             <Whys why={why.clone()} class="flex-grow" />
-            <Lasted
+            <Footer
                 started_at={started_at.clone()}
                 end_at={end_at.clone()}
             />
