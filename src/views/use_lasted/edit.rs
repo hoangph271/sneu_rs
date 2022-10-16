@@ -13,16 +13,11 @@ pub struct EditUseLastedProps {
     pub id: String,
 }
 
-#[function_component(EditUseLasted)]
-pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
-    let EditUseLastedProps { id } = props;
-
-    let history = use_history().unwrap();
-    let is_loading = use_state_eq(|| false);
+fn use_challenge(id: &str) -> UseStateHandle<Option<Challenge>> {
     let challenge = use_state_eq(|| Option::<Challenge>::None);
 
     use_effect_once({
-        let id = id.clone();
+        let id = id.clone().to_owned();
         let challenge = challenge.clone();
 
         || {
@@ -41,6 +36,17 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
             no_op
         }
     });
+
+    challenge
+}
+
+#[function_component(EditUseLasted)]
+pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
+    let EditUseLastedProps { id } = props;
+
+    let history = use_history().unwrap();
+    let is_loading = use_state_eq(|| false);
+    let challenge = use_challenge(id);
 
     with_loader((*challenge).clone(), {
         move |loaded_challenge| {

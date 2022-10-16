@@ -47,7 +47,7 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
         <form
             onsubmit={{
                 let challenge = Challenge {
-                    id: nanoid!(),
+                    id: challenge.id.clone(),
                     title: (*title).clone(),
                     why: (*why).clone(),
                     note: (*note).clone(),
