@@ -1,5 +1,6 @@
 use crate::components::Markdown;
 use crate::router::{SneuLink, SneuRoutes};
+use js_sys::encode_uri_component;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
@@ -14,7 +15,7 @@ pub fn title(props: &TitleProps) -> Html {
 
     html! {
         <SneuLink
-            to={SneuRoutes::UseLastedEdit { id: id.to_owned() }}
+            to={SneuRoutes::UseLastedEdit { id: encode_uri_component(id).into() }}
             classes="bg-gray-900/75 py-4 rounded-t text-center hover:underline"
         >
             <Markdown markdown={title.clone()} />
