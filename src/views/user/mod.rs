@@ -3,7 +3,7 @@ mod use_profile;
 
 use crate::{
     components::with_loader,
-    hooks::use_with_auth_required,
+    hooks::{use_history, use_with_auth_required},
     providers::{use_auth_context, AuthAction, AuthMessage},
     router::SneuRoutes,
     utils::is_tauri_app,
@@ -11,7 +11,7 @@ use crate::{
 use profile::*;
 use use_profile::*;
 use yew::prelude::*;
-use yew_router::prelude::{use_history, History};
+use yew_router::prelude::History;
 
 #[function_component(UserProfile)]
 fn user_profile() -> Html {
@@ -37,7 +37,7 @@ fn user_profile() -> Html {
 
 #[function_component(User)]
 pub fn user() -> Html {
-    let history = use_history().unwrap();
+    let history = use_history();
 
     use_with_auth_required(|| {
         if is_tauri_app() {

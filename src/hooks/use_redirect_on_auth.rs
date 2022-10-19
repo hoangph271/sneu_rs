@@ -2,11 +2,12 @@ use crate::{providers::use_auth_context, router::SneuRoutes, utils::no_op};
 use web_sys::UrlSearchParams;
 use yew::use_effect_with_deps;
 use yew_hooks::use_location;
-use yew_router::prelude::{use_history, History};
-use yew_router::Routable;
+use yew_router::{prelude::History, Routable};
+
+use super::use_history;
 
 pub fn use_redirect_on_auth() {
-    let history = use_history().unwrap();
+    let history = use_history();
     let location = use_location();
     let auth_context = use_auth_context();
 

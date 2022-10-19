@@ -1,10 +1,10 @@
-use crate::{components::*, router::SneuRoutes};
+use crate::{components::*, hooks::use_history, router::SneuRoutes};
 use hbp_types::{ApiItem, Challenge};
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_hooks::use_effect_once;
-use yew_router::prelude::{use_history, History};
+use yew_router::prelude::History;
 
 use crate::utils::{no_op, sneu_api::ApiHandler};
 
@@ -44,7 +44,7 @@ fn use_challenge(id: &str) -> UseStateHandle<Option<Challenge>> {
 pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
     let EditUseLastedProps { id } = props;
 
-    let history = use_history().unwrap();
+    let history = use_history();
     let is_loading = use_state_eq(|| false);
     let challenge = use_challenge(id);
 
