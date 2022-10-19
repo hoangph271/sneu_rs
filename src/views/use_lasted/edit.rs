@@ -99,7 +99,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                     .item;
                                 });
 
-                                history.replace(SneuRoutes::UseLasted)
+                                history.push(SneuRoutes::UseLasted)
                             })
                         }}
                     >
