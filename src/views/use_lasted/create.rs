@@ -35,7 +35,6 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
                             panic!();
                         });
 
-                    log::info!("WTF");
                     is_loading.set(false);
                     history.push(SneuRoutes::UseLasted)
                 }
