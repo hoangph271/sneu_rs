@@ -1,7 +1,7 @@
 mod create;
-mod delete;
+mod edit;
 mod index;
 
 pub use create::*;
-pub use delete::*;
+pub use edit::*;
 pub use index::*;

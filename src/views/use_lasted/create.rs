@@ -36,7 +36,7 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
                         });
 
                     is_loading.set(false);
-                    history.push(SneuRoutes::UseLasted)
+                    history.push(SneuRoutes::UseLasted);
                 }
             });
         }

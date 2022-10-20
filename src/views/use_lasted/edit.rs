@@ -56,6 +56,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                         onsubmit={{
                             let is_loading = is_loading.clone();
                             let challenge = challenge.clone();
+                            let history = history.clone();
 
                             Callback::from(move |item| {
                                 is_loading.set(true);
@@ -75,6 +76,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                 });
 
                                 is_loading.set(false);
+                                history.push(SneuRoutes::UseLasted);
                             })
                         }}
                         challenge={loaded_challenge.clone()}
