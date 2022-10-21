@@ -50,7 +50,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
 
     html! {
         <div
-            class="h-screen text-lg"
+            class="h-screen text-lg overflow-auto"
             style="font-family: monospace;"
         >
             <Header />
