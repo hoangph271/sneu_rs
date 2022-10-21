@@ -23,7 +23,7 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
     } = challenge;
 
     let class = format!(
-        "max-w-fit m-auto flex flex-col text-white p-2 h-96 max-h-screen {}",
+        "flex flex-col text-white p-2 h-96 max-h-screen {}",
         if *finished { "opacity-50" } else { "" }
     );
 
