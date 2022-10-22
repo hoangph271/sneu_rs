@@ -1,6 +1,13 @@
-use crate::components::*;
 use hbp_types::Challenge;
 use yew::prelude::*;
+
+mod footer;
+mod title;
+mod whys;
+
+use footer::Footer;
+use title::Title;
+use whys::Whys;
 
 #[derive(PartialEq, Eq)]
 pub struct UseLastedProps {}

@@ -1,4 +1,4 @@
-use super::utils::use_lasted;
+use super::super::utils::use_lasted;
 use crate::utils::friendly_datetime;
 use chrono::{DateTime, Utc};
 use yew::prelude::*;
