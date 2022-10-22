@@ -1,4 +1,4 @@
-use super::utils::use_lasted;
+use super::super::utils::use_lasted;
 use crate::utils::friendly_datetime;
 use chrono::{DateTime, Utc};
 use yew::prelude::*;
@@ -20,9 +20,9 @@ pub fn footer(props: &FooterProps) -> Html {
                 <span>{ "Lasted " }</span>
                 <span style="font-style: italic">
                     {if is_done {
-                        format!("{lasted} [{progress}%]...!")
+                        format!("[{progress}%]")
                     } else {
-                        format!("{lasted}...!")
+                        format!("{lasted} [{progress}%]...!")
                     }}
                 </span>
             } else {

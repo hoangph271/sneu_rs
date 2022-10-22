@@ -17,7 +17,7 @@ fn get_diffs(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> (Duration, D
 fn is_done(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> bool {
     let (so_far, total) = get_diffs(started_at, end_at);
 
-    so_far == total
+    so_far >= total
 }
 
 fn get_lasted(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
@@ -48,7 +48,7 @@ fn get_progress(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     let so_far = so_far.num_milliseconds() as f64;
     let total = total.num_milliseconds() as f64;
 
-    format!("{:.4}", (total / so_far) * 100.0)
+    format!("{:.4}", (so_far / total) * 100.0)
 }
 
 pub fn use_lasted(
