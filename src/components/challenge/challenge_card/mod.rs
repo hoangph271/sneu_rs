@@ -19,7 +19,7 @@ pub struct ChallengeCardProps {
 #[function_component(ChallengeCard)]
 pub fn challenge_card(props: &ChallengeCardProps) -> Html {
     let ChallengeCardProps { challenge } = props;
-    let is_flipped = use_state_eq(|| true);
+    let is_flipped = use_state_eq(|| false);
 
     let Challenge {
         id,
