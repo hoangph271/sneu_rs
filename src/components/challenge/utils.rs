@@ -48,7 +48,7 @@ fn get_progress(started_at: &DateTime<Utc>, end_at: &DateTime<Utc>) -> String {
     let so_far = so_far.num_milliseconds() as f64;
     let total = total.num_milliseconds() as f64;
 
-    format!("{:.4}", (so_far / total) * 100.0)
+    format!("{:.2}", (so_far / total) * 100.0)
 }
 
 pub fn use_lasted(
