@@ -19,6 +19,8 @@ pub struct ChallengeCardProps {
 #[function_component(ChallengeCard)]
 pub fn challenge_card(props: &ChallengeCardProps) -> Html {
     let ChallengeCardProps { challenge } = props;
+    let is_flipped = use_state_eq(|| true);
+
     let Challenge {
         id,
         title,
@@ -26,6 +28,7 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
         start_at_ms,
         end_at_ms,
         finished,
+        note,
         ..
     } = challenge;
 
@@ -34,10 +37,19 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
         if *finished { "opacity-50" } else { "" }
     );
 
+    let text = if *is_flipped {
+        note.clone()
+    } else {
+        why.clone()
+    };
+
     html! {
-        <div {class}>
+        <div
+            {class}
+            onclick={Callback::from(move |_| { is_flipped.set(!*is_flipped) })}
+        >
             <Title id={id.clone()} title={title.clone()} />
-            <Whys why={why.clone()} class="flex-grow" />
+            <Whys {text} class="flex-grow" />
             <Footer
                 started_at={start_at_ms.clone()}
                 end_at={end_at_ms.clone()}
