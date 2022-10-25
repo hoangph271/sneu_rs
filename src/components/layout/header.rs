@@ -16,12 +16,12 @@ pub fn header(props: &HeaderProps) -> Html {
     let sucker = format!("Sucked for {sucker:.2} years...!");
 
     html! {
-        <header class="p-4 shadow-md hover:shadow-xl">
+        <header class="p-4 shadow-md hover:shadow-xl" style="color: #F5F9FF;">
             <nav class="flex">
                 <SneuLink to={SneuRoutes::Home} classes="hover:underline">
                     { "@sneu_rs" }
                 </SneuLink>
-                <div class="flex-grow text-end">
+                <div class="flex-grow text-end" style="color: #F5F9FF;">
                     { sucker }
                 </div>
             </nav>
