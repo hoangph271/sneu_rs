@@ -35,7 +35,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
                         } else if c2.finished {
                             Ordering::Less
                         } else {
-                            Ordering::Equal
+                            c1.start_at_ms.cmp(&c2.start_at_ms)
                         }
                     });
 
