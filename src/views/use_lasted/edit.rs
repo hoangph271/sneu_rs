@@ -59,10 +59,13 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                             let history = history.clone();
 
                             Callback::from(move |item| {
-                                is_loading.set(true);
                                 let challenge = challenge.clone();
+                                let is_loading = is_loading.clone();
+                                let history = history.clone();
 
                                 spawn_local(async move {
+                                    is_loading.set(true);
+
                                     challenge.set(Some(
                                         ApiHandler::default()
                                             .json_put::<ApiItem<Challenge>>(
@@ -73,10 +76,10 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                             .unwrap()
                                             .item,
                                     ));
-                                });
 
-                                is_loading.set(false);
-                                history.push(SneuRoutes::UseLasted);
+                                    is_loading.set(false);
+                                    history.push(SneuRoutes::UseLasted);
+                                });
                             })
                         }}
                         challenge={loaded_challenge.clone()}
