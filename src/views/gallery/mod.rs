@@ -24,7 +24,7 @@ pub fn gallery() -> Html {
         html! {
             <img
                 src={ image_url.clone() }
-                style="max-width: 80%; display: block; margin: auto; }"
+                style="max-width: 80%; display: block; margin: auto; min-height: 100vh; object-fit: contain;"
             />
         }
     })
