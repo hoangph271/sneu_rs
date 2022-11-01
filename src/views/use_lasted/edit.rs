@@ -95,16 +95,17 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                             Callback::from(move |e: MouseEvent| {
                                 e.prevent_default();
                                 let id = id.clone();
+                                let history = history.clone();
 
                                 spawn_local(async move {
                                     ApiHandler::default()
-                                    .json_delete::<ApiItem<()>>(&format!("/challenges/{id}"), JsValue::undefined())
-                                    .await
-                                    .unwrap()
-                                    .item;
-                                });
+                                        .json_delete::<ApiItem<()>>(&format!("/challenges/{id}"), JsValue::undefined())
+                                        .await
+                                        .unwrap()
+                                        .item;
 
-                                history.push(SneuRoutes::UseLasted)
+                                    history.push(SneuRoutes::UseLasted)
+                                });
                             })
                         }}
                     >
