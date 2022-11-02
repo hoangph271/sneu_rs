@@ -10,5 +10,7 @@
   "files.associations": {
     "*.rs": "rust"
   },
-  "task.allowAutomaticTasks": "on"
+  "task.allowAutomaticTasks": "on",
+  "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "always",
+  "rust-analyzer.inlayHints.lifetimeElisionHints.useParameterNames": true
 }
