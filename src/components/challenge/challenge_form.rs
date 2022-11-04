@@ -2,7 +2,7 @@ use crate::{
     components::*,
     utils::{expect_target, from_datetime_str, to_datetime_str},
 };
-use chrono::Utc;
+use chrono::{DateTime, Utc};
 use hbp_types::Challenge;
 use nanoid::nanoid;
 use web_sys::HtmlTextAreaElement;
@@ -37,10 +37,10 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
 
     let title = use_state_eq(|| challenge.title.to_owned());
     let why = use_state_eq(|| challenge.why.to_owned());
-    // TODO: Flip display on cards...?
     let note = use_state_eq(|| challenge.note.to_owned());
     let start_at_ms = use_state_eq(|| challenge.start_at_ms.to_owned());
     let end_at_ms = use_state_eq(|| challenge.end_at_ms.to_owned());
+    let failed_at_ms = use_state_eq(|| Option::<DateTime<Utc>>::None);
     let finished = use_state_eq(|| challenge.finished);
 
     html! {
@@ -114,6 +114,21 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                     })
                 }}
             />
+            if *is_edit {
+                <FormInput
+                    label="Failed at:"
+                    placeholder="Did you fail and when...?"
+                    input_type={InputType::Datetime}
+                    value={failed_at_ms.map(|val| to_datetime_str(&val)).unwrap_or_default()}
+                    on_value_changed={{
+                        let failed_at_ms = failed_at_ms.clone();
+
+                        Callback::from(move |value: String| {
+                            failed_at_ms.set(Some(from_datetime_str(&value)));
+                        })
+                    }}
+                />
+            }
             <PillButton
                 button_type={ButtonType::Submit}
                 is_loading={*is_loading}
