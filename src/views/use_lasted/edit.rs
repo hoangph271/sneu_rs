@@ -1,12 +1,12 @@
+use crate::utils::{no_op, sneu_api::ApiHandler};
 use crate::{components::*, hooks::use_history, router::SneuRoutes};
 use hbp_types::{ApiItem, Challenge};
+use js_sys::encode_uri_component;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_hooks::use_effect_once;
 use yew_router::prelude::History;
-
-use crate::utils::{no_op, sneu_api::ApiHandler};
 
 #[derive(PartialEq, Properties)]
 pub struct EditUseLastedProps {
@@ -89,7 +89,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                     <PillButton
                         button_type={ButtonType::Button}
                         onclick={{
-                            let id = loaded_challenge.id.clone();
+                            let id = encode_uri_component(&loaded_challenge.id);
                             let history = history.clone();
 
                             Callback::from(move |e: MouseEvent| {
