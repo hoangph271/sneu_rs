@@ -11,7 +11,7 @@ use yew_router::prelude::History;
 
 use super::use_history;
 
-fn use_redirect_unauthed() -> AuthMessage {
+pub fn use_redirect_unauthed() -> AuthMessage {
     let history = use_history();
     let location = use_location();
     let auth_context = use_auth_context();
@@ -44,7 +44,7 @@ fn use_redirect_unauthed() -> AuthMessage {
     (*auth_context).clone()
 }
 
-mod components {
+pub mod components {
     use super::use_redirect_unauthed;
     use yew::prelude::*;
 

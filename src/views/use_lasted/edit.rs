@@ -1,5 +1,5 @@
 use crate::utils::{no_op, sneu_api::ApiHandler};
-use crate::{components::*, hooks::use_history, router::SneuRoutes};
+use crate::{components::*, hooks::{use_history, use_redirect_unauthed}, router::SneuRoutes};
 use hbp_types::{ApiItem, Challenge};
 use js_sys::encode_uri_component;
 use wasm_bindgen::JsValue;
@@ -48,6 +48,8 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
     let is_loading = use_state_eq(|| false);
     let challenge = use_challenge(id);
 
+    use_redirect_unauthed();
+
     with_loader((*challenge).clone(), {
         move |loaded_challenge| {
             html! {
@@ -67,6 +69,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                     is_loading.set(true);
 
                                     challenge.set(Some(
+                                        // TODO: ApiHandler must be authed
                                         ApiHandler::default()
                                             .json_put::<ApiItem<Challenge>>(
                                                 "/challenges",
