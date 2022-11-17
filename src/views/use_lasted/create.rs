@@ -5,7 +5,7 @@ use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_router::prelude::History;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct CreateUseLastedProps {}
 
 #[function_component(CreateUseLasted)]
@@ -23,7 +23,7 @@ pub fn create_use_lasted(props: &CreateUseLastedProps) -> Html {
             let history = history.clone();
 
             spawn_local({
-                let json = serde_json::to_string(&challenge.clone())
+                let json = serde_json::to_string(&challenge)
                     .expect("{challenge:?} must be a valid JSON value");
 
                 async move {

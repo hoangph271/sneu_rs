@@ -12,7 +12,7 @@ pub struct UnsafeHtmlProps {
 pub fn unsafe_html(props: &UnsafeHtmlProps) -> Html {
     let UnsafeHtmlProps { tag, html, class } = props;
     let code = gloo_utils::document()
-        .create_element(&tag)
+        .create_element(tag)
         .unwrap_or_else(|e| panic!("create_element() [{:?}] failed: {e:?}", &tag));
 
     code.set_class_name(&class.to_string());

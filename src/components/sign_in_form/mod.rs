@@ -11,7 +11,7 @@ pub fn sign_in_form() -> Html {
     let password = use_state_eq(|| "".to_owned());
 
     let (is_loading, onsubmit, sign_in_error, clear_error) =
-        use_sign_in_handler(&*username, &*username);
+        use_sign_in_handler(&username, &password);
 
     html! {
         <div

@@ -11,15 +11,14 @@ pub fn use_authed_api_hander() -> Option<ApiHandler> {
             let api_hander = api_hander.clone();
 
             move |_| {
-                match auth_context {
-                    Some(auth) => api_hander.set(Some(ApiHandler::with_jwt((*auth).jwt()))),
-                    None => todo!(),
+                if let Some(auth) = auth_context {
+                    api_hander.set(Some(ApiHandler::with_jwt((*auth).jwt())));
                 }
 
                 || {}
             }
         },
-        auth_context.clone(),
+        auth_context,
     );
 
     (*api_hander).clone()

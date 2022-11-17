@@ -9,7 +9,7 @@ use yew::prelude::*;
 use yew_hooks::use_effect_once;
 use yew_router::prelude::History;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct EditUseLastedProps {
     pub id: String,
 }
@@ -18,7 +18,7 @@ fn use_challenge(id: &str) -> UseStateHandle<Option<Challenge>> {
     let challenge = use_state_eq(|| Option::<Challenge>::None);
 
     use_effect_once({
-        let id = id.clone().to_owned();
+        let id = (*id).to_owned();
         let challenge = challenge.clone();
 
         || {
@@ -105,8 +105,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                     ApiHandler::default()
                                         .json_delete::<ApiItem<()>>(&format!("/challenges/{id}"), JsValue::undefined())
                                         .await
-                                        .unwrap()
-                                        .item;
+                                        .unwrap();
 
                                     history.push(SneuRoutes::UseLasted)
                                 });

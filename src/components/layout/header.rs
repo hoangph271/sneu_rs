@@ -2,7 +2,7 @@ use crate::router::*;
 use chrono::{TimeZone, Utc};
 use yew::prelude::*;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct HeaderProps {}
 
 #[function_component(Header)]

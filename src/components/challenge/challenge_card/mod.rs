@@ -12,7 +12,7 @@ use whys::Whys;
 #[derive(PartialEq, Eq)]
 pub struct UseLastedProps {}
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct ChallengeCardProps {
     pub challenge: Challenge,
 }
@@ -51,8 +51,8 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
             <Title id={id.clone()} title={title.clone()} />
             <Whys {text} class="flex-grow" />
             <Footer
-                started_at={start_at_ms.clone()}
-                end_at={end_at_ms.clone()}
+                started_at={*start_at_ms}
+                end_at={*end_at_ms}
             />
         </div>
     }

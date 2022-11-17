@@ -54,7 +54,7 @@ pub fn use_lasted(props: &UseLastedProps) -> Html {
             style="font-family: monospace;"
         >
             <Header />
-            {with_loader((*challenges).as_ref().map(|c| c.clone()), |challenges| {
+            {with_loader((*challenges).as_ref().cloned(), |challenges| {
                 html! {
                     <div class="w-screen grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1">
                         {challenges.iter().map(|challenge| {

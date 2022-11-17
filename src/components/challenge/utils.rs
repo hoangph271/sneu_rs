@@ -63,7 +63,7 @@ pub fn use_lasted(
         let lasted = lasted.clone();
         let progress = progress.clone();
         let is_done_state = is_done_state.clone();
-        let (started_at, end_at) = (started_at.clone(), end_at.clone());
+        let (started_at, end_at) = (*started_at, *end_at);
 
         move || {
             let timer = Interval::new(UPDATE_INTERVAL, move || {

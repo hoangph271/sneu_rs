@@ -21,7 +21,7 @@ pub fn use_redirect_unauthed() -> bool {
             let auth_context = auth_context.clone();
 
             move |_| {
-                if let None = auth_context {
+                if auth_context.is_none() {
                     let pathname = location.pathname.clone();
 
                     let redirect_url = if pathname.eq("/") {
