@@ -8,6 +8,10 @@ pub use auth_provider::*;
 
 pub type AuthContext = UseReducerHandle<AuthMessage>;
 
-pub fn use_auth_context() -> UseReducerHandle<AuthMessage> {
+pub fn use_auth_context() -> Option<UseReducerHandle<AuthMessage>> {
+    use_context::<AuthContext>()
+}
+
+pub fn use_expected_auth_context() -> UseReducerHandle<AuthMessage> {
     use_context::<AuthContext>().expect("use_auth_context() got None")
 }

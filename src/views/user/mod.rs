@@ -4,7 +4,7 @@ mod use_profile;
 use crate::{
     components::with_loader,
     hooks::{use_history, use_with_auth_required},
-    providers::{use_auth_context, AuthAction, AuthMessage},
+    providers::{use_expected_auth_context, AuthAction, AuthMessage},
     router::SneuRoutes,
     utils::is_tauri_app,
 };
@@ -15,7 +15,7 @@ use yew_router::prelude::History;
 
 #[function_component(UserProfile)]
 fn user_profile() -> Html {
-    let auth_context = use_auth_context();
+    let auth_context = use_expected_auth_context();
     let profile = use_profile();
 
     with_loader(profile, |profile| {

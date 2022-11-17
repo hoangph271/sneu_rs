@@ -93,7 +93,7 @@ pub fn sneu_player(props: &SneuPlayerProps) -> Html {
                         player_state.dispatch(PlayerAction::StartAtIndex(index));
                     }
                 })}
-                play_list={(*player_state).play_list.clone()}
+                play_list={player_state.play_list.clone()}
             />
         </div>
     }

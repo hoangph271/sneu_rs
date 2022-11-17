@@ -9,13 +9,11 @@ pub fn to_datetime_str(date: &DateTime<Utc>) -> String {
 }
 
 pub fn from_datetime_str(date_str: &String) -> DateTime<Utc> {
-    DateTime::<Utc>::from(
-        NaiveDateTime::parse_from_str(date_str, "%Y-%m-%dT%H:%M")
-            .unwrap_or_else(|e| {
-                log::error!("Parse {date_str} failed: {e}");
-                panic!()
-            })
-            .and_local_timezone(Utc)
-            .unwrap(),
-    )
+    NaiveDateTime::parse_from_str(date_str, "%Y-%m-%dT%H:%M")
+        .unwrap_or_else(|e| {
+            log::error!("Parse {date_str} failed: {e}");
+            panic!()
+        })
+        .and_local_timezone(Utc)
+        .unwrap()
 }

@@ -51,9 +51,9 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                     title: (*title).clone(),
                     why: (*why).clone(),
                     note: (*note).clone(),
-                    start_at_ms: (*start_at_ms).clone(),
-                    end_at_ms: (*end_at_ms).clone(),
-                    finished: (*finished).clone(),
+                    start_at_ms: *start_at_ms,
+                    end_at_ms: *end_at_ms,
+                    finished: *finished,
                 };
                 let onsubmit = onsubmit.clone();
 
@@ -92,7 +92,7 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                 label="Start at:"
                 placeholder="When will the challenge begin...?"
                 input_type={InputType::Datetime}
-                value={to_datetime_str(&*start_at_ms)}
+                value={to_datetime_str(&start_at_ms)}
                 on_value_changed={{
                     let start_at_ms = start_at_ms.clone();
 
@@ -105,7 +105,7 @@ pub fn challenge_form(props: &ChallengeFormProps) -> Html {
                 label="End at:"
                 placeholder="When will the challenge end...?"
                 input_type={InputType::Datetime}
-                value={to_datetime_str(&*end_at_ms)}
+                value={to_datetime_str(&end_at_ms)}
                 on_value_changed={{
                     let end_at_ms = end_at_ms.clone();
 

@@ -79,7 +79,7 @@ mod toast_utils {
                 document()
                     .body()
                     .expect("Expectec to find the body element")
-                    .append_child(&*element)
+                    .append_child(&element)
                     .unwrap_or_else(|e| panic!("append_child() failed: {e:?}"));
 
                 Some(element)

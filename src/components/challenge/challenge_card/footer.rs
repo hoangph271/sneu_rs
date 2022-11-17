@@ -3,7 +3,7 @@ use crate::utils::friendly_datetime;
 use chrono::{DateTime, Utc};
 use yew::prelude::*;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct FooterProps {
     pub started_at: DateTime<Utc>,
     pub end_at: DateTime<Utc>,

@@ -3,7 +3,7 @@ use crate::router::{SneuLink, SneuRoutes};
 use js_sys::encode_uri_component;
 use yew::prelude::*;
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Properties, Eq)]
 pub struct TitleProps {
     pub id: String,
     pub title: String,
