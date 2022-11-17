@@ -1,5 +1,5 @@
 use crate::{
-    providers::{use_auth_context, AuthMessage},
+    providers::use_auth_context,
     router::{SignInQuery, SneuRoutes},
     utils::no_op,
 };
@@ -11,17 +11,17 @@ use yew_router::prelude::History;
 
 use super::use_history;
 
-pub fn use_redirect_unauthed() -> AuthMessage {
+pub fn use_redirect_unauthed() -> bool {
     let history = use_history();
     let location = use_location();
     let auth_context = use_auth_context();
 
     use_effect_with_deps(
         {
-            let auth = (*auth_context).clone();
+            let auth_context = auth_context.clone();
 
             move |_| {
-                if !auth.is_authed() {
+                if let None = auth_context {
                     let pathname = location.pathname.clone();
 
                     let redirect_url = if pathname.eq("/") {
@@ -38,10 +38,13 @@ pub fn use_redirect_unauthed() -> AuthMessage {
                 no_op
             }
         },
-        (*auth_context).clone(),
+        auth_context.clone(),
     );
 
-    (*auth_context).clone()
+    match auth_context {
+        Some(auth) => auth.is_authed(),
+        None => false,
+    }
 }
 
 pub mod components {
@@ -49,10 +52,10 @@ pub mod components {
     use yew::prelude::*;
 
     pub fn use_with_auth_required(render: impl Fn() -> Html) -> Html {
-        let auth = use_redirect_unauthed();
+        let is_auth = use_redirect_unauthed();
 
         html! {
-            if auth.is_authed() {
+            if is_auth {
                 { render() }
             }
         }

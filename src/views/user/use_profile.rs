@@ -1,5 +1,5 @@
 use crate::utils::sneu_api::ApiHandler;
-use crate::{providers::use_auth_context, utils::no_op};
+use crate::{providers::use_expected_auth_context, utils::no_op};
 use hbp_types::ApiItem;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::spawn_local;
@@ -16,7 +16,7 @@ pub struct UserProfile {
 
 pub fn use_profile() -> Option<UserProfile> {
     let profile = use_state_eq(|| Option::<UserProfile>::None);
-    let auth_context = use_auth_context();
+    let auth_context = use_expected_auth_context();
     let api_hander = use_state_eq(|| ApiHandler::with_jwt((*auth_context).jwt()));
 
     use_effect_with_deps(

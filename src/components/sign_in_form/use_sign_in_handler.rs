@@ -1,5 +1,5 @@
 use crate::{
-    providers::{use_auth_context, AuthAction, AuthMessage, AuthPayload},
+    providers::{use_expected_auth_context, AuthAction, AuthMessage, AuthPayload},
     utils::{
         json,
         sneu_api::{ApiHandler, ApiResult},
@@ -18,7 +18,7 @@ pub fn use_sign_in_handler(
     username: &String,
     password: &String,
 ) -> (bool, Callback<FocusEvent>, String, Callback<()>) {
-    let auth_context = use_auth_context();
+    let auth_context = use_expected_auth_context();
     let is_loading = use_bool_toggle(false);
     let sign_in_error = use_state_eq(String::new);
 
