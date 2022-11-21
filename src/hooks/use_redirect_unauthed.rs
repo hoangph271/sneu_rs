@@ -54,7 +54,7 @@ pub mod components {
     use super::use_redirect_unauthed;
     use yew::prelude::*;
 
-    pub fn use_with_auth_required(render: impl Fn() -> Html) -> Html {
+    pub fn with_auth_required(render: impl Fn() -> Html) -> Html {
         let is_auth = use_redirect_unauthed();
 
         html! {
