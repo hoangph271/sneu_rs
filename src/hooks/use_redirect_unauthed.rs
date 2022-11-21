@@ -21,18 +21,21 @@ pub fn use_redirect_unauthed() -> bool {
             let auth_context = auth_context.clone();
 
             move |_| {
-                if auth_context.is_none() {
-                    let pathname = location.pathname.clone();
+                match auth_context {
+                    Some(x) if x.is_authed() => {}
+                    _ => {
+                        let pathname = location.pathname.clone();
 
-                    let redirect_url = if pathname.eq("/") {
-                        None
-                    } else {
-                        Some(format!("{}{}", pathname, location.search.clone()))
-                    };
+                        let redirect_url = if pathname.eq("/") {
+                            None
+                        } else {
+                            Some(format!("{}{}", pathname, location.search.clone()))
+                        };
 
-                    history
-                        .replace_with_query(SneuRoutes::SignIn, SignInQuery { redirect_url })
-                        .unwrap();
+                        history
+                            .replace_with_query(SneuRoutes::SignIn, SignInQuery { redirect_url })
+                            .unwrap();
+                    }
                 }
 
                 no_op

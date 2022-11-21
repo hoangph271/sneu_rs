@@ -21,7 +21,7 @@ pub enum AuthMessage {
 }
 
 mod auth_persist {
-    // FIXME: Now using SessionStorage to store JWT
+    // ! FIXME: Now using SessionStorage to store JWT
     // NOT safe, consider HttpOnly Cookies...?
     // Or only in-memory...?
     use super::{AuthMessage, AuthPayload};

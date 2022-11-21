@@ -1,4 +1,4 @@
-use crate::hooks::use_expected_authed_api_hander;
+use crate::hooks::{use_authed_api_hander, use_with_auth_required};
 use crate::utils::{no_op, sneu_api::ApiHandler};
 use crate::{components::*, hooks::use_history, router::SneuRoutes};
 use hbp_types::{ApiItem, Challenge};
@@ -48,74 +48,84 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
     let history = use_history();
     let is_loading = use_state_eq(|| false);
     let challenge = use_challenge(id);
-    let api_handler = use_expected_authed_api_hander();
+    let api_handler = use_authed_api_hander();
 
-    with_loader((*challenge).clone(), {
-        move |loaded_challenge| {
-            html! {
-                <>
-                    <ChallengeForm
-                        onsubmit={{
-                            let is_loading = is_loading.clone();
-                            let challenge = challenge.clone();
-                            let history = history.clone();
-                            let api_handler = api_handler.clone();
+    let is_form_loading = *is_loading || api_handler.is_none();
 
-                            Callback::from(move |item| {
-                                let challenge = challenge.clone();
+    use_with_auth_required(|| {
+        let is_loading = is_loading.clone();
+        let challenge = challenge.clone();
+        let history = history.clone();
+        let api_handler = api_handler.as_ref().unwrap().clone();
+
+        with_loader((*challenge).clone(), {
+            move |loaded_challenge| {
+                html! {
+                    <>
+                        <ChallengeForm
+                            onsubmit={{
                                 let is_loading = is_loading.clone();
+                                let challenge = challenge.clone();
                                 let history = history.clone();
                                 let api_handler = api_handler.clone();
 
-                                spawn_local(async move {
-                                    is_loading.set(true);
+                                Callback::from(move |item| {
+                                    let challenge = challenge.clone();
+                                    let is_loading = is_loading.clone();
+                                    let history = history.clone();
+                                    let api_handler = api_handler.clone();
 
-                                    challenge.set(Some(
-                                        api_handler
-                                            .json_put::<ApiItem<Challenge>>(
-                                                "/challenges",
-                                                JsValue::from_str(&serde_json::to_string(&item).unwrap()),
-                                            )
-                                            .await
-                                            .unwrap()
-                                            .item,
-                                    ));
+                                    spawn_local(async move {
+                                        is_loading.set(true);
 
-                                    is_loading.set(false);
-                                    history.push(SneuRoutes::UseLasted);
-                                });
-                            })
-                        }}
-                        challenge={loaded_challenge.clone()}
-                        is_edit={true}
-                        is_loading={*is_loading}
-                    />
-                    <PillButton
-                        button_type={ButtonType::Button}
-                        onclick={{
-                            let id = encode_uri_component(&loaded_challenge.id);
-                            let history = history.clone();
+                                        challenge.set(Some(
+                                            api_handler
+                                                .json_put::<ApiItem<Challenge>>(
+                                                    "/challenges",
+                                                    JsValue::from_str(&serde_json::to_string(&item).unwrap()),
+                                                )
+                                                .await
+                                                .unwrap()
+                                                .item,
+                                        ));
 
-                            Callback::from(move |e: MouseEvent| {
-                                e.prevent_default();
-                                let id = id.clone();
+                                        is_loading.set(false);
+                                        history.push(SneuRoutes::UseLasted);
+                                    });
+                                })
+                            }}
+                            challenge={loaded_challenge.clone()}
+                            is_edit={true}
+                            is_loading={is_form_loading}
+                        />
+                        <PillButton
+                            button_type={ButtonType::Button}
+                            disabled={is_form_loading}
+                            onclick={{
+                                let id = encode_uri_component(&loaded_challenge.id);
                                 let history = history.clone();
 
-                                spawn_local(async move {
-                                    ApiHandler::default()
-                                        .json_delete::<ApiItem<()>>(&format!("/challenges/{id}"), JsValue::undefined())
-                                        .await
-                                        .unwrap();
+                                Callback::from(move |e: MouseEvent| {
+                                    e.prevent_default();
+                                    let id = id.clone();
+                                    let history = history.clone();
 
-                                    history.push(SneuRoutes::UseLasted)
-                                });
-                            })
-                        }}
-                    >
-                        { "Delete" }
-                    </PillButton>
-                </>
+                                    spawn_local(async move {
+                                        ApiHandler::default()
+                                            .json_delete::<ApiItem<()>>(&format!("/challenges/{id}"), JsValue::undefined())
+                                            .await
+                                            .unwrap();
+
+                                        history.push(SneuRoutes::UseLasted)
+                                    });
+                                })
+                            }}
+                        >
+                            { "Delete" }
+                        </PillButton>
+                    </>
+                }
             }
-        }
+        })
     })
 }
