@@ -23,7 +23,3 @@ pub fn use_authed_api_hander() -> Option<ApiHandler> {
 
     (*api_hander).clone()
 }
-
-pub fn use_expected_authed_api_hander() -> ApiHandler {
-    use_authed_api_hander().expect("use_expected_authed_api_hander() failed")
-}

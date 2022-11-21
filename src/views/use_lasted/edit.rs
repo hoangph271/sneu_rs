@@ -1,4 +1,4 @@
-use crate::hooks::use_expected_authed_api_hander;
+use crate::hooks::{use_authed_api_hander, with_auth_required};
 use crate::utils::{no_op, sneu_api::ApiHandler};
 use crate::{components::*, hooks::use_history, router::SneuRoutes};
 use hbp_types::{ApiItem, Challenge};
@@ -41,14 +41,20 @@ fn use_challenge(id: &str) -> UseStateHandle<Option<Challenge>> {
     challenge
 }
 
-#[function_component(EditUseLasted)]
-pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
-    let EditUseLastedProps { id } = props;
+#[derive(PartialEq, Properties, Eq)]
+pub struct EditFormProps {
+    pub id: String,
+}
+
+#[function_component(EditForm)]
+pub fn edit_form(props: &EditFormProps) -> Html {
+    let EditFormProps { id } = props;
 
     let history = use_history();
     let is_loading = use_state_eq(|| false);
     let challenge = use_challenge(id);
-    let api_handler = use_expected_authed_api_hander();
+    let api_handler = use_authed_api_hander();
+    let is_form_loading = *is_loading || api_handler.is_none();
 
     with_loader((*challenge).clone(), {
         move |loaded_challenge| {
@@ -65,7 +71,7 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                                 let challenge = challenge.clone();
                                 let is_loading = is_loading.clone();
                                 let history = history.clone();
-                                let api_handler = api_handler.clone();
+                                let api_handler = api_handler.clone().unwrap();
 
                                 spawn_local(async move {
                                     is_loading.set(true);
@@ -88,10 +94,11 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                         }}
                         challenge={loaded_challenge.clone()}
                         is_edit={true}
-                        is_loading={*is_loading}
+                        is_loading={is_form_loading}
                     />
                     <PillButton
                         button_type={ButtonType::Button}
+                        disabled={is_form_loading}
                         onclick={{
                             let id = encode_uri_component(&loaded_challenge.id);
                             let history = history.clone();
@@ -116,6 +123,17 @@ pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
                     </PillButton>
                 </>
             }
+        }
+    })
+}
+
+#[function_component(EditUseLasted)]
+pub fn edit_use_lasted(props: &EditUseLastedProps) -> Html {
+    let EditUseLastedProps { id } = props;
+
+    with_auth_required(|| {
+        html! {
+            <EditForm id={id.clone()} />
         }
     })
 }

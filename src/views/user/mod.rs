@@ -3,7 +3,7 @@ mod use_profile;
 
 use crate::{
     components::with_loader,
-    hooks::{use_history, use_with_auth_required},
+    hooks::{use_history, with_auth_required},
     providers::{use_expected_auth_context, AuthAction, AuthMessage},
     router::SneuRoutes,
     utils::is_tauri_app,
@@ -39,7 +39,7 @@ fn user_profile() -> Html {
 pub fn user() -> Html {
     let history = use_history();
 
-    use_with_auth_required(|| {
+    with_auth_required(|| {
         if is_tauri_app() {
             history.push(SneuRoutes::SneuPlayer);
             return html! {};

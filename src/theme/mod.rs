@@ -1,4 +1,3 @@
-
 #[derive(PartialEq, Eq, Default, Clone)]
 pub enum ColorVariant {
     #[default]
@@ -9,12 +8,16 @@ pub enum ColorVariant {
 
 impl ColorVariant {
     pub fn bg(&self) -> String {
-        match self {
+        let mut bg_classes = match self {
             ColorVariant::Primary => "bg-sky-500 hover:bg-sky-700",
             ColorVariant::Warning => "bg-amber-500 hover:bg-amber-700",
             ColorVariant::Danger => "bg-rose-500 hover:bg-rose-700",
         }
-        .to_owned()
+        .to_owned();
+
+        bg_classes.push_str(" disabled:bg-slate-400");
+
+        bg_classes
     }
 }
 

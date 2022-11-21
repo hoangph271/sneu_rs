@@ -41,7 +41,7 @@ pub async fn raw_get(url: &str) -> ApiResult<Response> {
     Ok(res)
 }
 
-#[derive(Default, PartialEq, Eq, Clone)]
+#[derive(Default, PartialEq, Eq, Clone, Debug)]
 pub struct ApiHandler {
     pub jwt: Option<String>,
 }
